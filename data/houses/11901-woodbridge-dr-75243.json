@@ -1,0 +1,176 @@
+{
+  "address": "11901 Woodbridge Dr, Dallas, TX 75243",
+  "zillowUrl": "https://www.zillow.com/homedetails/11901-Woodbridge-Dr-Dallas-TX-75243/26890250_zpid/",
+  "photoUrl": null,
+  "status": "For sale (price cut 9/30/2026)",
+  "listPrice": 549000,
+  "yearBuilt": 1980,
+  "sqft": 2742,
+  "pricePerSqft": 200,
+  "beds": 4,
+  "baths": 3,
+  "lotAcres": 0.25,
+  "lastUpdated": "2026-10-11",
+  "priceHistory": [
+    {
+      "week": "2026-01-05",
+      "price": null
+    },
+    {
+      "week": "2026-01-12",
+      "price": null
+    },
+    {
+      "week": "2026-01-19",
+      "price": null
+    },
+    {
+      "week": "2026-01-26",
+      "price": null
+    },
+    {
+      "week": "2026-02-02",
+      "price": null
+    },
+    {
+      "week": "2026-02-09",
+      "price": null
+    },
+    {
+      "week": "2026-02-16",
+      "price": null
+    },
+    {
+      "week": "2026-02-23",
+      "price": null
+    },
+    {
+      "week": "2026-03-02",
+      "price": null
+    },
+    {
+      "week": "2026-03-09",
+      "price": null
+    },
+    {
+      "week": "2026-03-16",
+      "price": null
+    },
+    {
+      "week": "2026-03-23",
+      "price": null
+    },
+    {
+      "week": "2026-03-30",
+      "price": null
+    },
+    {
+      "week": "2026-04-06",
+      "price": null
+    },
+    {
+      "week": "2026-04-13",
+      "price": null
+    },
+    {
+      "week": "2026-04-20",
+      "price": null
+    },
+    {
+      "week": "2026-04-27",
+      "price": null
+    },
+    {
+      "week": "2026-05-04",
+      "price": null
+    },
+    {
+      "week": "2026-05-11",
+      "price": null
+    },
+    {
+      "week": "2026-05-18",
+      "price": null
+    },
+    {
+      "week": "2026-05-25",
+      "price": null
+    },
+    {
+      "week": "2026-06-01",
+      "price": null
+    },
+    {
+      "week": "2026-06-08",
+      "price": null
+    },
+    {
+      "week": "2026-06-15",
+      "price": null
+    },
+    {
+      "week": "2026-06-22",
+      "price": null
+    },
+    {
+      "week": "2026-06-29",
+      "price": null
+    },
+    {
+      "week": "2026-07-06",
+      "price": null
+    },
+    {
+      "week": "2026-07-13",
+      "price": null
+    },
+    {
+      "week": "2026-07-20",
+      "price": null
+    },
+    {
+      "week": "2026-07-27",
+      "price": null
+    },
+    {
+      "week": "2026-08-03",
+      "price": null
+    },
+    {
+      "week": "2026-08-10",
+      "price": 585000
+    },
+    {
+      "week": "2026-08-17",
+      "price": 585000
+    },
+    {
+      "week": "2026-08-24",
+      "price": 585000
+    },
+    {
+      "week": "2026-08-31",
+      "price": 579000
+    },
+    {
+      "week": "2026-09-07",
+      "price": 579000
+    },
+    {
+      "week": "2026-09-14",
+      "price": 579000
+    },
+    {
+      "week": "2026-09-21",
+      "price": 565000
+    },
+    {
+      "week": "2026-09-28",
+      "price": 565000
+    },
+    {
+      "week": "2026-10-05",
+      "price": 549000
+    }
+  ]
+}

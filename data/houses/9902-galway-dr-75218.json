@@ -1,0 +1,176 @@
+{
+  "address": "9902 Galway Dr, Dallas, TX 75218",
+  "zillowUrl": "https://www.zillow.com/homedetails/9902-Galway-Dr-Dallas-TX-75218/26744176_zpid/",
+  "photoUrl": "https://photos.zillowstatic.com/fp/df66018e4880930ab65e7b4006dc9e8f-cc_ft_1536.jpg",
+  "status": "For sale (relisted 10/2/2026)",
+  "listPrice": 699999,
+  "yearBuilt": 1971,
+  "sqft": 2653,
+  "pricePerSqft": 264,
+  "beds": 4,
+  "baths": 4,
+  "lotAcres": 0.46,
+  "lastUpdated": "2026-10-10",
+  "priceHistory": [
+    {
+      "week": "2026-01-05",
+      "price": null
+    },
+    {
+      "week": "2026-01-12",
+      "price": null
+    },
+    {
+      "week": "2026-01-19",
+      "price": null
+    },
+    {
+      "week": "2026-01-26",
+      "price": null
+    },
+    {
+      "week": "2026-02-02",
+      "price": null
+    },
+    {
+      "week": "2026-02-09",
+      "price": null
+    },
+    {
+      "week": "2026-02-16",
+      "price": null
+    },
+    {
+      "week": "2026-02-23",
+      "price": null
+    },
+    {
+      "week": "2026-03-02",
+      "price": null
+    },
+    {
+      "week": "2026-03-09",
+      "price": null
+    },
+    {
+      "week": "2026-03-16",
+      "price": null
+    },
+    {
+      "week": "2026-03-23",
+      "price": 949000
+    },
+    {
+      "week": "2026-03-30",
+      "price": 949000
+    },
+    {
+      "week": "2026-04-06",
+      "price": 899999
+    },
+    {
+      "week": "2026-04-13",
+      "price": 899999
+    },
+    {
+      "week": "2026-04-20",
+      "price": 899999
+    },
+    {
+      "week": "2026-04-27",
+      "price": 849999
+    },
+    {
+      "week": "2026-05-04",
+      "price": 849999
+    },
+    {
+      "week": "2026-05-11",
+      "price": 849999
+    },
+    {
+      "week": "2026-05-18",
+      "price": 849999
+    },
+    {
+      "week": "2026-05-25",
+      "price": 849999
+    },
+    {
+      "week": "2026-06-01",
+      "price": 849999
+    },
+    {
+      "week": "2026-06-08",
+      "price": 849999
+    },
+    {
+      "week": "2026-06-15",
+      "price": 849999
+    },
+    {
+      "week": "2026-06-22",
+      "price": 799999
+    },
+    {
+      "week": "2026-06-29",
+      "price": 799999
+    },
+    {
+      "week": "2026-07-06",
+      "price": 799999
+    },
+    {
+      "week": "2026-07-13",
+      "price": 799999
+    },
+    {
+      "week": "2026-07-20",
+      "price": 799999
+    },
+    {
+      "week": "2026-07-27",
+      "price": 775000
+    },
+    {
+      "week": "2026-08-03",
+      "price": 775000
+    },
+    {
+      "week": "2026-08-10",
+      "price": 775000
+    },
+    {
+      "week": "2026-08-17",
+      "price": 775000
+    },
+    {
+      "week": "2026-08-24",
+      "price": 749900
+    },
+    {
+      "week": "2026-08-31",
+      "price": 749900
+    },
+    {
+      "week": "2026-09-07",
+      "price": 749900
+    },
+    {
+      "week": "2026-09-14",
+      "price": 749900
+    },
+    {
+      "week": "2026-09-21",
+      "price": 749900
+    },
+    {
+      "week": "2026-09-28",
+      "price": 749900
+    },
+    {
+      "week": "2026-10-05",
+      "price": 699999
+    }
+  ]
+}
