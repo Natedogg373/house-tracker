@@ -1,0 +1,176 @@
+{
+  "address": "8026 Westover Dr, Dallas, TX 75231",
+  "zillowUrl": "https://www.zillow.com/homedetails/8026-Westover-Dr-Dallas-TX-75231/26868573_zpid/",
+  "photoUrl": "https://photos.zillowstatic.com/fp/caa98f7befe2c7f2c2abf8b26b0f83c2-cc_ft_1536.jpg",
+  "status": "For sale (price cut 9/23/2026)",
+  "listPrice": 675000,
+  "yearBuilt": 1978,
+  "sqft": 2079,
+  "pricePerSqft": 325,
+  "beds": 4,
+  "baths": 2,
+  "lotAcres": 0.18,
+  "lastUpdated": "2026-10-11",
+  "priceHistory": [
+    {
+      "week": "2026-01-05",
+      "price": null
+    },
+    {
+      "week": "2026-01-12",
+      "price": null
+    },
+    {
+      "week": "2026-01-19",
+      "price": null
+    },
+    {
+      "week": "2026-01-26",
+      "price": null
+    },
+    {
+      "week": "2026-02-02",
+      "price": null
+    },
+    {
+      "week": "2026-02-09",
+      "price": null
+    },
+    {
+      "week": "2026-02-16",
+      "price": null
+    },
+    {
+      "week": "2026-02-23",
+      "price": null
+    },
+    {
+      "week": "2026-03-02",
+      "price": null
+    },
+    {
+      "week": "2026-03-09",
+      "price": null
+    },
+    {
+      "week": "2026-03-16",
+      "price": null
+    },
+    {
+      "week": "2026-03-23",
+      "price": null
+    },
+    {
+      "week": "2026-03-30",
+      "price": null
+    },
+    {
+      "week": "2026-04-06",
+      "price": null
+    },
+    {
+      "week": "2026-04-13",
+      "price": null
+    },
+    {
+      "week": "2026-04-20",
+      "price": null
+    },
+    {
+      "week": "2026-04-27",
+      "price": null
+    },
+    {
+      "week": "2026-05-04",
+      "price": null
+    },
+    {
+      "week": "2026-05-11",
+      "price": 799900
+    },
+    {
+      "week": "2026-05-18",
+      "price": 799900
+    },
+    {
+      "week": "2026-05-25",
+      "price": 799900
+    },
+    {
+      "week": "2026-06-01",
+      "price": 750000
+    },
+    {
+      "week": "2026-06-08",
+      "price": 750000
+    },
+    {
+      "week": "2026-06-15",
+      "price": 750000
+    },
+    {
+      "week": "2026-06-22",
+      "price": 750000
+    },
+    {
+      "week": "2026-06-29",
+      "price": 750000
+    },
+    {
+      "week": "2026-07-06",
+      "price": 730000
+    },
+    {
+      "week": "2026-07-13",
+      "price": 730000
+    },
+    {
+      "week": "2026-07-20",
+      "price": 730000
+    },
+    {
+      "week": "2026-07-27",
+      "price": 715000
+    },
+    {
+      "week": "2026-08-03",
+      "price": 715000
+    },
+    {
+      "week": "2026-08-10",
+      "price": 715000
+    },
+    {
+      "week": "2026-08-17",
+      "price": 700000
+    },
+    {
+      "week": "2026-08-24",
+      "price": 700000
+    },
+    {
+      "week": "2026-08-31",
+      "price": 700000
+    },
+    {
+      "week": "2026-09-07",
+      "price": 700000
+    },
+    {
+      "week": "2026-09-14",
+      "price": 685000
+    },
+    {
+      "week": "2026-09-21",
+      "price": 685000
+    },
+    {
+      "week": "2026-09-28",
+      "price": 675000
+    },
+    {
+      "week": "2026-10-05",
+      "price": 675000
+    }
+  ]
+}

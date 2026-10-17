@@ -1,0 +1,176 @@
+{
+  "address": "9028 Clearhurst Dr, Dallas, TX 75238",
+  "zillowUrl": "https://www.zillow.com/homedetails/9028-Clearhurst-Dr-Dallas-TX-75238/26912736_zpid/",
+  "photoUrl": "https://photos.zillowstatic.com/fp/accbf7bc8b30fe3396dbd15db688f631-cc_ft_1536.jpg",
+  "status": "Pending (since 9/24/2026)",
+  "listPrice": 615000,
+  "yearBuilt": 1999,
+  "sqft": 1859,
+  "pricePerSqft": 331,
+  "beds": 3,
+  "baths": 2,
+  "lotAcres": 0.09,
+  "lastUpdated": "2026-10-11",
+  "priceHistory": [
+    {
+      "week": "2026-01-05",
+      "price": null
+    },
+    {
+      "week": "2026-01-12",
+      "price": null
+    },
+    {
+      "week": "2026-01-19",
+      "price": null
+    },
+    {
+      "week": "2026-01-26",
+      "price": null
+    },
+    {
+      "week": "2026-02-02",
+      "price": null
+    },
+    {
+      "week": "2026-02-09",
+      "price": null
+    },
+    {
+      "week": "2026-02-16",
+      "price": null
+    },
+    {
+      "week": "2026-02-23",
+      "price": null
+    },
+    {
+      "week": "2026-03-02",
+      "price": null
+    },
+    {
+      "week": "2026-03-09",
+      "price": null
+    },
+    {
+      "week": "2026-03-16",
+      "price": null
+    },
+    {
+      "week": "2026-03-23",
+      "price": null
+    },
+    {
+      "week": "2026-03-30",
+      "price": null
+    },
+    {
+      "week": "2026-04-06",
+      "price": null
+    },
+    {
+      "week": "2026-04-13",
+      "price": null
+    },
+    {
+      "week": "2026-04-20",
+      "price": null
+    },
+    {
+      "week": "2026-04-27",
+      "price": null
+    },
+    {
+      "week": "2026-05-04",
+      "price": null
+    },
+    {
+      "week": "2026-05-11",
+      "price": null
+    },
+    {
+      "week": "2026-05-18",
+      "price": null
+    },
+    {
+      "week": "2026-05-25",
+      "price": null
+    },
+    {
+      "week": "2026-06-01",
+      "price": null
+    },
+    {
+      "week": "2026-06-08",
+      "price": null
+    },
+    {
+      "week": "2026-06-15",
+      "price": null
+    },
+    {
+      "week": "2026-06-22",
+      "price": null
+    },
+    {
+      "week": "2026-06-29",
+      "price": null
+    },
+    {
+      "week": "2026-07-06",
+      "price": null
+    },
+    {
+      "week": "2026-07-13",
+      "price": null
+    },
+    {
+      "week": "2026-07-20",
+      "price": null
+    },
+    {
+      "week": "2026-07-27",
+      "price": null
+    },
+    {
+      "week": "2026-08-03",
+      "price": null
+    },
+    {
+      "week": "2026-08-10",
+      "price": null
+    },
+    {
+      "week": "2026-08-17",
+      "price": 615000
+    },
+    {
+      "week": "2026-08-24",
+      "price": 615000
+    },
+    {
+      "week": "2026-08-31",
+      "price": 615000
+    },
+    {
+      "week": "2026-09-07",
+      "price": 615000
+    },
+    {
+      "week": "2026-09-14",
+      "price": 615000
+    },
+    {
+      "week": "2026-09-21",
+      "price": 615000
+    },
+    {
+      "week": "2026-09-28",
+      "price": 615000
+    },
+    {
+      "week": "2026-10-05",
+      "price": 615000
+    }
+  ]
+}
