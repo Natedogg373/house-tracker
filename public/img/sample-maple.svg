@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Sample mid-century house illustration">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d7e4dc"/>
+      <stop offset="1" stop-color="#f3efe7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <rect x="0" y="690" width="1600" height="210" fill="#cfc3ae"/>
+  <rect x="260" y="430" width="1080" height="280" fill="#e8d7c3"/>
+  <polygon points="240,430 800,210 1360,430" fill="#2c4a3e"/>
+  <rect x="330" y="500" width="170" height="140" fill="#8fb7c9"/>
+  <rect x="540" y="500" width="170" height="140" fill="#8fb7c9"/>
+  <rect x="890" y="520" width="160" height="190" fill="#4c3a2e"/>
+  <rect x="1120" y="500" width="140" height="140" fill="#8fb7c9"/>
+  <rect x="0" y="688" width="1600" height="8" fill="#2c4a3e"/>
+  <circle cx="1280" cy="160" r="42" fill="#e8c872"/>
+</svg>

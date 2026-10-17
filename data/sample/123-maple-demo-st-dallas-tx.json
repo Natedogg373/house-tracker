@@ -1,0 +1,27 @@
+{
+  "address": "123 Maple Demo St, Dallas, TX 75201",
+  "zillowUrl": "https://www.zillow.com/homedetails/123-Maple-Demo-St-Dallas-TX-75201/000000001_zpid/",
+  "photoUrl": "/img/sample-maple.svg",
+  "status": "For sale",
+  "listPrice": 739000,
+  "yearBuilt": 1972,
+  "sqft": 2381,
+  "pricePerSqft": 310,
+  "beds": 4,
+  "baths": 2.5,
+  "lotAcres": 0.2,
+  "lastUpdated": "2026-10-13",
+  "priceHistory": [
+    { "week": "2026-08-03", "price": 775000 },
+    { "week": "2026-08-10", "price": 775000 },
+    { "week": "2026-08-17", "price": 765000 },
+    { "week": "2026-08-24", "price": null },
+    { "week": "2026-08-31", "price": null },
+    { "week": "2026-09-07", "price": 749000 },
+    { "week": "2026-09-14", "price": 749000 },
+    { "week": "2026-09-21", "price": 739000 },
+    { "week": "2026-09-28", "price": 739000 },
+    { "week": "2026-10-05", "price": 739000 },
+    { "week": "2026-10-12", "price": 739000 }
+  ]
+}

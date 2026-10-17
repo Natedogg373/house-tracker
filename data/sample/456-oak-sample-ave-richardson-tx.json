@@ -1,0 +1,27 @@
+{
+  "address": "456 Oak Sample Ave, Richardson, TX 75080",
+  "zillowUrl": "https://www.zillow.com/homedetails/456-Oak-Sample-Ave-Richardson-TX-75080/000000002_zpid/",
+  "photoUrl": null,
+  "status": "For sale",
+  "listPrice": 625000,
+  "yearBuilt": 1998,
+  "sqft": 2100,
+  "pricePerSqft": 298,
+  "beds": 3,
+  "baths": 2,
+  "lotAcres": 0.18,
+  "lastUpdated": "2026-10-12",
+  "priceHistory": [
+    { "week": "2026-08-03", "price": 649000 },
+    { "week": "2026-08-10", "price": 649000 },
+    { "week": "2026-08-17", "price": 649000 },
+    { "week": "2026-08-24", "price": null },
+    { "week": "2026-08-31", "price": null },
+    { "week": "2026-09-07", "price": 635000 },
+    { "week": "2026-09-14", "price": 635000 },
+    { "week": "2026-09-21", "price": 625000 },
+    { "week": "2026-09-28", "price": 625000 },
+    { "week": "2026-10-05", "price": 625000 },
+    { "week": "2026-10-12", "price": 625000 }
+  ]
+}

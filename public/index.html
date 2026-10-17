@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>House Tracker</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/vendor/leaflet.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <img src="/favicon.svg" alt="" />
+        <span>House Tracker</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/" aria-current="page">Dashboard</a>
+        <a href="/add">Add house</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="panel toolbar">
+        <label for="house-select">
+          Viewing
+          <select id="house-select"></select>
+        </label>
+        <p id="sample-banner" class="banner sample" hidden>
+          Showing sample houses for demo. Real listings appear here once JSON files land in
+          <code>data/houses/</code>.
+        </p>
+      </section>
+
+      <section id="empty" class="panel empty hidden">
+        <h1>No houses yet</h1>
+        <p>Add a Zillow link or address, then wait a few minutes for House Tracker to write the listing here.</p>
+        <p><a href="/add">Add a house</a></p>
+      </section>
+
+      <section id="house-view">
+        <div class="hero">
+          <p class="kicker"><span id="status" class="pill">For sale</span></p>
+          <h1 id="address">Loading…</h1>
+          <p id="budget-banner" class="banner" hidden></p>
+        </div>
+
+        <div class="metrics" id="metrics"></div>
+
+        <figure class="photo-card" id="media-card">
+          <img id="photo" alt="House photo" />
+          <div id="photo-fallback" class="photo-fallback">
+            <div id="house-map" class="house-map hidden" title="Map of the selected house" hidden></div>
+            <div id="map-placeholder" class="map-placeholder">
+              <img src="/img/placeholder.svg" alt="" />
+              <p id="map-placeholder-text">Looking up this address on the map…</p>
+            </div>
+            <a
+              id="zillow-cta"
+              class="zillow-cta hidden"
+              target="_blank"
+              rel="noopener noreferrer"
+            >View on Zillow</a>
+          </div>
+        </figure>
+
+        <section class="panel chart-card">
+          <h2>Price over time</h2>
+          <div class="chart-wrap">
+            <canvas id="price-chart" aria-label="Listing price over time"></canvas>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="/vendor/chart.umd.min.js"></script>
+    <script src="/vendor/leaflet.js"></script>
+    <script type="module" src="/js/dashboard.js"></script>
+  </body>
+</html>

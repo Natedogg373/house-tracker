@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Sample two-story house illustration">
+  <defs>
+    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dbe7f0"/>
+      <stop offset="1" stop-color="#f3efe7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky2)"/>
+  <rect x="0" y="720" width="1600" height="180" fill="#b9c9b2"/>
+  <rect x="380" y="300" width="840" height="430" fill="#f4efe6"/>
+  <rect x="360" y="250" width="880" height="70" fill="#3d6b57"/>
+  <rect x="430" y="360" width="150" height="120" fill="#9ec4d6"/>
+  <rect x="630" y="360" width="150" height="120" fill="#9ec4d6"/>
+  <rect x="1020" y="360" width="150" height="120" fill="#9ec4d6"/>
+  <rect x="720" y="540" width="160" height="190" fill="#2c4a3e"/>
+  <rect x="430" y="560" width="150" height="120" fill="#9ec4d6"/>
+  <rect x="1020" y="560" width="150" height="120" fill="#9ec4d6"/>
+  <circle cx="250" cy="170" r="48" fill="#f0d48a"/>
+</svg>

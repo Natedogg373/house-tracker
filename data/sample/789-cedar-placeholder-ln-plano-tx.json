@@ -1,0 +1,19 @@
+{
+  "address": "789 Cedar Placeholder Ln, Plano, TX 75023",
+  "zillowUrl": null,
+  "photoUrl": "/img/sample-cedar.svg",
+  "status": "Pending",
+  "listPrice": 699000,
+  "yearBuilt": 2015,
+  "sqft": 2450,
+  "beds": 4,
+  "baths": 3,
+  "lastUpdated": "2026-10-06",
+  "priceHistory": [
+    { "week": "2026-09-07", "price": 715000 },
+    { "week": "2026-09-14", "price": 715000 },
+    { "week": "2026-09-21", "price": null },
+    { "week": "2026-09-28", "price": 699000 },
+    { "week": "2026-10-05", "price": 699000 }
+  ]
+}
