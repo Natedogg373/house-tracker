@@ -1,0 +1,19 @@
+{
+  "name": "house-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local dashboard for houses Nate and partner are considering buying.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js",
+    "mock-webhook": "node scripts/mock-webhook.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}
