@@ -1,5 +1,6 @@
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("fs");
 const http = require("http");
 const path = require("path");
 
@@ -9,6 +10,7 @@ process.env.GIT_PULL_ENABLED = "false";
 process.env.USE_SAMPLE_DATA = "true";
 process.env.GEOCODE_PREFETCH = "false";
 process.env.GEOCODE_CACHE_PATH = path.join(os.tmpdir(), `geocode-api-${process.pid}.json`);
+process.env.RANKINGS_PATH = path.join(os.tmpdir(), `rankings-api-${process.pid}.json`);
 delete process.env.HOUSE_TRACKER_WEBHOOK_URL;
 delete process.env.HOUSE_TRACKER_WEBHOOK_AUTH;
 
@@ -47,6 +49,7 @@ describe("API", () => {
     assert.match(html, /House Tracker/);
     assert.match(html, /price-chart/);
     assert.match(html, /href="\/about"/);
+    assert.match(html, /href="\/rankings"/);
   });
 
   it("serves the add page", async () => {
@@ -54,6 +57,16 @@ describe("API", () => {
     const html = await res.text();
     assert.equal(res.status, 200);
     assert.match(html, /Add a house/);
+    assert.match(html, /href="\/rankings"/);
+  });
+
+  it("serves the rankings page", async () => {
+    const res = await fetch(`http://127.0.0.1:${port}/rankings`);
+    const html = await res.text();
+    assert.equal(res.status, 200);
+    assert.match(html, /Rankings/);
+    assert.match(html, /id="rank-list"/);
+    assert.match(html, /href="\/rankings"/);
   });
 
   it("serves the about page with architecture and Cloudflare Pages roadmap", async () => {
@@ -65,6 +78,7 @@ describe("API", () => {
     assert.match(html, /Cloudflare Pages/);
     assert.match(html, /Client-side password/);
     assert.match(html, /npm start/);
+    assert.match(html, /href="\/rankings"/);
     assert.doesNotMatch(html, /lime\s*1234/i);
     assert.doesNotMatch(html, /password\s*[:=]\s*['"][^'"]+['"]/i);
   });
@@ -159,6 +173,51 @@ describe("API", () => {
 
     assert.equal(res.status, 502);
     assert.equal(data.code, "WEBHOOK_FAILED");
+  });
+
+  it("ranks sample houses alphabetically when rankings.json is missing", async () => {
+    fs.rmSync(process.env.RANKINGS_PATH, { force: true });
+    const { res, data } = await jsonRequest(port, "/api/rankings");
+    assert.equal(res.status, 200);
+    assert.equal(data.source, "default");
+    assert.deepEqual(data.slugs, [
+      "123-maple-demo-st-dallas-tx",
+      "456-oak-sample-ave-richardson-tx",
+      "789-cedar-placeholder-ln-plano-tx",
+    ]);
+  });
+
+  it("rejects a rankings payload that is not a slug array", async () => {
+    const { res, data } = await jsonRequest(port, "/api/rankings", {
+      method: "POST",
+      body: JSON.stringify({ slugs: "nope" }),
+    });
+    assert.equal(res.status, 400);
+    assert.match(data.error, /slugs/);
+  });
+
+  it("writes rankings.json and returns the merged slug order", async () => {
+    const { res, data } = await jsonRequest(port, "/api/rankings", {
+      method: "POST",
+      body: JSON.stringify({
+        slugs: ["789-cedar-placeholder-ln-plano-tx", "123-maple-demo-st-dallas-tx"],
+      }),
+    });
+    assert.equal(res.status, 200);
+    assert.equal(data.ok, true);
+    assert.deepEqual(data.slugs, [
+      "789-cedar-placeholder-ln-plano-tx",
+      "123-maple-demo-st-dallas-tx",
+      "456-oak-sample-ave-richardson-tx",
+    ]);
+
+    const saved = JSON.parse(fs.readFileSync(process.env.RANKINGS_PATH, "utf8"));
+    assert.deepEqual(saved, data.slugs);
+
+    const again = await jsonRequest(port, "/api/rankings");
+    assert.equal(again.res.status, 200);
+    assert.equal(again.data.source, "file");
+    assert.deepEqual(again.data.slugs, data.slugs);
   });
 
   it("geocodes an address through Nominatim with a User-Agent and caches it", async () => {

@@ -30,6 +30,7 @@ Copy `.env.example` to `.env`. `.env` is gitignored; never commit secrets.
 | `GIT_PULL_ENABLED` | Set `false` to skip pulling. |
 | `USE_SAMPLE_DATA` | Set `true` to force the fake demo houses even if real files exist. |
 | `HOUSES_DIR` | Optional override of the folder to read (default `data/houses`). |
+| `RANKINGS_PATH` | Optional override of the ranking order file (default `data/rankings.json`). |
 | `NOMINATIM_USER_AGENT` | Override the Nominatim User-Agent (a default identifying this app is already set). |
 | `GEOCODE_CACHE_PATH` | Override the geocode cache file (default `data/geocode-cache.json`). |
 | `GEOCODE_PREFETCH` | Set `false` to skip background geocoding of every loaded address. |
@@ -79,6 +80,20 @@ When `photoUrl` is missing or the image fails to load, the dashboard embeds an O
 
 `data/houses/index.json` (a list of slugs) is **not** treated as a house. The server reads every other `*.json` in the folder.
 
+### Rankings
+
+`data/rankings.json` is a committed JSON array of address slugs, in preference order:
+
+```json
+["9223-seagrove-dr-75243", "7130-abrams-rd-75231"]
+```
+
+The Rankings page POSTs that list to `/api/rankings`, and the local server writes the file. House JSON files are not modified — the House Tracker bot owns those.
+
+If the file is missing, houses default to **alphabetical by address**. New houses not yet in the file are appended in that same order; slugs for houses that no longer exist are ignored.
+
+The order is shared through git. After you rearrange houses, **commit `data/rankings.json`** (or let a later bot sync commit it) so `git pull` on other machines picks it up. Local reorders that are not committed are overwritten on the next pull.
+
 ### Sample data
 
 `data/sample/` has three clearly fake houses (Demo / Sample / Placeholder addresses). They are used only when `data/houses/` has no house files, or when `USE_SAMPLE_DATA=true`.
@@ -86,6 +101,7 @@ When `photoUrl` is missing or the image fails to load, the dashboard embeds an O
 ## Pages
 
 - **Dashboard** (`/`) — pick an address, see details, photo, and price history vs. the $700K budget line.
+- **Rankings** (`/rankings`) — drag houses into an order, or type a rank number (that house moves there and the rest shift). Saved to `data/rankings.json`.
 - **Add house** (`/add`) — submit a Zillow URL or street address to the bot webhook.
 - **About** (`/about`) — what the project is, how the bot / GitHub JSON / web app fit together, and the plan to host on Cloudflare Pages with a public landing and a password-gated dashboard.
 
