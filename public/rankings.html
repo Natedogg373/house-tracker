@@ -31,8 +31,9 @@
       <section class="panel rankings-intro">
         <h1>Rankings</h1>
         <p class="lede">
-          Drag a house to move it, or type a rank number and press Enter. The list is saved on this
-          machine as <code>data/rankings.json</code> so it survives a refresh.
+          Drag a house to move it, or type a rank number and press Enter. Order is written to
+          <code>data/rankings.json</code>. Commit that file (or a later bot sync) so
+          <code>git pull</code> keeps the ranking shared.
         </p>
         <p class="rankings-note">Coming later: scoring against must-haves, and notes from a visit.</p>
         <p id="sample-banner" class="banner sample" hidden>

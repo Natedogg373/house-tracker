@@ -438,6 +438,10 @@ h2 {
   font-size: 1.05rem;
 }
 
+.lede code {
+  white-space: nowrap;
+}
+
 label.field {
   display: grid;
   gap: 0.4rem;
