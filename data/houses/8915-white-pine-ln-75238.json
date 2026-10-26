@@ -2,7 +2,7 @@
   "address": "8915 White Pine Ln, Dallas, TX 75238",
   "zillowUrl": "https://www.zillow.com/homedetails/8915-White-Pine-Ln-Dallas-TX-75238/26912745_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/546957cf9bdfe9fe4ab01f3311d896a2-cc_ft_1536.jpg",
-  "status": "Pending (since 9/22/2026)",
+  "status": "Sold (found 10/18/2026; price/date not shown; last listed $685,000)",
   "listPrice": 685000,
   "yearBuilt": 1999,
   "sqft": 2292,
@@ -10,7 +10,7 @@
   "beds": 3,
   "baths": 2.5,
   "lotAcres": 0.09,
-  "lastUpdated": "2026-10-11",
+  "lastUpdated": "2026-10-25",
   "priceHistory": [
     {
       "week": "2026-01-05",
