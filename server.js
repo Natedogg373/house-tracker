@@ -17,6 +17,10 @@ app.get("/add", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "add.html"));
 });
 
+app.get("/about", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "about.html"));
+});
+
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });

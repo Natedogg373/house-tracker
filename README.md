@@ -87,6 +87,7 @@ When `photoUrl` is missing or the image fails to load, the dashboard embeds an O
 
 - **Dashboard** (`/`) — pick an address, see details, photo, and price history vs. the $700K budget line.
 - **Add house** (`/add`) — submit a Zillow URL or street address to the bot webhook.
+- **About** (`/about`) — what the project is, how the bot / GitHub JSON / web app fit together, and the plan to host on Cloudflare Pages with a public landing and a password-gated dashboard.
 
 ## Local webhook testing
 
