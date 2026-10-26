@@ -3,6 +3,7 @@ require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const { resolveHouses, getBudget, getHousesDir, SAMPLE_DIR } = require("./lib/houses");
+const { applyRankings, loadRankings, saveRankings } = require("./lib/rankings");
 const { startGitPullLoop } = require("./lib/git-pull");
 const { postToHouseTracker } = require("./lib/webhook");
 const { getGeocoder, isPrefetchEnabled } = require("./lib/geocode");
@@ -19,6 +20,10 @@ app.get("/add", (_req, res) => {
 
 app.get("/about", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "about.html"));
+});
+
+app.get("/rankings", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "rankings.html"));
 });
 
 app.get("/api/health", (_req, res) => {
@@ -64,6 +69,44 @@ app.get("/api/geocode", async (req, res) => {
   } catch (err) {
     console.error("[api] geocode failed:", err);
     return res.status(502).json({ error: "Geocoding failed.", coords: null });
+  }
+});
+
+function currentHouses() {
+  return resolveHouses({
+    housesDir: getHousesDir(),
+    sampleDir: SAMPLE_DIR,
+    useSampleData: process.env.USE_SAMPLE_DATA,
+  });
+}
+
+app.get("/api/rankings", (_req, res) => {
+  try {
+    const result = currentHouses();
+    const loaded = loadRankings();
+    const ordered = applyRankings(result.houses, loaded.slugs);
+    res.json({
+      slugs: ordered.map((house) => house.slug),
+      source: loaded.source,
+    });
+  } catch (err) {
+    console.error("[api] failed to load rankings:", err);
+    res.status(500).json({ error: "Failed to load rankings." });
+  }
+});
+
+app.post("/api/rankings", (req, res) => {
+  if (!Array.isArray(req.body?.slugs)) {
+    return res.status(400).json({ error: 'Send { "slugs": ["address-slug", ...] }.' });
+  }
+  try {
+    const result = currentHouses();
+    const ordered = applyRankings(result.houses, req.body.slugs);
+    const slugs = saveRankings(ordered.map((house) => house.slug));
+    return res.json({ ok: true, slugs });
+  } catch (err) {
+    console.error("[api] failed to save rankings:", err);
+    return res.status(500).json({ error: "Failed to save rankings." });
   }
 });
 
