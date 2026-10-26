@@ -15,6 +15,8 @@
   --pending-bg: #fef3c7;
   --contingent: #1d4ed8;
   --contingent-bg: #dbeafe;
+  --sold: #5c4d3d;
+  --sold-bg: #efe6d8;
   --shadow: 0 1px 2px rgba(31, 27, 22, 0.05), 0 16px 40px rgba(31, 27, 22, 0.06);
   --radius: 18px;
   --font: "Outfit", system-ui, sans-serif;
@@ -223,6 +225,11 @@ button:focus-visible {
 .pill.contingent {
   background: var(--contingent-bg);
   color: var(--contingent);
+}
+
+.pill.sold {
+  background: var(--sold-bg);
+  color: var(--sold);
 }
 
 h1,
@@ -712,12 +719,116 @@ button.secondary,
   border: 0;
 }
 
+.graveyard-intro,
 .rankings-intro {
   margin-bottom: 1.1rem;
 }
 
+.graveyard-intro .lede,
 .rankings-intro .lede {
   margin-bottom: 0.7rem;
+}
+
+.graveyard-count {
+  margin: 0 0 0.85rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.graveyard-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.grave-card {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 0.95rem 1.05rem;
+  align-items: start;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem;
+}
+
+.grave-thumb {
+  width: 88px;
+  height: 88px;
+  border-radius: 14px;
+  object-fit: cover;
+  background: #ece6db;
+}
+
+.grave-thumb-empty {
+  background:
+    linear-gradient(145deg, #efe6d8 0%, #ece6db 100%);
+}
+
+.grave-body {
+  min-width: 0;
+}
+
+.grave-address {
+  margin: 0 0 0.4rem;
+  font-family: var(--font);
+  font-size: 1.08rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.grave-address a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.grave-address a:hover {
+  color: var(--forest);
+  text-decoration: underline;
+}
+
+.grave-meta {
+  margin: 0 0 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.65rem;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.grave-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.grave-metric {
+  background: #fbf8f2;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.7rem 0.8rem;
+}
+
+.grave-metric .label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.grave-metric .value {
+  font-size: 1.02rem;
+  font-weight: 600;
 }
 
 .rankings-note {
@@ -865,9 +976,24 @@ button.secondary,
   .about-grid.split {
     grid-template-columns: 1fr 1fr;
   }
+
+  .grave-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 640px) {
+  .grave-card {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 0.7rem 0.75rem;
+    padding: 0.85rem;
+  }
+
+  .grave-thumb {
+    width: 64px;
+    height: 64px;
+  }
+
   .rank-card,
   .rank-placeholder {
     grid-template-columns: auto auto 56px minmax(0, 1fr);

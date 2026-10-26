@@ -3,6 +3,7 @@ require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const { resolveHouses, getBudget, getHousesDir, SAMPLE_DIR } = require("./lib/houses");
+const { buildGraveyard } = require("./lib/graveyard");
 const { applyRankings, loadRankings, saveRankings } = require("./lib/rankings");
 const { startGitPullLoop } = require("./lib/git-pull");
 const { postToHouseTracker } = require("./lib/webhook");
@@ -24,6 +25,10 @@ app.get("/about", (_req, res) => {
 
 app.get("/rankings", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "rankings.html"));
+});
+
+app.get("/graveyard", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "graveyard.html"));
 });
 
 app.get("/api/health", (_req, res) => {
@@ -79,6 +84,19 @@ function currentHouses() {
     useSampleData: process.env.USE_SAMPLE_DATA,
   });
 }
+
+app.get("/api/graveyard", (_req, res) => {
+  try {
+    const result = currentHouses();
+    res.json({
+      source: result.source,
+      houses: buildGraveyard(result.houses),
+    });
+  } catch (err) {
+    console.error("[api] failed to load graveyard:", err);
+    res.status(500).json({ error: "Failed to load graveyard." });
+  }
+});
 
 app.get("/api/rankings", (_req, res) => {
   try {

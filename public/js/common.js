@@ -69,6 +69,7 @@ export function budgetDelta(listPrice, budget) {
 
 export function statusClass(status) {
   const value = String(status || "").toLowerCase();
+  if (/\bsold\b/.test(value)) return "sold";
   if (value.includes("pending")) return "pending";
   if (value.includes("contingent")) return "contingent";
   if (value.includes("sale") || value.includes("listed") || value.includes("active")) return "sale";
