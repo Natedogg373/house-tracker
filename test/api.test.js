@@ -46,6 +46,7 @@ describe("API", () => {
     assert.equal(res.status, 200);
     assert.match(html, /House Tracker/);
     assert.match(html, /price-chart/);
+    assert.match(html, /href="\/about"/);
   });
 
   it("serves the add page", async () => {
@@ -53,6 +54,19 @@ describe("API", () => {
     const html = await res.text();
     assert.equal(res.status, 200);
     assert.match(html, /Add a house/);
+  });
+
+  it("serves the about page with architecture and Cloudflare Pages roadmap", async () => {
+    const res = await fetch(`http://127.0.0.1:${port}/about`);
+    const html = await res.text();
+    assert.equal(res.status, 200);
+    assert.match(html, /About House Tracker/);
+    assert.match(html, /class="mermaid"/);
+    assert.match(html, /Cloudflare Pages/);
+    assert.match(html, /Client-side password/);
+    assert.match(html, /npm start/);
+    assert.doesNotMatch(html, /lime\s*1234/i);
+    assert.doesNotMatch(html, /password\s*[:=]\s*['"][^'"]+['"]/i);
   });
 
   it("returns sample houses and never treats index.json as a house", async () => {

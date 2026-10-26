@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About House Tracker · How it works</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <img src="/favicon.svg" alt="" />
+        <span>House Tracker</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Dashboard</a>
+        <a href="/add">Add house</a>
+        <a href="/about" aria-current="page">About</a>
+      </nav>
+    </header>
+
+    <main class="about">
+      <section class="hero about-hero">
+        <p class="kicker"><span class="pill sale">Local today</span><span class="pill">Cloudflare Pages soon</span></p>
+        <h1>About House Tracker</h1>
+        <p class="lede">
+          A quiet place for Nate and his partner to watch the houses they’re considering — live
+          Zillow-sourced listings, photos, and price history against a <strong>$700K</strong> budget.
+          Built for the two of them now; meant to be something their realtor can open later too.
+        </p>
+        <div class="actions">
+          <a class="button-link button-link-solid" href="/">Open the dashboard</a>
+          <a class="button-link" href="/add">Add a house</a>
+        </div>
+      </section>
+
+      <section class="about-grid split">
+        <article class="panel">
+          <h2>What it is</h2>
+          <p>
+            House Tracker is a small dashboard of homes they’re actually looking at. Pick an address,
+            see the listing details, a Zillow photo (or a map if the photo is missing), and an
+            interactive price chart with a $700,000 line so it’s obvious what’s over or under budget.
+          </p>
+          <p>
+            A separate House Tracker bot scrapes Zillow, updates a Google Sheet, and commits one JSON
+            file per house into this GitHub repo. The web app just reads those files. New listings
+            show up after a <code>git pull</code>; Sunday price runs keep the history current.
+          </p>
+        </article>
+        <article class="panel">
+          <h2>Who it’s for</h2>
+          <p>
+            <strong>Today:</strong> Nate and his partner, running the app on a laptop with
+            <code>npm start</code>. Nobody else can reach it.
+          </p>
+          <p>
+            <strong>Soon:</strong> the same dashboard for their real estate agent — browse the list,
+            check prices against budget, and suggest a listing with Add House. Visitors can still see
+            this public About page; the houses themselves stay behind a shared password Nate can hand
+            the realtor.
+          </p>
+        </article>
+      </section>
+
+      <section class="panel arch-panel" aria-labelledby="arch-heading">
+        <h2 id="arch-heading">How the pieces fit</h2>
+        <p class="lede arch-lede">
+          Planned shape: Cloudflare Pages serves this public landing plus a password-gated app.
+          The bot still writes JSON to GitHub; Pages rebuilds from the repo. Right now the same UI
+          is just Express on Nate’s laptop.
+        </p>
+        <div class="arch-wrap" role="img" aria-hidden="true">
+          <pre class="mermaid">
+flowchart TB
+  Anyone(["Anyone"]) --> Landing["Public landing / About"]
+  Team(["Nate + realtor"]) --> Gate["Client-side password"]
+  Gate --> Dash["Dashboard + Add House"]
+
+  subgraph pages ["Soon: Cloudflare Pages"]
+    Landing
+    Gate
+    Dash
+  end
+
+  pages -->|"rebuilds"| Repo[("GitHub repo\ndata/houses/*.json")]
+  Repo -->|"listings, photos, prices"| Dash
+
+  Dash -->|"Add House webhook"| Bot["House Tracker bot"]
+  Bot -->|"scrape"| Zillow
+  Bot -->|"update"| Sheet["Google Sheet"]
+  Bot -->|"commit JSON + Sunday prices"| Repo
+
+  subgraph today ["Today: local only"]
+    Laptop["npm start on Nate's laptop"]
+  end
+  Laptop -->|"git pull every ~2 min"| Repo
+          </pre>
+        </div>
+        <ol class="arch-flow" aria-hidden="true">
+          <li>
+            <span class="arch-kicker">Public</span>
+            <strong>Anyone → About / landing</strong>
+            <p>This page stays visible. No password.</p>
+          </li>
+          <li>
+            <span class="arch-kicker">Gated</span>
+            <strong>Nate + realtor → password → dashboard</strong>
+            <p>A small client-side password box unlocks listings and Add House.</p>
+          </li>
+          <li>
+            <span class="arch-kicker">Hosting</span>
+            <strong>Soon: Cloudflare Pages · Today: npm start</strong>
+            <p>Pages rebuilds from GitHub. Today Express on Nate’s laptop git-pulls every ~2 min.</p>
+          </li>
+          <li>
+            <span class="arch-kicker">Data</span>
+            <strong>GitHub repo → data/houses/*.json</strong>
+            <p>The dashboard reads those files for photos, prices, and history.</p>
+          </li>
+          <li>
+            <span class="arch-kicker">Bot</span>
+            <strong>Add House → webhook → House Tracker bot</strong>
+            <p>Scrapes Zillow, updates a Google Sheet, commits JSON and Sunday prices.</p>
+          </li>
+        </ol>
+        <p id="arch-plain" class="arch-plain">
+          Anyone can open the public About page. Nate and the realtor unlock the dashboard with a
+          shared password. Cloudflare Pages (today: <code>npm start</code> on a laptop) reads
+          <code>data/houses/*.json</code> from GitHub. Add House posts a Zillow link or address to
+          the House Tracker bot, which scrapes Zillow, updates a Google Sheet, and commits JSON —
+          including Sunday price updates — back to the repo so the dashboard stays fresh.
+        </p>
+      </section>
+
+      <section class="panel" aria-labelledby="roadmap-heading">
+        <h2 id="roadmap-heading">Coming soon</h2>
+        <p class="lede">
+          Honest status: this is a local app. Hosting, public landing, and realtor access are the
+          plan — not live yet.
+        </p>
+        <ol class="roadmap">
+          <li>
+            <h3>Host on Cloudflare Pages</h3>
+            <p>
+              Ship the site from Pages, not a home-laptop tunnel or Tailscale expose. GitHub stays
+              the source of truth; a push (including the bot’s JSON commits) rebuilds the site.
+            </p>
+          </li>
+          <li>
+            <h3>A public, portfolio-style landing</h3>
+            <p>
+              This About page can be that landing — or lead into it. Anyone may see what the project
+              is. House details and the dashboard are not part of that public surface.
+            </p>
+          </li>
+          <li>
+            <h3>A simple password box, not Cloudflare Access</h3>
+            <p>
+              The dashboard and listing data sit behind a small client-side password prompt. Nate
+              shares that password with the realtor. No extra identity product, and no password
+              written down on this page.
+            </p>
+          </li>
+          <li>
+            <h3>Realtor on the same dashboard</h3>
+            <p>
+              Once it’s hosted, the agent can open it from a phone or laptop, scan the same budget
+              chart, and suggest houses through Add House — same webhook, same bot, same JSON files.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="panel about-cta">
+        <h2>Take a look</h2>
+        <p class="lede">The dashboard and Add House form are here on this machine today.</p>
+        <div class="actions">
+          <a class="button-link button-link-solid" href="/">Dashboard</a>
+          <a class="button-link" href="/add">Add house</a>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "base",
+        securityLevel: "strict",
+        flowchart: { curve: "basis", padding: 12, htmlLabels: true, useMaxWidth: true },
+        themeVariables: {
+          background: "#fffcf7",
+          fontFamily: "Outfit, system-ui, sans-serif",
+          fontSize: "16px",
+          primaryColor: "#e4eee8",
+          primaryTextColor: "#1f1b16",
+          primaryBorderColor: "#2c4a3e",
+          secondaryColor: "#e8e0d2",
+          secondaryTextColor: "#1f1b16",
+          secondaryBorderColor: "#c4b8a5",
+          tertiaryColor: "#fffcf7",
+          lineColor: "#3d6b57",
+          clusterBkg: "#f3efe7",
+          clusterBorder: "#ddd4c6",
+          titleColor: "#2c4a3e",
+          nodeTextColor: "#1f1b16",
+          edgeLabelBackground: "#fffcf7",
+        },
+      });
+    </script>
+  </body>
+</html>
