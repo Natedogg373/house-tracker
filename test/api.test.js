@@ -50,6 +50,7 @@ describe("API", () => {
     assert.match(html, /price-chart/);
     assert.match(html, /href="\/about"/);
     assert.match(html, /href="\/rankings"/);
+    assert.match(html, /href="\/graveyard"/);
   });
 
   it("serves the add page", async () => {
@@ -58,6 +59,7 @@ describe("API", () => {
     assert.equal(res.status, 200);
     assert.match(html, /Add a house/);
     assert.match(html, /href="\/rankings"/);
+    assert.match(html, /href="\/graveyard"/);
   });
 
   it("serves the rankings page", async () => {
@@ -67,6 +69,16 @@ describe("API", () => {
     assert.match(html, /Rankings/);
     assert.match(html, /id="rank-list"/);
     assert.match(html, /href="\/rankings"/);
+    assert.match(html, /href="\/graveyard"/);
+  });
+
+  it("serves the graveyard page", async () => {
+    const res = await fetch(`http://127.0.0.1:${port}/graveyard`);
+    const html = await res.text();
+    assert.equal(res.status, 200);
+    assert.match(html, /Graveyard/);
+    assert.match(html, /id="graveyard-list"/);
+    assert.match(html, /href="\/graveyard"/);
   });
 
   it("serves the about page with architecture and Cloudflare Pages roadmap", async () => {
@@ -79,6 +91,7 @@ describe("API", () => {
     assert.match(html, /Client-side password/);
     assert.match(html, /npm start/);
     assert.match(html, /href="\/rankings"/);
+    assert.match(html, /href="\/graveyard"/);
     assert.doesNotMatch(html, /lime\s*1234/i);
     assert.doesNotMatch(html, /password\s*[:=]\s*['"][^'"]+['"]/i);
   });
@@ -88,12 +101,33 @@ describe("API", () => {
     assert.equal(res.status, 200);
     assert.equal(data.source, "sample");
     assert.equal(data.budget, 700000);
-    assert.equal(data.houses.length, 3);
+    assert.equal(data.houses.length, 5);
     assert.ok(data.houses.every((h) => h.slug !== "index"));
     const maple = data.houses.find((h) => h.address.includes("Maple Demo"));
     assert.ok(maple);
     assert.equal(maple.listPrice, 739000);
     assert.ok(maple.priceHistory.some((p) => p.price == null));
+  });
+
+  it("returns only sold sample houses with computed graveyard fields", async () => {
+    const { res, data } = await jsonRequest(port, "/api/graveyard");
+    assert.equal(res.status, 200);
+    assert.equal(data.source, "sample");
+    assert.equal(data.houses.length, 2);
+    assert.deepEqual(
+      data.houses.map((h) => h.slug),
+      ["321-willow-sold-st-dallas-tx", "654-birch-closed-ave-garland-tx"]
+    );
+    const willow = data.houses[0];
+    assert.equal(willow.originalPrice, 689000);
+    assert.equal(willow.lowestPrice, 665000);
+    assert.equal(willow.salePrice, 655000);
+    assert.equal(willow.daysOnMarket, 73);
+    const birch = data.houses[1];
+    assert.equal(birch.originalPrice, 599000);
+    assert.equal(birch.lowestPrice, 575000);
+    assert.equal(birch.salePrice, null);
+    assert.equal(birch.daysOnMarket, 56);
   });
 
   it("rejects an empty add-house payload", async () => {
@@ -182,7 +216,9 @@ describe("API", () => {
     assert.equal(data.source, "default");
     assert.deepEqual(data.slugs, [
       "123-maple-demo-st-dallas-tx",
+      "321-willow-sold-st-dallas-tx",
       "456-oak-sample-ave-richardson-tx",
+      "654-birch-closed-ave-garland-tx",
       "789-cedar-placeholder-ln-plano-tx",
     ]);
   });
@@ -208,7 +244,9 @@ describe("API", () => {
     assert.deepEqual(data.slugs, [
       "789-cedar-placeholder-ln-plano-tx",
       "123-maple-demo-st-dallas-tx",
+      "321-willow-sold-st-dallas-tx",
       "456-oak-sample-ave-richardson-tx",
+      "654-birch-closed-ave-garland-tx",
     ]);
 
     const saved = JSON.parse(fs.readFileSync(process.env.RANKINGS_PATH, "utf8"));

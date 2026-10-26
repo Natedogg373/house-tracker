@@ -1,0 +1,29 @@
+{
+  "address": "321 Willow Sold St, Dallas, TX 75201",
+  "zillowUrl": "https://www.zillow.com/homedetails/321-Willow-Sold-St-Dallas-TX-75201/000000004_zpid/",
+  "photoUrl": "/img/sample-maple.svg",
+  "status": "Sold (10/15/2026)",
+  "listPrice": 665000,
+  "salePrice": 655000,
+  "soldDate": "2026-10-15",
+  "yearBuilt": 1988,
+  "sqft": 1960,
+  "pricePerSqft": 339,
+  "beds": 3,
+  "baths": 2,
+  "lotAcres": 0.16,
+  "lastUpdated": "2026-10-16",
+  "priceHistory": [
+    { "week": "2026-08-03", "price": 689000 },
+    { "week": "2026-08-10", "price": 689000 },
+    { "week": "2026-08-17", "price": 679000 },
+    { "week": "2026-08-24", "price": null },
+    { "week": "2026-08-31", "price": 679000 },
+    { "week": "2026-09-07", "price": 669000 },
+    { "week": "2026-09-14", "price": 669000 },
+    { "week": "2026-09-21", "price": 665000 },
+    { "week": "2026-09-28", "price": 665000 },
+    { "week": "2026-10-05", "price": 665000 },
+    { "week": "2026-10-12", "price": 665000 }
+  ]
+}

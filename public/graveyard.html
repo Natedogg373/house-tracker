@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Graveyard · House Tracker</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <img src="/favicon.svg" alt="" />
+        <span>House Tracker</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Dashboard</a>
+        <a href="/rankings">Rankings</a>
+        <a href="/graveyard" aria-current="page">Graveyard</a>
+        <a href="/add">Add house</a>
+        <a href="/about">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="panel graveyard-intro">
+        <h1>Graveyard</h1>
+        <p class="lede">
+          Houses that sold while we were watching them. Original and lowest list prices come from
+          weekly history; sale price is shown when House Tracker can get it from Zillow — often it
+          cannot.
+        </p>
+        <p id="sample-banner" class="banner sample" hidden>
+          Showing sample houses for demo. Real sold listings appear here once JSON files in
+          <code>data/houses/</code> are marked Sold.
+        </p>
+        <p id="error-banner" class="banner error" hidden></p>
+      </section>
+
+      <section id="empty" class="panel empty hidden">
+        <h2>Nothing in the graveyard yet</h2>
+        <p>
+          When a watched listing is marked Sold, it will show up here with list-price history and
+          days on market. Pending and for-sale homes stay on the dashboard.
+        </p>
+        <p><a href="/">Back to dashboard</a></p>
+      </section>
+
+      <section id="graveyard-view" class="hidden">
+        <p id="graveyard-count" class="graveyard-count"></p>
+        <ol id="graveyard-list" class="graveyard-list" aria-label="Sold houses"></ol>
+      </section>
+    </main>
+
+    <script type="module" src="/js/graveyard.js"></script>
+  </body>
+</html>

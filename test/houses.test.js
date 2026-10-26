@@ -16,8 +16,9 @@ describe("isHouseFilename", () => {
 describe("loadHousesFromDir", () => {
   it("reads sample houses and skips nothing extra", () => {
     const houses = loadHousesFromDir(SAMPLE_DIR);
-    assert.equal(houses.length, 3);
+    assert.equal(houses.length, 5);
     assert.ok(houses.every((h) => h.slug && h.address));
+    assert.equal(houses.filter((h) => /\bsold\b/i.test(h.status)).length, 2);
   });
 
   it("skips index.json and keeps house files", () => {
@@ -44,7 +45,7 @@ describe("resolveHouses", () => {
     const empty = fs.mkdtempSync(path.join(os.tmpdir(), "empty-houses-"));
     const result = resolveHouses({ housesDir: empty, sampleDir: SAMPLE_DIR, useSampleData: "" });
     assert.equal(result.source, "sample");
-    assert.equal(result.houses.length, 3);
+    assert.equal(result.houses.length, 5);
   });
 
   it("uses live houses when present", () => {

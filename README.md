@@ -65,6 +65,8 @@ One JSON file per house: `data/houses/<address-slug>.json`.
   "baths": 2.5,
   "lotAcres": 0.2,
   "lastUpdated": "2026-10-13",
+  "salePrice": null,
+  "soldDate": null,
   "priceHistory": [
     { "week": "2026-09-07", "price": 739000 },
     { "week": "2026-09-14", "price": null }
@@ -73,6 +75,8 @@ One JSON file per house: `data/houses/<address-slug>.json`.
 ```
 
 Weeks are Mondays (series starts `2026-01-05`). `price: null` means the house was not listed that week; the chart leaves a gap and does not connect across it.
+
+`salePrice` and `soldDate` (ISO date) may appear when House Tracker can read a close from Zillow. They are often missing even after status becomes Sold — the Graveyard page then shows sale price as Unknown and estimates days on market from `priceHistory` (or `lastUpdated`).
 
 Any field may be missing or null. The UI shows placeholders, skips a broken photo, and computes age from year built. List price is highlighted over or under the **$700,000** budget.
 
@@ -96,12 +100,13 @@ The order is shared through git. After you rearrange houses, **commit `data/rank
 
 ### Sample data
 
-`data/sample/` has three clearly fake houses (Demo / Sample / Placeholder addresses). They are used only when `data/houses/` has no house files, or when `USE_SAMPLE_DATA=true`.
+`data/sample/` has five clearly fake houses (Demo / Sample / Placeholder / Sold / Closed addresses). They are used only when `data/houses/` has no house files, or when `USE_SAMPLE_DATA=true`. The two Sold samples are for exercising `/graveyard` without changing real `data/houses/` files.
 
 ## Pages
 
 - **Dashboard** (`/`) — pick an address, see details, photo, and price history vs. the $700K budget line.
 - **Rankings** (`/rankings`) — drag houses into an order, or type a rank number (that house moves there and the rest shift). Saved to `data/rankings.json`.
+- **Graveyard** (`/graveyard`) — houses whose status is Sold (word match, so `Sold (10/1/2026)` counts). Shows original list price, lowest list price, sale price (or Unknown), and days on market. Newest `soldDate` first; otherwise by address.
 - **Add house** (`/add`) — submit a Zillow URL or street address to the bot webhook.
 - **About** (`/about`) — what the project is, how the bot / GitHub JSON / web app fit together, and the plan to host on Cloudflare Pages with a public landing and a password-gated dashboard.
 

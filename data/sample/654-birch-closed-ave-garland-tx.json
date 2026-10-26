@@ -1,0 +1,27 @@
+{
+  "address": "654 Birch Closed Ave, Garland, TX 75040",
+  "zillowUrl": "https://www.zillow.com/homedetails/654-Birch-Closed-Ave-Garland-TX-75040/000000005_zpid/",
+  "photoUrl": "/img/sample-cedar.svg",
+  "status": "Sold",
+  "listPrice": 575000,
+  "salePrice": null,
+  "soldDate": null,
+  "yearBuilt": 2004,
+  "sqft": 2040,
+  "pricePerSqft": 282,
+  "beds": 4,
+  "baths": 2.5,
+  "lotAcres": 0.19,
+  "lastUpdated": "2026-10-13",
+  "priceHistory": [
+    { "week": "2026-08-17", "price": 599000 },
+    { "week": "2026-08-24", "price": 599000 },
+    { "week": "2026-08-31", "price": 589000 },
+    { "week": "2026-09-07", "price": 589000 },
+    { "week": "2026-09-14", "price": null },
+    { "week": "2026-09-21", "price": 579000 },
+    { "week": "2026-09-28", "price": 575000 },
+    { "week": "2026-10-05", "price": 575000 },
+    { "week": "2026-10-12", "price": 575000 }
+  ]
+}
