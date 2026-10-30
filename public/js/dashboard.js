@@ -18,6 +18,7 @@ import {
   show,
   slugFromLocation,
   statusClass,
+  zillowHref,
 } from "./common.js";
 
 const select = document.querySelector("#house-select");
@@ -78,11 +79,6 @@ const mapPin = Leaflet.divIcon({
 
 let leafletMap = null;
 let leafletMarker = null;
-
-function zillowHref(house) {
-  const url = String(house.zillowUrl || "");
-  return /^https?:\/\//i.test(url) ? url : "";
-}
 
 function setZillowButton(house) {
   const href = zillowHref(house);
@@ -389,6 +385,7 @@ function renderHouse(house) {
   }
 
   renderInterestUi(house);
+  setZillowButton(house);
 
   if (delta) {
     budgetBanner.hidden = false;
@@ -398,9 +395,9 @@ function renderHouse(house) {
     budgetBanner.hidden = true;
   }
 
-  const zillowUrl = String(house.zillowUrl || "");
-  const zillowSafe = /^https?:\/\//i.test(zillowUrl)
-    ? `<a href="${escapeHtml(zillowUrl)}" target="_blank" rel="noopener noreferrer">Open listing</a>`
+  const listingHref = zillowHref(house);
+  const zillowSafe = listingHref
+    ? `<a href="${escapeHtml(listingHref)}" target="_blank" rel="noopener noreferrer">View on Zillow</a>`
     : "No listing link";
 
   const priceClass = delta ? `price ${delta.kind}` : "price";

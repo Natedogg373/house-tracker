@@ -363,7 +363,7 @@ h2 {
   place-items: center;
   align-content: center;
   gap: 0.6rem;
-  padding: 1.5rem 1.5rem 4.5rem;
+  padding: 1.5rem;
   text-align: center;
   color: var(--muted);
 }
@@ -379,28 +379,29 @@ h2 {
 }
 
 .zillow-cta {
-  position: absolute;
-  left: 50%;
-  bottom: 1rem;
-  transform: translateX(-50%);
-  z-index: 1100;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: min(90%, 280px);
-  padding: 0.9rem 1.4rem;
+  min-height: 44px;
+  min-width: 12.5rem;
+  padding: 0.85rem 1.3rem;
   border-radius: 999px;
   background: #006aff;
   color: #fff;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1rem;
   letter-spacing: 0.01em;
   text-decoration: none;
-  box-shadow: 0 8px 24px rgba(0, 80, 180, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 80, 180, 0.28);
 }
 
 .zillow-cta:hover {
   background: #0057d2;
+  color: #fff;
+}
+
+.zillow-cta:visited {
+  color: #fff;
 }
 
 .zillow-cta:focus-visible {
@@ -1151,6 +1152,12 @@ button.secondary,
 
 .house-actions {
   margin-top: 0.35rem;
+  align-items: stretch;
+}
+
+.house-actions button,
+.house-actions .zillow-cta {
+  min-height: 44px;
 }
 
 button.danger,
@@ -1525,6 +1532,7 @@ body.map-page main.map-main {
 
 button,
 .button-link,
+.zillow-cta,
 .nav a,
 .rank-handle {
   touch-action: manipulation;
@@ -1692,8 +1700,10 @@ button,
   }
 
   .actions button,
-  .actions .button-link {
+  .actions .button-link,
+  .actions .zillow-cta {
     width: 100%;
+    min-height: 44px;
     justify-content: center;
   }
 

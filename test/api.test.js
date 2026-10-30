@@ -56,6 +56,10 @@ describe("API", () => {
     assert.match(html, /href="\/graveyard"/);
     assert.match(html, /href="\/map"/);
     assert.match(html, /id="not-interested-btn"/);
+    assert.match(html, /id="zillow-cta"/);
+    assert.match(html, /View on Zillow/);
+    assert.match(html, /target="_blank"/);
+    assert.match(html, /rel="noopener/);
     assert.match(html, /id="schools-section"/);
     assert.match(html, /id="schools-list"/);
   });

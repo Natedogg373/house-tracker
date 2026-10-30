@@ -98,6 +98,14 @@ export function isSoldStatus(status) {
   return /\bsold\b/i.test(String(status || "").trim());
 }
 
+export function zillowHref(house) {
+  const listing = String(house?.zillowUrl || "").trim();
+  if (/^https?:\/\//i.test(listing)) return listing;
+  const address = String(house?.address || "").trim();
+  if (!address) return "";
+  return `https://www.zillow.com/homes/${encodeURIComponent(address)}_rb/`;
+}
+
 export function escapeHtml(value) {
   return String(value)
     .replace(/&/g, "&amp;")
