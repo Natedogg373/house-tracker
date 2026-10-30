@@ -21,7 +21,9 @@ jobs:
           tags: tag:ci
 
       - name: Trigger Coolify deploy
+        env:
+          TOKEN: ${{ secrets.COOLIFY_GH_TOKEN }}
         run: |
-          curl -fsS --max-time 60 \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+          curl -fsS -X POST --max-time 60 \
+            -H "Authorization: Bearer $TOKEN" \
             "http://100.74.201.123:8000/api/v1/deploy?uuid=li87awd6s5qjttyt2icjxqiw&force=false"
