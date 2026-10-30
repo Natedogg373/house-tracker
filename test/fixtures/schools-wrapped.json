@@ -1,0 +1,37 @@
+{
+  "schools": [
+    {
+      "id": "fixture-hexter-elementary",
+      "name": "Fixture Hexter Elementary",
+      "level": "elementary",
+      "district": "Dallas ISD",
+      "address": "9720 Waterview Rd, Dallas, TX 75218",
+      "lat": 32.849701,
+      "lng": -96.709471,
+      "greatSchoolsRating": 8,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/1831-Victor-High-Hexter-Elementary-School/"
+    },
+    {
+      "id": "fixture-hill-middle",
+      "name": "Fixture Hill Middle",
+      "level": "middle",
+      "district": "Dallas ISD",
+      "address": "505 Easton Rd, Dallas, TX 75218",
+      "lat": 32.85659,
+      "lng": -96.704503,
+      "greatSchoolsRating": 5,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/1832-Robert-T-Hill-Middle-School/"
+    },
+    {
+      "id": "fixture-adams-high",
+      "name": "Fixture Adams High",
+      "level": "high",
+      "district": "Dallas ISD",
+      "address": "2101 Millmar Dr, Dallas, TX 75228",
+      "lat": 32.826904,
+      "lng": -96.680084,
+      "greatSchoolsRating": null,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/1769-Bryan-Adams-High-School/"
+    }
+  ]
+}

@@ -10,6 +10,10 @@ import {
   houseAge,
   isSoldStatus,
   pricePerSqft,
+  schoolLevelLabel,
+  schoolRatingClass,
+  schoolRatingLabel,
+  schoolsForHouse,
   setHouseUrl,
   show,
   slugFromLocation,
@@ -35,11 +39,19 @@ const mapPlaceholder = document.querySelector("#map-placeholder");
 const mapPlaceholderText = document.querySelector("#map-placeholder-text");
 const zillowCta = document.querySelector("#zillow-cta");
 const canvas = document.querySelector("#price-chart");
+const schoolsSection = document.querySelector("#schools-section");
+const schoolsList = document.querySelector("#schools-list");
 
 const STORAGE_KEY = "house-tracker:selected";
 
 let chart;
-let payload = { houses: [], budget: 700000, source: "sample", interest: { notInterested: [], pendingReactivation: [] } };
+let payload = {
+  houses: [],
+  budget: 700000,
+  source: "sample",
+  interest: { notInterested: [], pendingReactivation: [] },
+  schools: [],
+};
 
 function metric(label, value, extra = "") {
   return `<article class="metric ${extra}">
@@ -321,6 +333,33 @@ function renderInterestUi(house) {
   show(notInterestedBtn, !notInterested && !isSoldStatus(house.status));
 }
 
+function schoolRowHtml(school) {
+  const ratingText = schoolRatingLabel(school.rating);
+  const ratingClass = schoolRatingClass(school.rating);
+  const ratingInner = /^https?:\/\//i.test(String(school.ratingSource || ""))
+    ? `<a href="${escapeHtml(school.ratingSource)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ratingText)}</a>`
+    : escapeHtml(ratingText);
+  const district = school.district ? escapeHtml(school.district) : "District unknown";
+  return `<li class="school-row">
+    <div>
+      <p class="school-row-name">${escapeHtml(school.name)}</p>
+      <p class="school-row-meta">${escapeHtml(schoolLevelLabel(school.level))} · ${district}</p>
+    </div>
+    <span class="pill school-rating ${ratingClass}">${ratingInner}</span>
+  </li>`;
+}
+
+function renderSchools(house) {
+  const schools = schoolsForHouse(house, payload.schools);
+  if (!schools.length) {
+    schoolsSection.hidden = true;
+    schoolsList.innerHTML = "";
+    return;
+  }
+  schoolsSection.hidden = false;
+  schoolsList.innerHTML = schools.map(schoolRowHtml).join("");
+}
+
 function renderHouse(house) {
   const budget = payload.budget || 700000;
   const delta = budgetDelta(house.listPrice, budget);
@@ -364,6 +403,7 @@ function renderHouse(house) {
     metric("Zillow", zillowSafe),
   ].join("");
 
+  renderSchools(house);
   setMedia(house);
   renderChart(house, budget);
 }

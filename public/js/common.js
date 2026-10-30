@@ -168,3 +168,33 @@ export function schoolRatingLabel(rating) {
   if (rating == null || rating === "" || Number.isNaN(Number(rating))) return "Not rated";
   return `${Number(rating)}/10`;
 }
+
+export function schoolRatingClass(rating) {
+  if (rating == null || rating === "" || Number.isNaN(Number(rating))) return "unrated";
+  const n = Number(rating);
+  if (n >= 8) return "high";
+  if (n >= 5) return "mid";
+  return "low";
+}
+
+const SCHOOL_LEVEL_ORDER = { elementary: 0, middle: 1, high: 2 };
+
+export function sortSchoolsByLevel(schools) {
+  return [...(schools || [])].sort((a, b) => {
+    const da = SCHOOL_LEVEL_ORDER[a?.level] ?? 99;
+    const db = SCHOOL_LEVEL_ORDER[b?.level] ?? 99;
+    if (da !== db) return da - db;
+    return String(a?.name || "").localeCompare(String(b?.name || ""), "en", { sensitivity: "base" });
+  });
+}
+
+export function schoolsForHouse(house, schools) {
+  const ids = Array.isArray(house?.schoolIds) ? house.schoolIds : [];
+  const byId = new Map((schools || []).map((school) => [school.id, school]));
+  const found = [];
+  for (const id of ids) {
+    const school = byId.get(id);
+    if (school) found.push(school);
+  }
+  return sortSchoolsByLevel(found);
+}
