@@ -1,5 +1,4 @@
 import {
-  colorForIndex,
   detailsUrl,
   escapeHtml,
   fetchHouses,
@@ -10,6 +9,17 @@ import {
   schoolRatingLabel,
   show,
 } from "./common.js";
+import {
+  MAP_LEVEL_STORAGE_KEY,
+  NEUTRAL_HOUSE_COLOR,
+  SCHOOL_LEVELS,
+  assignSchoolColors,
+  colorForHouseAtLevel,
+  normalizeSchoolLevel,
+  schoolAtLevel,
+  schoolPoint,
+  schoolsAtLevel,
+} from "./school-colors.js";
 
 const Leaflet = window.L;
 const mapEl = document.querySelector("#map");
@@ -21,12 +31,14 @@ const missingCoordsEl = document.querySelector("#missing-coords");
 const geofenceList = document.querySelector("#geofence-list");
 const geofenceStatus = document.querySelector("#geofence-status");
 const drawHint = document.querySelector("#draw-hint");
+const levelToggle = document.querySelector("#level-toggle");
 
 let payload = { houses: [], schools: [], geofences: [], interest: {}, source: "houses" };
 let map;
 let overlay;
 let drawer = null;
 let fenceLayers = new Map();
+let currentLevel = readStoredLevel();
 
 const FENCE_STYLE = {
   color: "#2c4a3e",
@@ -36,6 +48,22 @@ const FENCE_STYLE = {
   dashArray: "6 4",
 };
 
+function readStoredLevel() {
+  try {
+    return normalizeSchoolLevel(window.localStorage.getItem(MAP_LEVEL_STORAGE_KEY));
+  } catch {
+    return "elementary";
+  }
+}
+
+function persistLevel(level) {
+  try {
+    window.localStorage.setItem(MAP_LEVEL_STORAGE_KEY, level);
+  } catch {
+    /* ignore quota / private-mode failures */
+  }
+}
+
 function activeHouses() {
   return (payload.houses || []).filter((house) => isActiveHouse(house, payload.interest));
 }
@@ -44,25 +72,12 @@ function mappableHouses() {
   return activeHouses().filter((house) => houseLatLng(house));
 }
 
-function colorBySlug() {
-  const colors = new Map();
-  mappableHouses().forEach((house, index) => {
-    colors.set(house.slug, colorForIndex(index));
-  });
-  return colors;
+function visibleSchools() {
+  return schoolsAtLevel(payload.schools, currentLevel);
 }
 
-function housesForSchool(school, colors) {
-  return mappableHouses().filter((house) => (house.schoolIds || []).includes(school.id) && colors.has(house.slug));
-}
-
-function conicBackground(colors) {
-  if (!colors.length) return "#6f675e";
-  if (colors.length === 1) return colors[0];
-  const step = 100 / colors.length;
-  return `conic-gradient(${colors
-    .map((color, index) => `${color} ${index * step}% ${(index + 1) * step}%`)
-    .join(", ")})`;
+function housesForSchool(school) {
+  return mappableHouses().filter((house) => (house.schoolIds || []).includes(school.id));
 }
 
 function houseIcon(color) {
@@ -75,11 +90,10 @@ function houseIcon(color) {
   });
 }
 
-function schoolIcon(colors) {
-  const fill = conicBackground(colors);
+function schoolIcon(color) {
   return Leaflet.divIcon({
     className: "pin-wrap",
-    html: `<span class="school-pin" style="background:${fill}"><span class="school-pin-mark" aria-hidden="true"></span></span>`,
+    html: `<span class="school-pin" style="background:${color}"><span class="school-pin-mark" aria-hidden="true"></span></span>`,
     iconSize: [22, 22],
     iconAnchor: [11, 11],
     tooltipAnchor: [0, -12],
@@ -92,16 +106,20 @@ function insideBadge(house) {
   return `<span class="pill inside">In area</span>`;
 }
 
-function houseTooltip(house) {
+function houseTooltip(house, school) {
   const href = detailsUrl(house.slug);
   const photo = house.photoUrl
     ? `<img class="map-tip-thumb" src="${escapeHtml(house.photoUrl)}" alt="" />`
     : `<div class="map-tip-thumb map-tip-empty" aria-hidden="true"></div>`;
+  const schoolLine = school
+    ? `<span>${escapeHtml(school.name)}</span>`
+    : `<span class="map-tip-muted">No ${escapeHtml(schoolLevelLabel(currentLevel).toLowerCase())} school</span>`;
   return `<a class="map-tip-card" href="${escapeHtml(href)}">
     ${photo}
     <div class="map-tip-body">
       <strong>${escapeHtml(house.address || house.slug)}</strong>
       <span>${escapeHtml(formatMoney(house.listPrice))}</span>
+      ${schoolLine}
       ${insideBadge(house)}
     </div>
   </a>`;
@@ -219,24 +237,40 @@ async function persistGeofences(next) {
   payload.geofences = houses.geofences || payload.geofences;
   payload.interest = houses.interest;
   payload.schools = houses.schools || payload.schools;
-  renderAll();
+  renderAll({ fit: true });
 }
 
 function nextAreaName() {
   return `Area ${(payload.geofences || []).length + 1}`;
 }
 
+function renderLevelToggle() {
+  if (!levelToggle) return;
+  for (const button of levelToggle.querySelectorAll("[data-level]")) {
+    const on = button.dataset.level === currentLevel;
+    button.setAttribute("aria-pressed", on ? "true" : "false");
+  }
+}
+
 function renderLegend(colors) {
-  const items = mappableHouses().map((house) => {
-    const color = colors.get(house.slug);
-    return `<li>
-      <a class="legend-house" href="${escapeHtml(detailsUrl(house.slug))}">
-        <span class="legend-swatch" style="background:${color}"></span>
-        <span>${escapeHtml(house.address || house.slug)}</span>
-      </a>
-    </li>`;
-  });
-  legendList.innerHTML = items.join("") || `<li class="map-note">No houses with coordinates yet.</li>`;
+  const items = visibleSchools()
+    .slice()
+    .sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), "en", { sensitivity: "base" }))
+    .map((school) => {
+      const color = colors.get(school.id);
+      return `<li>
+        <div class="legend-school">
+          <span class="legend-swatch school-swatch" style="background:${color}"></span>
+          <span class="legend-school-text">
+            <span class="legend-school-name">${escapeHtml(school.name)}</span>
+            <span class="legend-school-rating">${escapeHtml(schoolRatingLabel(school.rating))}</span>
+          </span>
+        </div>
+      </li>`;
+    });
+  const levelName = schoolLevelLabel(currentLevel).toLowerCase();
+  legendList.innerHTML =
+    items.join("") || `<li class="map-note">No ${escapeHtml(levelName)} schools with coordinates yet.</li>`;
 }
 
 function renderGeofences() {
@@ -278,13 +312,14 @@ function renderPins(colors) {
 
   for (const house of mappableHouses()) {
     const point = houseLatLng(house);
-    const color = colors.get(house.slug);
+    const school = schoolAtLevel(house, payload.schools, currentLevel);
+    const color = colorForHouseAtLevel(house, colors, payload.schools, currentLevel);
     const marker = Leaflet.marker([point.lat, point.lng], {
       icon: houseIcon(color),
       title: house.address || house.slug,
       riseOnHover: true,
     });
-    marker.bindTooltip(houseTooltip(house), {
+    marker.bindTooltip(houseTooltip(house, school), {
       direction: "top",
       opacity: 1,
       className: "map-tip",
@@ -296,14 +331,13 @@ function renderPins(colors) {
     overlay.addLayer(marker);
   }
 
-  for (const school of payload.schools || []) {
-    const lat = Number(school.lat);
-    const lng = Number(school.lng);
-    if (!Number.isFinite(lat) || !Number.isFinite(lng)) continue;
-    const related = housesForSchool(school, colors);
-    const colorsForSchool = related.map((house) => colors.get(house.slug));
-    const marker = Leaflet.marker([lat, lng], {
-      icon: schoolIcon(colorsForSchool),
+  for (const school of visibleSchools()) {
+    const point = schoolPoint(school);
+    if (!point) continue;
+    const related = housesForSchool(school);
+    const color = colors.get(school.id) || NEUTRAL_HOUSE_COLOR;
+    const marker = Leaflet.marker([point.lat, point.lng], {
+      icon: schoolIcon(color),
       title: school.name,
       riseOnHover: true,
       zIndexOffset: 200,
@@ -324,10 +358,9 @@ function fitMap() {
     const point = houseLatLng(house);
     bounds.extend([point.lat, point.lng]);
   }
-  for (const school of payload.schools || []) {
-    const lat = Number(school.lat);
-    const lng = Number(school.lng);
-    if (Number.isFinite(lat) && Number.isFinite(lng)) bounds.extend([lat, lng]);
+  for (const school of visibleSchools()) {
+    const point = schoolPoint(school);
+    if (point) bounds.extend([point.lat, point.lng]);
   }
   for (const layer of fenceLayers.values()) {
     if (layer.getBounds && layer.getBounds().isValid()) bounds.extend(layer.getBounds());
@@ -339,9 +372,9 @@ function fitMap() {
   }
 }
 
-function renderAll() {
+function renderAll({ fit = true } = {}) {
   sampleBanner.hidden = payload.source !== "sample";
-  const colors = colorBySlug();
+  const colors = assignSchoolColors(visibleSchools());
   const mapped = mappableHouses();
   const active = activeHouses();
   const missing = active.length - mapped.length;
@@ -353,10 +386,22 @@ function renderAll() {
   const inArea = mapped.filter((house) => (house.inside || []).length > 0).length;
   const noun = inArea === 1 ? "house" : "houses";
   inAreaCount.textContent = `${inArea} ${noun} in area`;
+  renderLevelToggle();
   renderLegend(colors);
   renderGeofences();
   renderPins(colors);
-  fitMap();
+  if (fit) fitMap();
+}
+
+function setLevel(level, { persist = true, fit = false } = {}) {
+  const next = normalizeSchoolLevel(level);
+  if (next === currentLevel && persist) {
+    renderLevelToggle();
+    return;
+  }
+  currentLevel = next;
+  if (persist) persistLevel(currentLevel);
+  renderAll({ fit });
 }
 
 function initMap() {
@@ -390,6 +435,14 @@ document.querySelector("#draw-rect").addEventListener("click", () => startDraw("
 document.querySelector("#draw-circle").addEventListener("click", () => startDraw("circle"));
 document.querySelector("#draw-polygon").addEventListener("click", () => startDraw("polygon"));
 
+if (levelToggle) {
+  levelToggle.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-level]");
+    if (!button || !SCHOOL_LEVELS.includes(button.dataset.level)) return;
+    setLevel(button.dataset.level);
+  });
+}
+
 geofenceList.addEventListener("click", async (event) => {
   const rename = event.target.closest(".rename-fence");
   const remove = event.target.closest(".delete-fence");
@@ -422,7 +475,8 @@ async function load() {
   try {
     payload = await fetchHouses();
     errorBanner.hidden = true;
-    renderAll();
+    currentLevel = readStoredLevel();
+    renderAll({ fit: true });
   } catch (err) {
     errorBanner.hidden = false;
     errorBanner.textContent = err.message;

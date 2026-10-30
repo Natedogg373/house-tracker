@@ -76,6 +76,8 @@ describe("API", () => {
     const html = await res.text();
     assert.equal(res.status, 200);
     assert.match(html, /Houses and schools map/);
+    assert.match(html, /id="level-toggle"/);
+    assert.match(html, /Elementary/);
     assert.match(html, /leaflet.draw/);
     assert.match(html, /House Details/);
     assert.match(html, /href="\/map"/);

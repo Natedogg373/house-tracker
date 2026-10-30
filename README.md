@@ -84,7 +84,7 @@ Weeks are Mondays (series starts `2026-01-05`). `price: null` means the house wa
 
 `salePrice` and `soldDate` (ISO date) may appear when House Tracker can read a close from Zillow. They are often missing even after status becomes Sold — the Graveyard page then shows sale price as Unknown and estimates days on market from `priceHistory` (or `lastUpdated`).
 
-`lat` and `lng` are optional. The Map page uses them when present; otherwise it falls back to the Nominatim geocode cache. `schoolIds` lists ids from `data/schools.json` so school pins can share that house’s color.
+`lat` and `lng` are optional. The Map page uses them when present; otherwise it falls back to the Nominatim geocode cache. `schoolIds` lists ids from `data/schools.json` so a house pin can take the color of its school at the selected level.
 
 Any field may be missing or null. The UI shows placeholders, skips a broken photo, and computes age from year built. List price is highlighted over or under the **$700,000** budget.
 
@@ -147,7 +147,7 @@ The bot will commit this file. Missing or unreadable is fine — the Map still l
 ]
 ```
 
-`level` is `elementary`, `middle`, or `high`. `rating` is `0`–`10` or `null` (“Not rated”). The Map uses a square marker for schools and a round pin for houses. Each active house gets a distinct color; school pins that appear in that house’s `schoolIds` use the same color. A school shared by several houses is drawn once with a split/conic color ring, and the tooltip lists the houses.
+`level` is `elementary`, `middle`, or `high`. `rating` is `0`–`10` or `null` (“Not rated”). The Map uses a square marker for schools and a round pin for houses. An Elementary / Middle / High toggle (remembered in `localStorage`) shows one level at a time. Each school gets one color; houses zoned to that school use the same color. Nearby schools (about 3 km) never share a color; far-apart schools may. Houses with no school at the selected level are grey. The legend lists only the schools for that level (color, name, rating).
 
 ### Geofences (`data/geofences.json`)
 
@@ -175,7 +175,7 @@ Commit `data/geofences.json` so the areas are shared.
 ## Pages
 
 - **House Details** (`/`, deep link `/?house=<slug>`) — pick an address, see details, photo, and price history vs. the $700K budget line. The dropdown updates the URL; opening a deep link selects that house. **Not interested** moves it to the Graveyard list above.
-- **Map** (`/map`) — Leaflet + OSM. Active house pins (not sold, not not-interested), school pins, a legend, and drawable geofences. Hover a house pin for photo + price + address; click the pin or tooltip to open House Details.
+- **Map** (`/map`) — Leaflet + OSM. Active house pins (not sold, not not-interested), school pins for the selected level, a school legend, and drawable geofences. Hover a house pin for photo, price, address, and that level’s school; click the pin or tooltip to open House Details.
 - **Rankings** (`/rankings`) — drag houses into an order, or type a rank number (that house moves there and the rest shift). Saved to `data/rankings.json`. Sold and not-interested houses are excluded. Click a house (not the handle or rank input) to open House Details.
 - **Graveyard** (`/graveyard`) — **Sold** (word match, so `Sold (10/1/2026)` counts) plus **No longer interested**. Sold cards show original list price, lowest list price, sale price (or Unknown), and days on market. Newest `soldDate` first; otherwise by address.
 - **Add house** (`/add`) — submit a Zillow URL or street address to the bot webhook.
