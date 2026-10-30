@@ -1,0 +1,158 @@
+{
+  "schools": [
+    {
+      "id": "hexter-elementary",
+      "name": "Victor H. Hexter Elementary",
+      "level": "elementary",
+      "district": "Dallas ISD",
+      "address": "9720 Waterview Rd, Dallas, TX 75218",
+      "lat": 32.849701,
+      "lng": -96.709471,
+      "greatSchoolsRating": 8,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/1831-Victor-High-Hexter-Elementary-School/"
+    },
+    {
+      "id": "robert-t-hill-middle",
+      "name": "Robert T. Hill Middle School",
+      "level": "middle",
+      "district": "Dallas ISD",
+      "address": "505 Easton Rd, Dallas, TX 75218",
+      "lat": 32.85659,
+      "lng": -96.704503,
+      "greatSchoolsRating": 5,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/1832-Robert-T-Hill-Middle-School/"
+    },
+    {
+      "id": "bryan-adams-high",
+      "name": "Bryan Adams High School (Leadership Academy)",
+      "level": "high",
+      "district": "Dallas ISD",
+      "address": "2101 Millmar Dr, Dallas, TX 75228",
+      "lat": 32.826904,
+      "lng": -96.680084,
+      "greatSchoolsRating": 4,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/1769-Bryan-Adams-High-School/"
+    },
+    {
+      "id": "skyview-elementary",
+      "name": "Skyview Elementary",
+      "level": "elementary",
+      "district": "Richardson ISD",
+      "address": "9229 Meadowknoll Dr, Dallas, TX 75243",
+      "lat": 32.902849,
+      "lng": -96.733535,
+      "greatSchoolsRating": 2,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/5737-Skyview-Elementary-School/"
+    },
+    {
+      "id": "moss-haven-elementary",
+      "name": "Moss Haven Elementary",
+      "level": "elementary",
+      "district": "Richardson ISD",
+      "address": "9202 Moss Farm Ln, Dallas, TX 75243",
+      "lat": 32.8955,
+      "lng": -96.7437,
+      "greatSchoolsRating": 8,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/5722-Moss-Haven-Elementary-School/"
+    },
+    {
+      "id": "merriman-park-elementary",
+      "name": "Merriman Park Elementary",
+      "level": "elementary",
+      "district": "Richardson ISD",
+      "address": "7101 Winedale Dr, Dallas, TX 75231",
+      "lat": 32.8797,
+      "lng": -96.7399,
+      "greatSchoolsRating": 8,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/5749-Merriman-Park-Elementary-School/"
+    },
+    {
+      "id": "white-rock-elementary",
+      "name": "White Rock Elementary",
+      "level": "elementary",
+      "district": "Richardson ISD",
+      "address": "9229 Chiswell Rd, Dallas, TX 75238",
+      "lat": 32.8737,
+      "lng": -96.7241,
+      "greatSchoolsRating": 10,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/5745-White-Rock-Elementary-School/"
+    },
+    {
+      "id": "aikin-elementary",
+      "name": "Aikin Elementary",
+      "level": "elementary",
+      "district": "Richardson ISD",
+      "address": "12300 Pleasant Valley Dr, Dallas, TX 75243",
+      "lat": 32.9151,
+      "lng": -96.7227,
+      "greatSchoolsRating": 3,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/5747-Aikin-Elementary-School/"
+    },
+    {
+      "id": "audelia-creek-elementary",
+      "name": "Audelia Creek Elementary",
+      "level": "elementary",
+      "district": "Richardson ISD",
+      "address": "12600 Audelia Rd, Dallas, TX 75243",
+      "lat": 32.9197,
+      "lng": -96.7156,
+      "greatSchoolsRating": 2,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/10070-Audelia-Creek-Elementary-School/"
+    },
+    {
+      "id": "forest-meadow-middle",
+      "name": "Forest Meadow Middle School",
+      "level": "middle",
+      "district": "Richardson ISD",
+      "address": "9373 Whitehurst Dr, Dallas, TX 75243",
+      "lat": 32.9013,
+      "lng": -96.7399,
+      "greatSchoolsRating": 4,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/5712-Forest-Meadow-J-High-School/"
+    },
+    {
+      "id": "lake-highlands-middle",
+      "name": "Lake Highlands Middle School",
+      "level": "middle",
+      "district": "Richardson ISD",
+      "address": "10301 Walnut Hill Ln, Dallas, TX 75238",
+      "lat": 32.8799,
+      "lng": -96.7081,
+      "greatSchoolsRating": 7,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/5719-Lake-Highlands-J-High-School/"
+    },
+    {
+      "id": "liberty-junior-high",
+      "name": "Liberty Junior High STEM Academy",
+      "level": "middle",
+      "district": "Richardson ISD",
+      "address": "10330 Lawler Rd, Dallas, TX 75243",
+      "lat": 32.923621,
+      "lng": -96.706746,
+      "greatSchoolsRating": 2,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/5720-Liberty-J-High-School/"
+    },
+    {
+      "id": "lake-highlands-high",
+      "name": "Lake Highlands High School",
+      "level": "high",
+      "district": "Richardson ISD",
+      "address": "9449 Church Rd, Dallas, TX 75238",
+      "lat": 32.887,
+      "lng": -96.7273,
+      "greatSchoolsRating": 5,
+      "ratingSource": "https://www.greatschools.org/texas/dallas/5718-Lake-Highlands-High-School/"
+    },
+    {
+      "id": "berkner-high",
+      "name": "Berkner High School",
+      "level": "high",
+      "district": "Richardson ISD",
+      "address": "1600 E Spring Valley Rd, Richardson, TX 75081",
+      "lat": 32.9368,
+      "lng": -96.6933,
+      "greatSchoolsRating": 4,
+      "ratingSource": "https://www.greatschools.org/texas/richardson/5704-Berkner-High-School/"
+    }
+  ]
+}

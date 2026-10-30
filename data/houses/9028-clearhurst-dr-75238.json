@@ -172,5 +172,12 @@
       "week": "2026-10-05",
       "price": 615000
     }
+  ],
+  "lat": 32.869509,
+  "lng": -96.730294,
+  "schoolIds": [
+    "white-rock-elementary",
+    "lake-highlands-middle",
+    "lake-highlands-high"
   ]
 }

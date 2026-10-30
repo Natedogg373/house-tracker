@@ -172,5 +172,12 @@
       "week": "2026-10-05",
       "price": 749000
     }
+  ],
+  "lat": 32.886003,
+  "lng": -96.741204,
+  "schoolIds": [
+    "merriman-park-elementary",
+    "forest-meadow-middle",
+    "lake-highlands-high"
   ]
 }

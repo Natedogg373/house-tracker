@@ -172,5 +172,12 @@
       "week": "2026-10-05",
       "price": 549000
     }
+  ],
+  "lat": 32.910379,
+  "lng": -96.714756,
+  "schoolIds": [
+    "audelia-creek-elementary",
+    "liberty-junior-high",
+    "berkner-high"
   ]
 }

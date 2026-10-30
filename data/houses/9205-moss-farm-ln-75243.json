@@ -172,5 +172,12 @@
       "week": "2026-10-05",
       "price": 670000
     }
+  ],
+  "lat": 32.896178,
+  "lng": -96.743906,
+  "schoolIds": [
+    "moss-haven-elementary",
+    "forest-meadow-middle",
+    "lake-highlands-high"
   ]
 }
