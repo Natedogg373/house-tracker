@@ -1,4 +1,4 @@
-import { fetchHouses, formatMoney, show, statusClass } from "./common.js";
+import { detailsUrl, fetchHouses, formatMoney, isActiveHouse, show, statusClass } from "./common.js";
 
 const listEl = document.querySelector("#rank-list");
 const emptyEl = document.querySelector("#empty");
@@ -108,6 +108,7 @@ function cardHtml(house, rank, total) {
   const status = house.status || "Status unknown";
   const pillClass = statusClass(house.status);
   const price = formatMoney(house.listPrice);
+  const href = detailsUrl(house.slug);
   return `<li class="rank-card" data-slug="${escapeHtml(house.slug)}">
     <button type="button" class="rank-handle" aria-label="Drag to reorder ${escapeHtml(house.address || house.slug)}">
       <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -131,14 +132,16 @@ function cardHtml(house, rank, total) {
         value="${rank}"
       />
     </label>
-    ${thumbHtml(house)}
-    <div class="rank-body">
-      <p class="rank-address">${escapeHtml(house.address || house.slug)}</p>
-      <p class="rank-meta">
-        <span>${escapeHtml(price)}</span>
-        <span class="pill ${pillClass}">${escapeHtml(status)}</span>
-      </p>
-    </div>
+    <a class="rank-link" href="${escapeHtml(href)}">
+      ${thumbHtml(house)}
+      <div class="rank-body">
+        <p class="rank-address">${escapeHtml(house.address || house.slug)}</p>
+        <p class="rank-meta">
+          <span>${escapeHtml(price)}</span>
+          <span class="pill ${pillClass}">${escapeHtml(status)}</span>
+        </p>
+      </div>
+    </a>
   </li>`;
 }
 
@@ -253,7 +256,10 @@ async function init() {
   try {
     const [payload, ranking] = await Promise.all([fetchHouses(), fetchRankings()]);
     sampleBanner.hidden = payload.source !== "sample";
-    houses = orderHouses(payload.houses || [], ranking.slugs || []);
+    const interest = payload.interest || { notInterested: [], pendingReactivation: [] };
+    houses = orderHouses(payload.houses || [], ranking.slugs || []).filter((house) =>
+      isActiveHouse(house, interest)
+    );
     render();
   } catch {
     showSave("error", "Could not load houses.");

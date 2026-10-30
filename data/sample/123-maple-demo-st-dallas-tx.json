@@ -11,6 +11,9 @@
   "baths": 2.5,
   "lotAcres": 0.2,
   "lastUpdated": "2026-10-13",
+  "lat": 32.7875,
+  "lng": -96.798,
+  "schoolIds": ["demo-maple-elem", "sample-cedar-high"],
   "priceHistory": [
     { "week": "2026-08-03", "price": 775000 },
     { "week": "2026-08-10", "price": 775000 },

@@ -10,6 +10,24 @@ export const moneyExact = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
+export const HOUSE_COLORS = [
+  "#c2410c",
+  "#1d4ed8",
+  "#7c3aed",
+  "#0f766e",
+  "#b45309",
+  "#be123c",
+  "#365314",
+  "#0369a1",
+  "#9f1239",
+  "#4338ca",
+  "#047857",
+  "#a16207",
+  "#6d28d9",
+  "#b91c1c",
+  "#0e7490",
+];
+
 export function formatMoney(value) {
   if (value == null || value === "" || Number.isNaN(Number(value))) return "—";
   const n = Number(value);
@@ -76,6 +94,18 @@ export function statusClass(status) {
   return "";
 }
 
+export function isSoldStatus(status) {
+  return /\bsold\b/i.test(String(status || "").trim());
+}
+
+export function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 export function show(el, on) {
   el.classList.toggle("hidden", !on);
 }
@@ -84,4 +114,57 @@ export async function fetchHouses() {
   const res = await fetch("/api/houses");
   if (!res.ok) throw new Error("Could not load houses.");
   return res.json();
+}
+
+export function detailsUrl(slug) {
+  return `/?house=${encodeURIComponent(slug)}`;
+}
+
+export function slugFromLocation(location = window.location) {
+  return new URLSearchParams(location.search).get("house") || "";
+}
+
+export function setHouseUrl(slug, { replace = true } = {}) {
+  const url = new URL(window.location.href);
+  url.pathname = "/";
+  if (slug) url.searchParams.set("house", slug);
+  else url.searchParams.delete("house");
+  const method = replace ? "replaceState" : "pushState";
+  history[method]({ house: slug || "" }, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
+export function hiddenInterestSlugs(interest) {
+  const slugs = new Set();
+  for (const entry of interest?.notInterested || []) slugs.add(entry.slug);
+  for (const entry of interest?.pendingReactivation || []) slugs.add(entry.slug);
+  return slugs;
+}
+
+export function isActiveHouse(house, interest) {
+  if (!house) return false;
+  if (isSoldStatus(house.status)) return false;
+  return !hiddenInterestSlugs(interest).has(house.slug);
+}
+
+export function houseLatLng(house) {
+  const lat = Number(house?.lat ?? house?.coords?.lat);
+  const lng = Number(house?.lng ?? house?.lon ?? house?.coords?.lng ?? house?.coords?.lon);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  return { lat, lng };
+}
+
+export function colorForIndex(index) {
+  return HOUSE_COLORS[index % HOUSE_COLORS.length];
+}
+
+export function schoolLevelLabel(level) {
+  if (level === "elementary") return "Elementary";
+  if (level === "middle") return "Middle";
+  if (level === "high") return "High";
+  return "School";
+}
+
+export function schoolRatingLabel(rating) {
+  if (rating == null || rating === "" || Number.isNaN(Number(rating))) return "Not rated";
+  return `${Number(rating)}/10`;
 }

@@ -2,17 +2,32 @@ require("dotenv").config();
 
 const path = require("path");
 const express = require("express");
-const { resolveHouses, getBudget, getHousesDir, SAMPLE_DIR } = require("./lib/houses");
-const { buildGraveyard } = require("./lib/graveyard");
+const { resolveHouses, getBudget, getHousesDir, SAMPLE_DIR, coordsFromHouse, schoolIdsOf } = require("./lib/houses");
+const { buildGraveyard, buildNotInterested } = require("./lib/graveyard");
 const { applyRankings, loadRankings, saveRankings } = require("./lib/rankings");
 const { startGitPullLoop } = require("./lib/git-pull");
-const { postToHouseTracker } = require("./lib/webhook");
+const { postToHouseTracker, postHouseTrackerPayload } = require("./lib/webhook");
 const { getGeocoder, isPrefetchEnabled } = require("./lib/geocode");
+const {
+  loadInterest,
+  saveInterest,
+  markNotInterested,
+  requestReactivation,
+  interestStatus,
+  reactivationInput,
+} = require("./lib/interest");
+const {
+  loadGeofences,
+  saveGeofences,
+  geofencesContaining,
+  housePoint,
+} = require("./lib/geofences");
+const { resolveSchools } = require("./lib/schools");
 
 const app = express();
 
 app.disable("x-powered-by");
-app.use(express.json({ limit: "32kb" }));
+app.use(express.json({ limit: "256kb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/add", (_req, res) => {
@@ -31,28 +46,69 @@ app.get("/graveyard", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "graveyard.html"));
 });
 
+app.get("/map", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "map.html"));
+});
+
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
 
-function withCoords(house) {
-  return { ...house, coords: getGeocoder().peek(house.address) };
+function currentHouses() {
+  return resolveHouses({
+    housesDir: getHousesDir(),
+    sampleDir: SAMPLE_DIR,
+    useSampleData: process.env.USE_SAMPLE_DATA,
+  });
+}
+
+function decorateHouse(house, { interest, geofences }) {
+  const peeked = getGeocoder().peek(house.address);
+  const coords = coordsFromHouse(house, peeked);
+  const decorated = {
+    ...house,
+    schoolIds: schoolIdsOf(house),
+    coords,
+    interestStatus: interestStatus(interest, house.slug),
+  };
+  const point = housePoint(decorated);
+  decorated.inside = point ? geofencesContaining(point.lat, point.lng, geofences).map((fence) => fence.name) : [];
+  return decorated;
+}
+
+function snapshot() {
+  const result = currentHouses();
+  const interest = loadInterest();
+  const { geofences } = loadGeofences();
+  const schools = resolveSchools({ source: result.source });
+  return {
+    ...result,
+    interest: {
+      notInterested: interest.notInterested,
+      pendingReactivation: interest.pendingReactivation,
+    },
+    geofences,
+    schools: schools.schools,
+    schoolSource: schools.source,
+  };
 }
 
 app.get("/api/houses", (_req, res) => {
   try {
-    const result = resolveHouses({
-      housesDir: getHousesDir(),
-      sampleDir: SAMPLE_DIR,
-      useSampleData: process.env.USE_SAMPLE_DATA,
-    });
+    const data = snapshot();
+    const houses = data.houses.map((house) =>
+      decorateHouse(house, { interest: data.interest, geofences: data.geofences })
+    );
     res.json({
       budget: getBudget(),
-      source: result.source,
-      houses: result.houses.map(withCoords),
+      source: data.source,
+      houses,
+      interest: data.interest,
+      geofences: data.geofences,
+      schools: data.schools,
     });
     if (isPrefetchEnabled()) {
-      getGeocoder().prefetch(result.houses.map((house) => house.address));
+      getGeocoder().prefetch(data.houses.map((house) => house.address));
     }
   } catch (err) {
     console.error("[api] failed to load houses:", err);
@@ -77,20 +133,16 @@ app.get("/api/geocode", async (req, res) => {
   }
 });
 
-function currentHouses() {
-  return resolveHouses({
-    housesDir: getHousesDir(),
-    sampleDir: SAMPLE_DIR,
-    useSampleData: process.env.USE_SAMPLE_DATA,
-  });
-}
-
 app.get("/api/graveyard", (_req, res) => {
   try {
-    const result = currentHouses();
+    const data = snapshot();
+    const sold = buildGraveyard(data.houses);
+    const notInterested = buildNotInterested(data.houses, data.interest);
     res.json({
-      source: result.source,
-      houses: buildGraveyard(result.houses),
+      source: data.source,
+      houses: sold,
+      sold,
+      notInterested,
     });
   } catch (err) {
     console.error("[api] failed to load graveyard:", err);
@@ -128,6 +180,122 @@ app.post("/api/rankings", (req, res) => {
   }
 });
 
+app.get("/api/interest", (_req, res) => {
+  try {
+    const interest = loadInterest();
+    res.json({
+      notInterested: interest.notInterested,
+      pendingReactivation: interest.pendingReactivation,
+      source: interest.source,
+    });
+  } catch (err) {
+    console.error("[api] failed to load interest:", err);
+    res.status(500).json({ error: "Failed to load interest." });
+  }
+});
+
+function findHouse(slug) {
+  const result = currentHouses();
+  const house = result.houses.find((item) => item.slug === slug) || null;
+  return { result, house };
+}
+
+app.post("/api/interest/not-interested", (req, res) => {
+  const slug = String(req.body?.slug || "").trim();
+  if (!slug) {
+    return res.status(400).json({ error: "Missing slug." });
+  }
+  try {
+    const { house } = findHouse(slug);
+    if (!house) {
+      return res.status(404).json({ error: "Unknown house." });
+    }
+    const saved = saveInterest(markNotInterested(loadInterest(), slug));
+    return res.json({ ok: true, interest: saved, status: "notInterested" });
+  } catch (err) {
+    console.error("[api] failed to mark not interested:", err);
+    return res.status(500).json({ error: "Failed to update interest." });
+  }
+});
+
+app.post("/api/interest/reactivate", async (req, res) => {
+  const slug = String(req.body?.slug || "").trim();
+  if (!slug) {
+    return res.status(400).json({ error: "Missing slug." });
+  }
+  try {
+    const { house } = findHouse(slug);
+    if (!house) {
+      return res.status(404).json({ error: "Unknown house." });
+    }
+    const current = loadInterest();
+    if (interestStatus(current, slug) === "active") {
+      return res.status(409).json({ error: "House is already on the interested list." });
+    }
+    const saved = saveInterest(requestReactivation(current, slug));
+    const payload = {
+      action: "reactivate",
+      slug,
+      input: reactivationInput(house),
+    };
+    try {
+      await postHouseTrackerPayload(payload);
+      return res.json({
+        ok: true,
+        interest: saved,
+        status: "pendingReactivation",
+        webhook: payload,
+      });
+    } catch (err) {
+      return res.status(err.statusCode || 500).json({
+        error: err.message || "Could not send the request.",
+        code: err.code,
+        interest: saved,
+        status: "pendingReactivation",
+        webhook: payload,
+      });
+    }
+  } catch (err) {
+    console.error("[api] failed to request reactivation:", err);
+    return res.status(500).json({ error: "Failed to request reactivation." });
+  }
+});
+
+app.get("/api/geofences", (_req, res) => {
+  try {
+    const loaded = loadGeofences();
+    res.json({ geofences: loaded.geofences, source: loaded.source });
+  } catch (err) {
+    console.error("[api] failed to load geofences:", err);
+    res.status(500).json({ error: "Failed to load geofences." });
+  }
+});
+
+app.post("/api/geofences", (req, res) => {
+  const incoming = Array.isArray(req.body) ? req.body : req.body?.geofences;
+  if (!Array.isArray(incoming)) {
+    return res.status(400).json({ error: 'Send an array of geofences, or { "geofences": [...] }.' });
+  }
+  try {
+    const geofences = saveGeofences(incoming);
+    return res.json({ ok: true, geofences });
+  } catch (err) {
+    console.error("[api] failed to save geofences:", err);
+    return res.status(500).json({ error: "Failed to save geofences." });
+  }
+});
+
+app.get("/api/schools", (_req, res) => {
+  try {
+    const result = currentHouses();
+    const loaded = resolveSchools({ source: result.source });
+    res.json({ schools: loaded.schools, source: loaded.source });
+  } catch (err) {
+    console.error("[api] failed to load schools:", err);
+    res.status(500).json({ error: "Failed to load schools." });
+  }
+});
+
 app.post("/api/houses", async (req, res) => {
   const input = String(req.body?.input || "").trim();
   if (!input) {
@@ -139,7 +307,7 @@ app.post("/api/houses", async (req, res) => {
     return res.json({
       ok: true,
       message:
-        "Request sent. House Tracker will look this up on Zillow through a browser, so it can take a few minutes. The house should appear on the dashboard after that — usually within a couple of minutes of the bot finishing.",
+        "Request sent. House Tracker will look this up on Zillow through a browser, so it can take a few minutes. The house should appear on House Details after that — usually within a couple of minutes of the bot finishing.",
     });
   } catch (err) {
     return res.status(err.statusCode || 500).json({

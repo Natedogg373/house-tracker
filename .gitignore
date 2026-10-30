@@ -5,3 +5,5 @@ npm-debug.log*
 data/geocode-cache.json
 data/geocode-cache.json.tmp
 data/rankings.json.tmp
+data/interest.json.tmp
+data/geofences.json.tmp

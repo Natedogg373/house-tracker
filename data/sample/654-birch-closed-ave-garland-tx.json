@@ -13,6 +13,9 @@
   "baths": 2.5,
   "lotAcres": 0.19,
   "lastUpdated": "2026-10-13",
+  "lat": 32.912,
+  "lng": -96.638,
+  "schoolIds": ["placeholder-oak-middle"],
   "priceHistory": [
     { "week": "2026-08-17", "price": 599000 },
     { "week": "2026-08-24", "price": 599000 },

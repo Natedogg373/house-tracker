@@ -1,22 +1,31 @@
 import {
   budgetDelta,
+  escapeHtml,
   fetchHouses,
   formatDate,
   formatMoney,
   formatNumber,
   formatYear,
+  hiddenInterestSlugs,
   houseAge,
+  isSoldStatus,
   pricePerSqft,
+  setHouseUrl,
   show,
+  slugFromLocation,
   statusClass,
 } from "./common.js";
 
 const select = document.querySelector("#house-select");
+const includeToggle = document.querySelector("#include-not-interested");
 const sampleBanner = document.querySelector("#sample-banner");
 const empty = document.querySelector("#empty");
 const view = document.querySelector("#house-view");
 const addressEl = document.querySelector("#address");
 const statusEl = document.querySelector("#status");
+const insideBadge = document.querySelector("#inside-badge");
+const interestBadge = document.querySelector("#interest-badge");
+const notInterestedBtn = document.querySelector("#not-interested-btn");
 const budgetBanner = document.querySelector("#budget-banner");
 const metricsEl = document.querySelector("#metrics");
 const photoEl = document.querySelector("#photo");
@@ -30,15 +39,7 @@ const canvas = document.querySelector("#price-chart");
 const STORAGE_KEY = "house-tracker:selected";
 
 let chart;
-let payload = { houses: [], budget: 700000, source: "sample" };
-
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
+let payload = { houses: [], budget: 700000, source: "sample", interest: { notInterested: [], pendingReactivation: [] } };
 
 function metric(label, value, extra = "") {
   return `<article class="metric ${extra}">
@@ -274,12 +275,66 @@ function renderChart(house, budget) {
   });
 }
 
+function hiddenSet() {
+  return hiddenInterestSlugs(payload.interest);
+}
+
+function visibleHouses() {
+  const houses = payload.houses || [];
+  const hidden = hiddenSet();
+  const includeHidden = includeToggle.checked;
+  return houses.filter((house) => includeHidden || !hidden.has(house.slug));
+}
+
+function selectedHouse() {
+  const houses = payload.houses || [];
+  return houses.find((h) => h.slug === select.value) || visibleHouses()[0] || houses[0];
+}
+
+function fillSelect(houses, preferred) {
+  select.innerHTML = houses
+    .map((house) => {
+      const hidden = hiddenSet().has(house.slug);
+      const suffix = hidden ? " (not interested)" : "";
+      return `<option value="${escapeHtml(house.slug)}">${escapeHtml(
+        (house.address || house.slug) + suffix
+      )}</option>`;
+    })
+    .join("");
+  const match = houses.some((h) => h.slug === preferred);
+  if (match) select.value = preferred;
+}
+
+function renderInterestUi(house) {
+  const status = house.interestStatus || (hiddenSet().has(house.slug) ? "notInterested" : "active");
+  const pending = status === "pendingReactivation";
+  const notInterested = status === "notInterested" || pending;
+  interestBadge.classList.toggle("hidden", !notInterested);
+  if (pending) {
+    interestBadge.textContent = "Checking if still active…";
+  } else if (notInterested) {
+    const entry = (payload.interest?.notInterested || []).find((item) => item.slug === house.slug);
+    interestBadge.textContent = entry?.since
+      ? `No longer interested · ${formatDate(entry.since)}`
+      : "No longer interested";
+  }
+  show(notInterestedBtn, !notInterested && !isSoldStatus(house.status));
+}
+
 function renderHouse(house) {
   const budget = payload.budget || 700000;
   const delta = budgetDelta(house.listPrice, budget);
   addressEl.textContent = house.address || house.slug || "Unknown address";
   statusEl.textContent = house.status || "Status unknown";
   statusEl.className = `pill ${statusClass(house.status)}`;
+
+  const inside = Array.isArray(house.inside) ? house.inside.filter(Boolean) : [];
+  insideBadge.classList.toggle("hidden", inside.length === 0);
+  if (inside.length) {
+    insideBadge.textContent = `Inside: ${inside.join(", ")}`;
+  }
+
+  renderInterestUi(house);
 
   if (delta) {
     budgetBanner.hidden = false;
@@ -313,45 +368,114 @@ function renderHouse(house) {
   renderChart(house, budget);
 }
 
-function selectedHouse() {
-  return payload.houses.find((h) => h.slug === select.value) || payload.houses[0];
-}
-
-function fillSelect(houses, preferred) {
-  select.innerHTML = houses
-    .map(
-      (house) =>
-        `<option value="${escapeHtml(house.slug)}">${escapeHtml(house.address || house.slug)}</option>`
-    )
-    .join("");
-  const match = houses.some((h) => h.slug === preferred);
-  if (match) select.value = preferred;
+function preferredSlug(houses) {
+  const fromUrl = slugFromLocation();
+  if (fromUrl && houses.some((house) => house.slug === fromUrl)) return fromUrl;
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored && houses.some((house) => house.slug === stored)) return stored;
+  return houses[0]?.slug || "";
 }
 
 function renderAll() {
-  const houses = payload.houses || [];
+  const all = payload.houses || [];
   sampleBanner.hidden = payload.source !== "sample";
+  const fromUrl = slugFromLocation();
+  if (fromUrl && hiddenSet().has(fromUrl)) {
+    includeToggle.checked = true;
+  }
+  const houses = visibleHouses();
   if (!houses.length) {
     show(empty, true);
     show(view, false);
+    setHouseUrl("", { replace: true });
     return;
   }
   show(empty, false);
   show(view, true);
-  fillSelect(houses, localStorage.getItem(STORAGE_KEY));
-  renderHouse(selectedHouse());
+  const preferred = preferredSlug(houses);
+  fillSelect(houses, preferred);
+  const house = selectedHouse();
+  if (house) {
+    localStorage.setItem(STORAGE_KEY, house.slug);
+    setHouseUrl(house.slug, { replace: true });
+    renderHouse(house);
+  }
+}
+
+function selectHouse(slug, { replace = true } = {}) {
+  const houses = visibleHouses();
+  if (!houses.some((house) => house.slug === slug) && payload.houses.some((house) => house.slug === slug)) {
+    includeToggle.checked = true;
+    fillSelect(visibleHouses(), slug);
+  }
+  if (![...select.options].some((option) => option.value === slug)) return;
+  select.value = slug;
+  localStorage.setItem(STORAGE_KEY, slug);
+  setHouseUrl(slug, { replace });
+  const house = selectedHouse();
+  if (house) renderHouse(house);
 }
 
 select.addEventListener("change", () => {
-  localStorage.setItem(STORAGE_KEY, select.value);
+  selectHouse(select.value, { replace: false });
+});
+
+includeToggle.addEventListener("change", () => {
+  const current = select.value;
+  renderAll();
+  if (current && [...select.options].some((option) => option.value === current)) {
+    selectHouse(current);
+  }
+});
+
+window.addEventListener("popstate", () => {
+  const slug = slugFromLocation();
+  if (slug) selectHouse(slug);
+  else renderAll();
+});
+
+notInterestedBtn.addEventListener("click", async () => {
   const house = selectedHouse();
-  if (house) renderHouse(house);
+  if (!house) return;
+  const label = house.address || house.slug;
+  if (!window.confirm(`Move ${label} to No longer interested?`)) return;
+  notInterestedBtn.disabled = true;
+  try {
+    const res = await fetch("/api/interest/not-interested", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: house.slug }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      window.alert(data.error || "Could not update interest.");
+      return;
+    }
+    payload.interest = data.interest;
+    const updated = payload.houses.find((item) => item.slug === house.slug);
+    if (updated) updated.interestStatus = "notInterested";
+    if (!includeToggle.checked) {
+      const remaining = visibleHouses().filter((item) => item.slug !== house.slug);
+      if (remaining[0]) setHouseUrl(remaining[0].slug);
+      else setHouseUrl("");
+    }
+    renderAll();
+  } catch {
+    window.alert("Could not reach the local server.");
+  } finally {
+    notInterestedBtn.disabled = false;
+  }
 });
 
 async function load() {
   try {
-    payload = await fetchHouses();
+    const next = await fetchHouses();
+    const keepSlug = select.value || slugFromLocation();
+    payload = next;
     renderAll();
+    if (keepSlug && [...select.options].some((option) => option.value === keepSlug)) {
+      selectHouse(keepSlug);
+    }
   } catch (err) {
     sampleBanner.hidden = false;
     sampleBanner.className = "banner error";

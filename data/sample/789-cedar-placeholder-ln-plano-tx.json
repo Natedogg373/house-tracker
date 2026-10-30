@@ -9,6 +9,9 @@
   "beds": 4,
   "baths": 3,
   "lastUpdated": "2026-10-06",
+  "lat": 33.019,
+  "lng": -96.748,
+  "schoolIds": ["sample-cedar-high"],
   "priceHistory": [
     { "week": "2026-09-07", "price": 715000 },
     { "week": "2026-09-14", "price": 715000 },
