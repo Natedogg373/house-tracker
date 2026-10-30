@@ -240,7 +240,7 @@ Add these under **Settings → Secrets and variables → Actions**:
 | --- | --- |
 | `TS_OAUTH_CLIENT_ID` | Tailscale OAuth client ID |
 | `TS_OAUTH_SECRET` | Tailscale OAuth client secret |
-| `COOLIFY_API_TOKEN` | Coolify API token with **deploy** permission |
+| `COOLIFY_GH_TOKEN` | Coolify API token with **deploy** permission |
 
 ### Tailscale OAuth client and ACL
 
@@ -272,18 +272,18 @@ Add these under **Settings → Secrets and variables → Actions**:
 
 On a self-hosted Coolify instance, turn on **API access** (Settings → Advanced) or the webhook returns 403/disabled.
 
-Create an API token (**Keys & Tokens → API Tokens**) with the **deploy** permission (deploy-only is enough). Store it as `COOLIFY_API_TOKEN`. The workflow calls:
+Create an API token (**Keys & Tokens → API Tokens**) with the **deploy** permission (deploy-only is enough). Store it as `COOLIFY_GH_TOKEN`. The workflow `POST`s:
 
 `http://100.74.201.123:8000/api/v1/deploy?uuid=li87awd6s5qjttyt2icjxqiw&force=false`
 
 ### Persistent volume (do not wipe user-written files)
 
-The process only **writes** two files, both under `data/`, both via temp file then `rename`:
+The process **writes** these files under `data/`, each via temp file then `rename`:
 
 - `data/rankings.json` — Rankings page `POST /api/rankings` (`lib/rankings.js`). Override with `RANKINGS_PATH`.
+- `data/interest.json` — not-interested / pending reactivation (`lib/interest.js`). Override with `INTEREST_PATH`.
+- `data/geofences.json` — Map areas (`lib/geofences.js`). Override with `GEOFENCES_PATH`.
 - `data/geocode-cache.json` — Nominatim cache (`lib/geocode.js`, gitignored). Override with `GEOCODE_CACHE_PATH`.
-
-There are no interest or geofence files in this app.
 
 Do **not** bind-mount the whole `data/` directory over the checkout. That would hide `data/houses/` from bot-driven deploys. Because saves `rename` a sibling `.tmp` file, persist a **directory**, not a single-file bind (rename across filesystems fails).
 
@@ -291,7 +291,9 @@ In Coolify, mount a persistent volume at a writable directory (for example `/per
 
 ```
 RANKINGS_PATH=/persist/rankings.json
+INTEREST_PATH=/persist/interest.json
+GEOFENCES_PATH=/persist/geofences.json
 GEOCODE_CACHE_PATH=/persist/geocode-cache.json
 ```
 
-Leave `data/houses/` in the image so each deploy picks up new listing JSON. Seed `/persist/rankings.json` once from the committed `data/rankings.json` if you want the current order on first boot; otherwise rankings start alphabetical until someone saves on `/rankings`.
+Leave `data/houses/` in the image so each deploy picks up new listing JSON. Seed `/persist/rankings.json`, `/persist/interest.json`, and `/persist/geofences.json` once from the committed files if you want the current state on first boot; otherwise rankings start alphabetical and interest/geofences start empty until someone saves them in the app.
