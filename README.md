@@ -225,3 +225,73 @@ Restart `npm start`, submit a house on `/add` (or reactivate from the Graveyard)
 ```bash
 npm test
 ```
+
+## Auto-deploy
+
+Pushes to `main` (and manual **Run workflow**) join Tailscale, then hit a Coolify deploy webhook. Every push deploys — including House Tracker bot commits under `data/houses/`. The workflow is `.github/workflows/deploy.yml`. Concurrent runs queue (`concurrency` group `deploy`) so two deploys cannot overlap. `curl -fsS` fails the job if Coolify is unreachable or returns an HTTP error.
+
+The GitHub Action uses `tailscale/github-action@v4`. That action mints an **ephemeral** tagged node for the job and logs it out when the run finishes.
+
+### Repo secrets
+
+Add these under **Settings → Secrets and variables → Actions**:
+
+| Secret | Value |
+| --- | --- |
+| `TS_OAUTH_CLIENT_ID` | Tailscale OAuth client ID |
+| `TS_OAUTH_SECRET` | Tailscale OAuth client secret |
+| `COOLIFY_API_TOKEN` | Coolify API token with **deploy** permission |
+
+### Tailscale OAuth client and ACL
+
+1. In the tailnet policy, own `tag:ci` so the OAuth client can mint tagged auth keys:
+
+   ```json
+   "tagOwners": {
+     "tag:ci": ["autogroup:admin"]
+   }
+   ```
+
+2. Allow that tag to reach Coolify on the tailnet (ACL or grant). Coolify is at `100.74.201.123:8000`:
+
+   ```json
+   "grants": [
+     {
+       "src": ["tag:ci"],
+       "dst": ["100.74.201.123"],
+       "ip": ["tcp:8000"]
+     }
+   ]
+   ```
+
+   Equivalent ACL: `{ "action": "accept", "src": ["tag:ci"], "dst": ["100.74.201.123:8000"] }`.
+
+3. Create the OAuth client at [https://login.tailscale.com/admin/settings/oauth](https://login.tailscale.com/admin/settings/oauth). Give it **Keys → Auth Keys: write** (`auth_keys` write) and tag `tag:ci`. Put the client ID and secret in the two `TS_OAUTH_*` repo secrets.
+
+### Coolify API token
+
+On a self-hosted Coolify instance, turn on **API access** (Settings → Advanced) or the webhook returns 403/disabled.
+
+Create an API token (**Keys & Tokens → API Tokens**) with the **deploy** permission (deploy-only is enough). Store it as `COOLIFY_API_TOKEN`. The workflow calls:
+
+`http://100.74.201.123:8000/api/v1/deploy?uuid=li87awd6s5qjttyt2icjxqiw&force=false`
+
+### Persistent volume (do not wipe user-written files)
+
+The process only **writes** two files, both under `data/`, both via temp file then `rename`:
+
+- `data/rankings.json` — Rankings page `POST /api/rankings` (`lib/rankings.js`). Override with `RANKINGS_PATH`.
+- `data/geocode-cache.json` — Nominatim cache (`lib/geocode.js`, gitignored). Override with `GEOCODE_CACHE_PATH`.
+
+There are no interest or geofence files in this app.
+
+Do **not** bind-mount the whole `data/` directory over the checkout. That would hide `data/houses/` from bot-driven deploys. Because saves `rename` a sibling `.tmp` file, persist a **directory**, not a single-file bind (rename across filesystems fails).
+
+In Coolify, mount a persistent volume at a writable directory (for example `/persist`) and set:
+
+```
+RANKINGS_PATH=/persist/rankings.json
+GEOCODE_CACHE_PATH=/persist/geocode-cache.json
+```
+
+Leave `data/houses/` in the image so each deploy picks up new listing JSON. Seed `/persist/rankings.json` once from the committed `data/rankings.json` if you want the current order on first boot; otherwise rankings start alphabetical until someone saves on `/rankings`.
