@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Graveyard · House Tracker</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,7 +19,10 @@
         <img src="/favicon.svg" alt="" />
         <span>House Tracker</span>
       </a>
-      <nav class="nav" aria-label="Primary">
+      <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+      <nav id="site-nav" class="nav" aria-label="Primary">
         <a href="/">House Details</a>
         <a href="/map">Map</a>
         <a href="/rankings">Rankings</a>
@@ -68,6 +71,7 @@
       </section>
     </main>
 
+    <script type="module" src="/js/nav.js"></script>
     <script type="module" src="/js/graveyard.js"></script>
   </body>
 </html>

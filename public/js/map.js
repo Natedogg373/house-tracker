@@ -32,6 +32,8 @@ const geofenceList = document.querySelector("#geofence-list");
 const geofenceStatus = document.querySelector("#geofence-status");
 const drawHint = document.querySelector("#draw-hint");
 const levelToggle = document.querySelector("#level-toggle");
+const mapFolds = document.querySelectorAll(".map-fold");
+const MOBILE_MQ = window.matchMedia("(max-width: 839px)");
 
 let payload = { houses: [], schools: [], geofences: [], interest: {}, source: "houses" };
 let map;
@@ -39,6 +41,7 @@ let overlay;
 let drawer = null;
 let fenceLayers = new Map();
 let currentLevel = readStoredLevel();
+let invalidateTimer = 0;
 
 const FENCE_STYLE = {
   color: "#2c4a3e",
@@ -207,14 +210,51 @@ function disableDraw() {
   }
 }
 
+function isTouchUi() {
+  return window.matchMedia("(pointer: coarse)").matches || MOBILE_MQ.matches;
+}
+
+function idleDrawHint() {
+  return "Draw a rectangle, circle, or polygon, then name it.";
+}
+
+function activeDrawHint() {
+  return isTouchUi()
+    ? "Tap the map to draw. Use two fingers to pan. Press Esc to cancel."
+    : "Click the map to draw. Press Esc to cancel.";
+}
+
+function vertexIcon() {
+  const size = isTouchUi() ? 22 : 12;
+  return new Leaflet.DivIcon({
+    iconSize: new Leaflet.Point(size, size),
+    className: "leaflet-div-icon leaflet-editing-icon leaflet-touch-icon",
+  });
+}
+
 function startDraw(type) {
   disableDraw();
-  const options = { shapeOptions: { ...FENCE_STYLE, dashArray: null } };
+  const options = { shapeOptions: { ...FENCE_STYLE, dashArray: null }, touchIcon: vertexIcon(), icon: vertexIcon() };
   if (type === "rect") drawer = new Leaflet.Draw.Rectangle(map, options);
   else if (type === "circle") drawer = new Leaflet.Draw.Circle(map, options);
   else drawer = new Leaflet.Draw.Polygon(map, { ...options, allowIntersection: false });
   drawer.enable();
-  drawHint.textContent = "Click the map to draw. Press Esc to cancel.";
+  drawHint.textContent = activeDrawHint();
+}
+
+function scheduleInvalidate() {
+  window.clearTimeout(invalidateTimer);
+  invalidateTimer = window.setTimeout(() => {
+    if (!map) return;
+    map.invalidateSize({ animate: false });
+  }, 60);
+}
+
+function syncMapFolds() {
+  for (const fold of mapFolds) {
+    fold.open = !MOBILE_MQ.matches;
+  }
+  scheduleInvalidate();
 }
 
 function showFenceStatus(kind, text) {
@@ -390,7 +430,14 @@ function renderAll({ fit = true } = {}) {
   renderLegend(colors);
   renderGeofences();
   renderPins(colors);
-  if (fit) fitMap();
+  scheduleInvalidate();
+  if (fit) {
+    requestAnimationFrame(() => {
+      if (!map) return;
+      map.invalidateSize({ animate: false });
+      fitMap();
+    });
+  }
 }
 
 function setLevel(level, { persist = true, fit = false } = {}) {
@@ -405,7 +452,7 @@ function setLevel(level, { persist = true, fit = false } = {}) {
 }
 
 function initMap() {
-  map = Leaflet.map(mapEl, { scrollWheelZoom: true });
+  map = Leaflet.map(mapEl, { scrollWheelZoom: true, tapTolerance: 25 });
   Leaflet.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -413,7 +460,7 @@ function initMap() {
   map.setView([32.82, -96.75], 11);
   map.on("draw:created", async (event) => {
     disableDraw();
-    drawHint.textContent = "Draw a rectangle, circle, or polygon, then name it.";
+    drawHint.textContent = idleDrawHint();
     const name = window.prompt("Name this area", nextAreaName());
     if (!name || !name.trim()) return;
     const fence = fenceFromLayer(event.layer, event.layerType, name.trim());
@@ -427,8 +474,18 @@ function initMap() {
   });
   map.on("draw:drawstop", () => {
     drawer = null;
-    drawHint.textContent = "Draw a rectangle, circle, or polygon, then name it.";
+    drawHint.textContent = idleDrawHint();
   });
+  window.addEventListener("resize", scheduleInvalidate);
+  if (MOBILE_MQ.addEventListener) MOBILE_MQ.addEventListener("change", syncMapFolds);
+  else MOBILE_MQ.addListener(syncMapFolds);
+  for (const fold of mapFolds) {
+    fold.addEventListener("toggle", () => {
+      if (!MOBILE_MQ.matches) fold.open = true;
+      scheduleInvalidate();
+    });
+  }
+  syncMapFolds();
 }
 
 document.querySelector("#draw-rect").addEventListener("click", () => startDraw("rect"));

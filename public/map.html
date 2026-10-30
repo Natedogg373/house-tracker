@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Map · House Tracker</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,7 +21,10 @@
         <img src="/favicon.svg" alt="" />
         <span>House Tracker</span>
       </a>
-      <nav class="nav" aria-label="Primary">
+      <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+      <nav id="site-nav" class="nav" aria-label="Primary">
         <a href="/">House Details</a>
         <a href="/map" aria-current="page">Map</a>
         <a href="/rankings">Rankings</a>
@@ -41,7 +44,7 @@
       <div class="map-layout">
         <div id="map" class="full-map" role="application" aria-label="Houses and schools map"></div>
         <aside class="map-panel" aria-label="Map legend and geofences">
-          <section>
+          <section class="map-intro">
             <h1>Map</h1>
             <p class="lede map-lede">
               House pins are circles; schools are squares. Each school has one color; houses use the
@@ -55,16 +58,16 @@
             <p id="in-area-count" class="map-stat">0 houses in area</p>
             <p id="missing-coords" class="map-note hidden"></p>
           </section>
-          <section>
-            <h2>Legend</h2>
+          <details class="map-fold legend-fold">
+            <summary>Legend</summary>
             <ul id="legend-list" class="legend-list"></ul>
             <p class="legend-key">
               <span class="legend-swatch house-swatch"></span> House
               <span class="legend-swatch school-swatch"></span> School
             </p>
-          </section>
-          <section>
-            <h2>Geofences</h2>
+          </details>
+          <details class="map-fold geofence-fold">
+            <summary>Geofences</summary>
             <p id="draw-hint" class="map-note">Draw a rectangle, circle, or polygon, then name it.</p>
             <div class="actions map-actions">
               <button type="button" id="draw-rect" class="secondary">Rectangle</button>
@@ -73,13 +76,14 @@
             </div>
             <p id="geofence-status" class="banner hidden" hidden></p>
             <ul id="geofence-list" class="geofence-list"></ul>
-          </section>
+          </details>
         </aside>
       </div>
     </main>
 
     <script src="/vendor/leaflet.js"></script>
     <script src="/vendor/leaflet.draw.js"></script>
+    <script type="module" src="/js/nav.js"></script>
     <script type="module" src="/js/map.js"></script>
   </body>
 </html>
