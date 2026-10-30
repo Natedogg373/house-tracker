@@ -56,6 +56,8 @@ describe("API", () => {
     assert.match(html, /href="\/graveyard"/);
     assert.match(html, /href="\/map"/);
     assert.match(html, /id="not-interested-btn"/);
+    assert.match(html, /id="schools-section"/);
+    assert.match(html, /id="schools-list"/);
   });
 
   it("serves the add page", async () => {
