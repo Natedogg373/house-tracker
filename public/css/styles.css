@@ -1274,6 +1274,44 @@ body.map-page main.map-main {
   font-size: 0.88rem;
 }
 
+.level-toggle {
+  display: flex;
+  width: 100%;
+  margin: 0.75rem 0 0.85rem;
+  padding: 0.18rem;
+  gap: 0.15rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #f6f1e8;
+}
+
+.level-toggle button {
+  flex: 1;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: 600 0.8rem var(--font);
+  padding: 0.45rem 0.35rem;
+  box-shadow: none;
+}
+
+.level-toggle button:hover {
+  background: transparent;
+  color: var(--ink);
+}
+
+.level-toggle button[aria-pressed="true"] {
+  background: var(--forest);
+  color: #f6f3ee;
+}
+
+.level-toggle button[aria-pressed="true"]:hover {
+  background: var(--forest-2);
+  color: #f6f3ee;
+}
+
 .legend-list,
 .geofence-list {
   list-style: none;
@@ -1283,18 +1321,28 @@ body.map-page main.map-main {
   gap: 0.45rem;
 }
 
-.legend-house {
+.legend-school {
   display: flex;
   gap: 0.55rem;
-  align-items: center;
+  align-items: flex-start;
   color: inherit;
-  text-decoration: none;
   font-size: 0.92rem;
+}
+
+.legend-school-text {
+  display: grid;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.legend-school-name {
   font-weight: 600;
 }
 
-.legend-house:hover {
-  color: var(--forest);
+.legend-school-rating {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 .legend-swatch {
@@ -1307,9 +1355,13 @@ body.map-page main.map-main {
   flex: 0 0 auto;
 }
 
+.legend-swatch.house-swatch {
+  background: #8a847c;
+}
+
 .legend-swatch.school-swatch {
   border-radius: 3px;
-  background: conic-gradient(#c2410c 0 50%, #1d4ed8 50% 100%);
+  margin-top: 0.18rem;
 }
 
 .legend-key {

@@ -44,9 +44,14 @@
           <section>
             <h1>Map</h1>
             <p class="lede map-lede">
-              House pins are circles; schools are squares. Matching colors tie a house to its schools.
-              Draw an area to flag homes inside it.
+              House pins are circles; schools are squares. Each school has one color; houses use the
+              color of their school at the selected level. Draw an area to flag homes inside it.
             </p>
+            <div id="level-toggle" class="level-toggle" role="radiogroup" aria-label="School level">
+              <button type="button" data-level="elementary" aria-pressed="true">Elementary</button>
+              <button type="button" data-level="middle" aria-pressed="false">Middle</button>
+              <button type="button" data-level="high" aria-pressed="false">High</button>
+            </div>
             <p id="in-area-count" class="map-stat">0 houses in area</p>
             <p id="missing-coords" class="map-note hidden"></p>
           </section>
