@@ -211,6 +211,7 @@ function renderChart(house, budget) {
   const labels = history.map((row) => formatDate(row.week));
   const prices = history.map((row) => (row.price == null ? null : Number(row.price)));
   const budgetLine = history.map(() => budget);
+  const compact = window.matchMedia("(max-width: 839px)").matches;
 
   chart = new Chart(canvas, {
     type: "line",
@@ -225,8 +226,8 @@ function renderChart(house, budget) {
           backgroundColor: "rgba(44, 74, 62, 0.12)",
           fill: true,
           tension: 0.15,
-          pointRadius: 4,
-          pointHoverRadius: 6,
+          pointRadius: compact ? 3 : 4,
+          pointHoverRadius: compact ? 5 : 6,
           borderWidth: 2.5,
         },
         {
@@ -249,7 +250,12 @@ function renderChart(house, budget) {
       interaction: { mode: "index", intersect: false },
       plugins: {
         legend: {
-          labels: { boxWidth: 16, font: { family: "Outfit, sans-serif" } },
+          labels: {
+            boxWidth: compact ? 12 : 16,
+            boxHeight: compact ? 12 : 16,
+            padding: compact ? 10 : 12,
+            font: { family: "Outfit, sans-serif", size: compact ? 12 : 13 },
+          },
         },
         tooltip: {
           callbacks: {
@@ -265,20 +271,29 @@ function renderChart(house, budget) {
           },
         },
       },
+      layout: {
+        padding: compact ? { top: 4, right: 6, bottom: 0, left: 0 } : 0,
+      },
       scales: {
         x: {
           ticks: {
             maxRotation: 0,
             autoSkip: true,
-            maxTicksLimit: 8,
-            font: { family: "Outfit, sans-serif", size: 11 },
+            maxTicksLimit: compact ? 4 : 8,
+            font: { family: "Outfit, sans-serif", size: compact ? 10 : 11 },
           },
           grid: { display: false },
         },
         y: {
           ticks: {
-            callback: (value) => formatMoney(value),
-            font: { family: "Outfit, sans-serif", size: 11 },
+            callback: (value) => {
+              if (!compact) return formatMoney(value);
+              const n = Number(value);
+              if (Math.abs(n) >= 1000) return `$${Math.round(n / 1000)}k`;
+              return formatMoney(n);
+            },
+            font: { family: "Outfit, sans-serif", size: compact ? 10 : 11 },
+            maxTicksLimit: compact ? 5 : 8,
           },
           grace: "8%",
         },
