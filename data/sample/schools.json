@@ -1,0 +1,38 @@
+[
+  {
+    "id": "demo-maple-elem",
+    "name": "Maple Demo Elementary",
+    "level": "elementary",
+    "lat": 32.7862,
+    "lng": -96.7954,
+    "rating": 8,
+    "district": "Placeholder ISD"
+  },
+  {
+    "id": "placeholder-oak-middle",
+    "name": "Oak Sample Middle",
+    "level": "middle",
+    "lat": 32.9504,
+    "lng": -96.7288,
+    "rating": 7.5,
+    "district": "Sample Demo Schools"
+  },
+  {
+    "id": "sample-cedar-high",
+    "name": "Cedar Placeholder High",
+    "level": "high",
+    "lat": 32.9008,
+    "lng": -96.7582,
+    "rating": 9,
+    "district": "Fictional Independent School District"
+  },
+  {
+    "id": "unrated-willow-elem",
+    "name": "Willow Demo Academy",
+    "level": "elementary",
+    "lat": 32.7914,
+    "lng": -96.8031,
+    "rating": null,
+    "district": "Demo ISD"
+  }
+]

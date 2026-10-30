@@ -11,6 +11,8 @@ process.env.USE_SAMPLE_DATA = "true";
 process.env.GEOCODE_PREFETCH = "false";
 process.env.GEOCODE_CACHE_PATH = path.join(os.tmpdir(), `geocode-api-${process.pid}.json`);
 process.env.RANKINGS_PATH = path.join(os.tmpdir(), `rankings-api-${process.pid}.json`);
+process.env.INTEREST_PATH = path.join(os.tmpdir(), `interest-api-${process.pid}.json`);
+process.env.GEOFENCES_PATH = path.join(os.tmpdir(), `geofences-api-${process.pid}.json`);
 delete process.env.HOUSE_TRACKER_WEBHOOK_URL;
 delete process.env.HOUSE_TRACKER_WEBHOOK_AUTH;
 
@@ -42,15 +44,18 @@ describe("API", () => {
 
   after(() => server.close());
 
-  it("serves the dashboard", async () => {
+  it("serves House Details", async () => {
     const res = await fetch(`http://127.0.0.1:${port}/`);
     const html = await res.text();
     assert.equal(res.status, 200);
     assert.match(html, /House Tracker/);
+    assert.match(html, /House Details/);
     assert.match(html, /price-chart/);
     assert.match(html, /href="\/about"/);
     assert.match(html, /href="\/rankings"/);
     assert.match(html, /href="\/graveyard"/);
+    assert.match(html, /href="\/map"/);
+    assert.match(html, /id="not-interested-btn"/);
   });
 
   it("serves the add page", async () => {
@@ -59,6 +64,19 @@ describe("API", () => {
     assert.equal(res.status, 200);
     assert.match(html, /Add a house/);
     assert.match(html, /href="\/rankings"/);
+    assert.match(html, /href="\/graveyard"/);
+    assert.match(html, /href="\/map"/);
+    assert.match(html, /House Details/);
+  });
+
+  it("serves the map page", async () => {
+    const res = await fetch(`http://127.0.0.1:${port}/map`);
+    const html = await res.text();
+    assert.equal(res.status, 200);
+    assert.match(html, /Houses and schools map/);
+    assert.match(html, /leaflet.draw/);
+    assert.match(html, /House Details/);
+    assert.match(html, /href="\/map"/);
     assert.match(html, /href="\/graveyard"/);
   });
 
@@ -70,6 +88,8 @@ describe("API", () => {
     assert.match(html, /id="rank-list"/);
     assert.match(html, /href="\/rankings"/);
     assert.match(html, /href="\/graveyard"/);
+    assert.match(html, /href="\/map"/);
+    assert.match(html, /House Details/);
   });
 
   it("serves the graveyard page", async () => {
@@ -78,7 +98,10 @@ describe("API", () => {
     assert.equal(res.status, 200);
     assert.match(html, /Graveyard/);
     assert.match(html, /id="graveyard-list"/);
+    assert.match(html, /id="not-interested-list"/);
     assert.match(html, /href="\/graveyard"/);
+    assert.match(html, /href="\/map"/);
+    assert.match(html, /House Details/);
   });
 
   it("serves the about page with architecture and Cloudflare Pages roadmap", async () => {
@@ -92,6 +115,8 @@ describe("API", () => {
     assert.match(html, /npm start/);
     assert.match(html, /href="\/rankings"/);
     assert.match(html, /href="\/graveyard"/);
+    assert.match(html, /href="\/map"/);
+    assert.match(html, /House Details/);
     assert.doesNotMatch(html, /lime\s*1234/i);
     assert.doesNotMatch(html, /password\s*[:=]\s*['"][^'"]+['"]/i);
   });
@@ -299,6 +324,122 @@ describe("API", () => {
     const { res, data } = await jsonRequest(port, "/api/geocode?address=NotARealPlace123");
     assert.equal(res.status, 404);
     assert.equal(data.coords, null);
+  });
+
+  it("returns sample schools and house lat/lng without inventing live school data", async () => {
+    const houses = await jsonRequest(port, "/api/houses");
+    const maple = houses.data.houses.find((h) => h.slug === "123-maple-demo-st-dallas-tx");
+    assert.equal(maple.lat, 32.7875);
+    assert.equal(maple.lng, -96.798);
+    assert.deepEqual(maple.schoolIds, ["demo-maple-elem", "sample-cedar-high"]);
+    const schools = await jsonRequest(port, "/api/schools");
+    assert.equal(schools.res.status, 200);
+    assert.equal(schools.data.source, "sample");
+    assert.equal(schools.data.schools.length, 4);
+    assert.ok(schools.data.schools.every((school) => /demo|sample|placeholder|fictional|willow demo/i.test(`${school.name} ${school.district}`)));
+  });
+
+  it("moves a house to not interested and lists it on the graveyard", async () => {
+    fs.rmSync(process.env.INTEREST_PATH, { force: true });
+    const { res, data } = await jsonRequest(port, "/api/interest/not-interested", {
+      method: "POST",
+      body: JSON.stringify({ slug: "123-maple-demo-st-dallas-tx" }),
+    });
+    assert.equal(res.status, 200);
+    assert.equal(data.status, "notInterested");
+    assert.equal(data.interest.notInterested[0].slug, "123-maple-demo-st-dallas-tx");
+    assert.match(data.interest.notInterested[0].since, /^\d{4}-\d{2}-\d{2}$/);
+
+    const saved = JSON.parse(fs.readFileSync(process.env.INTEREST_PATH, "utf8"));
+    assert.deepEqual(
+      saved.notInterested.map((row) => row.slug),
+      ["123-maple-demo-st-dallas-tx"]
+    );
+
+    const grave = await jsonRequest(port, "/api/graveyard");
+    assert.equal(grave.res.status, 200);
+    assert.equal(grave.data.houses.length, 2);
+    assert.equal(grave.data.notInterested.length, 1);
+    assert.equal(grave.data.notInterested[0].slug, "123-maple-demo-st-dallas-tx");
+    assert.equal(grave.data.notInterested[0].pending, false);
+    assert.equal(grave.data.notInterested[0].listPrice, 739000);
+  });
+
+  it("POSTs a reactivate webhook body without changing the add-house { input } contract", async () => {
+    fs.rmSync(process.env.INTEREST_PATH, { force: true });
+    const marked = await jsonRequest(port, "/api/interest/not-interested", {
+      method: "POST",
+      body: JSON.stringify({ slug: "123-maple-demo-st-dallas-tx" }),
+    });
+    assert.equal(marked.res.status, 200);
+    const received = [];
+    const mock = http.createServer((req, res) => {
+      const chunks = [];
+      req.on("data", (c) => chunks.push(c));
+      req.on("end", () => {
+        received.push({
+          authorization: req.headers.authorization,
+          body: JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}"),
+        });
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true }));
+      });
+    });
+    const mockPort = await listen(mock);
+    process.env.HOUSE_TRACKER_WEBHOOK_URL = `http://127.0.0.1:${mockPort}/hook`;
+    process.env.HOUSE_TRACKER_WEBHOOK_AUTH = "Bearer test-token";
+
+    const add = await jsonRequest(port, "/api/houses", {
+      method: "POST",
+      body: JSON.stringify({ input: "https://www.zillow.com/homedetails/keep-me" }),
+    });
+    const reactivate = await jsonRequest(port, "/api/interest/reactivate", {
+      method: "POST",
+      body: JSON.stringify({ slug: "123-maple-demo-st-dallas-tx" }),
+    });
+
+    mock.close();
+    delete process.env.HOUSE_TRACKER_WEBHOOK_URL;
+    delete process.env.HOUSE_TRACKER_WEBHOOK_AUTH;
+
+    assert.equal(add.res.status, 200);
+    assert.equal(reactivate.res.status, 200);
+    assert.equal(reactivate.data.status, "pendingReactivation");
+    assert.equal(received.length, 2);
+    assert.deepEqual(received[0].body, { input: "https://www.zillow.com/homedetails/keep-me" });
+    assert.deepEqual(received[1].body, {
+      action: "reactivate",
+      slug: "123-maple-demo-st-dallas-tx",
+      input: "https://www.zillow.com/homedetails/123-Maple-Demo-St-Dallas-TX-75201/000000001_zpid/",
+    });
+    assert.equal(received[1].authorization, "Bearer test-token");
+
+    const saved = JSON.parse(fs.readFileSync(process.env.INTEREST_PATH, "utf8"));
+    assert.deepEqual(saved.notInterested, []);
+    assert.equal(saved.pendingReactivation[0].slug, "123-maple-demo-st-dallas-tx");
+
+    const grave = await jsonRequest(port, "/api/graveyard");
+    assert.equal(grave.data.notInterested[0].pending, true);
+  });
+
+  it("saves geofences and flags sample houses inside a rectangle", async () => {
+    const fence = {
+      id: "demo-area",
+      name: "Maple demo box",
+      type: "rect",
+      geometry: { south: 32.78, west: -96.81, north: 32.80, east: -96.79 },
+    };
+    const { res, data } = await jsonRequest(port, "/api/geofences", {
+      method: "POST",
+      body: JSON.stringify({ geofences: [fence] }),
+    });
+    assert.equal(res.status, 200);
+    assert.equal(data.geofences[0].name, "Maple demo box");
+    const houses = await jsonRequest(port, "/api/houses");
+    const maple = houses.data.houses.find((h) => h.slug === "123-maple-demo-st-dallas-tx");
+    const oak = houses.data.houses.find((h) => h.slug === "456-oak-sample-ave-richardson-tx");
+    assert.deepEqual(maple.inside, ["Maple demo box"]);
+    assert.deepEqual(oak.inside, []);
   });
 });
 

@@ -20,7 +20,8 @@
         <span>House Tracker</span>
       </a>
       <nav class="nav" aria-label="Primary">
-        <a href="/">Dashboard</a>
+        <a href="/">House Details</a>
+        <a href="/map">Map</a>
         <a href="/rankings" aria-current="page">Rankings</a>
         <a href="/graveyard">Graveyard</a>
         <a href="/add">Add house</a>
@@ -32,7 +33,8 @@
       <section class="panel rankings-intro">
         <h1>Rankings</h1>
         <p class="lede">
-          Drag a house to move it, or type a rank number and press Enter. Order is written to
+          Drag a house to move it, or type a rank number and press Enter. Click a house to open it on
+          House Details. Sold and no-longer-interested listings stay off this list. Order is written to
           <code>data/rankings.json</code>. Commit that file (or a later bot sync) so
           <code>git pull</code> keeps the ranking shared.
         </p>

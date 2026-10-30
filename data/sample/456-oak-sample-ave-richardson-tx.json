@@ -11,6 +11,9 @@
   "baths": 2,
   "lotAcres": 0.18,
   "lastUpdated": "2026-10-12",
+  "lat": 32.948,
+  "lng": -96.731,
+  "schoolIds": ["placeholder-oak-middle", "sample-cedar-high"],
   "priceHistory": [
     { "week": "2026-08-03", "price": 649000 },
     { "week": "2026-08-10", "price": 649000 },

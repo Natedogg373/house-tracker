@@ -13,6 +13,9 @@
   "baths": 2,
   "lotAcres": 0.16,
   "lastUpdated": "2026-10-16",
+  "lat": 32.789,
+  "lng": -96.801,
+  "schoolIds": ["demo-maple-elem", "unrated-willow-elem"],
   "priceHistory": [
     { "week": "2026-08-03", "price": 689000 },
     { "week": "2026-08-10", "price": 689000 },

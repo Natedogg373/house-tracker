@@ -848,7 +848,7 @@ button.secondary,
 .rank-card,
 .rank-placeholder {
   display: grid;
-  grid-template-columns: auto auto 72px minmax(0, 1fr);
+  grid-template-columns: auto auto minmax(0, 1fr);
   gap: 0.75rem 0.85rem;
   align-items: center;
   background: var(--surface);
@@ -857,6 +857,21 @@ button.secondary,
   box-shadow: var(--shadow);
   padding: 0.85rem 1rem;
   user-select: none;
+}
+
+.rank-link {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 0.75rem 0.85rem;
+  align-items: center;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.rank-link:hover .rank-address {
+  color: var(--forest);
+  text-decoration: underline;
 }
 
 .rank-placeholder {
@@ -996,9 +1011,14 @@ button.secondary,
 
   .rank-card,
   .rank-placeholder {
-    grid-template-columns: auto auto 56px minmax(0, 1fr);
+    grid-template-columns: auto auto minmax(0, 1fr);
     gap: 0.55rem 0.6rem;
     padding: 0.75rem;
+  }
+
+  .rank-link {
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 0.55rem 0.6rem;
   }
 
   .rank-thumb {
@@ -1038,5 +1058,320 @@ button.secondary,
 
   .arch-flow {
     display: grid;
+  }
+
+  .map-layout {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .full-map {
+    min-height: 55vh;
+  }
+}
+
+.toolbar-row {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.toolbar label.include-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+
+.include-toggle input {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--forest);
+}
+
+.house-actions {
+  margin-top: 0.35rem;
+}
+
+button.danger,
+.danger {
+  background: transparent;
+  color: var(--over);
+  border: 1px solid #fdba74;
+}
+
+button.danger:hover,
+.danger:hover {
+  background: var(--over-bg);
+  color: var(--over);
+}
+
+.pill.inside {
+  background: #e4eee8;
+  color: var(--forest);
+}
+
+.pill.not-interested {
+  background: var(--sold-bg);
+  color: var(--sold);
+}
+
+.grave-section {
+  margin-bottom: 1.6rem;
+}
+
+.grave-section h2 {
+  margin-bottom: 0.35rem;
+}
+
+.grave-status {
+  margin: 0.85rem 0 0;
+  color: var(--pending);
+  font-weight: 600;
+}
+
+.grave-card .actions {
+  margin-top: 0.85rem;
+}
+
+body.map-page main.map-main {
+  width: min(1440px, calc(100% - 1.5rem));
+  margin-top: 1rem;
+}
+
+.map-banner {
+  margin-bottom: 0.85rem;
+}
+
+.map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 1rem;
+  min-height: calc(100vh - 7.5rem);
+  align-items: stretch;
+}
+
+.full-map {
+  min-height: 640px;
+  height: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: #dbe4dc;
+}
+
+.map-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.15rem 1.2rem 1.4rem;
+  display: grid;
+  gap: 1.15rem;
+  align-content: start;
+}
+
+.map-lede {
+  margin-bottom: 0.65rem;
+  font-size: 0.95rem;
+}
+
+.map-stat {
+  margin: 0;
+  font-weight: 650;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+}
+
+.map-note {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.map-actions {
+  margin: 0.7rem 0 0.85rem;
+}
+
+.map-actions button {
+  padding: 0.55rem 0.85rem;
+  font-size: 0.88rem;
+}
+
+.legend-list,
+.geofence-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.legend-house {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.legend-house:hover {
+  color: var(--forest);
+}
+
+.legend-swatch {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  background: var(--forest);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--line);
+  flex: 0 0 auto;
+}
+
+.legend-swatch.school-swatch {
+  border-radius: 3px;
+  background: conic-gradient(#c2410c 0 50%, #1d4ed8 50% 100%);
+}
+
+.legend-key {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.geofence-item {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fbf8f2;
+}
+
+.geofence-item strong {
+  display: block;
+}
+
+.geofence-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.geofence-actions button {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.pin-wrap {
+  background: none;
+  border: 0;
+}
+
+.house-pin {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 5px rgba(31, 27, 22, 0.4);
+}
+
+.school-pin {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 5px rgba(31, 27, 22, 0.4);
+}
+
+.school-pin-mark {
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  clip-path: polygon(50% 0, 100% 38%, 82% 38%, 82% 100%, 18% 100%, 18% 38%, 0 38%);
+}
+
+.leaflet-tooltip.map-tip {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.leaflet-tooltip.map-tip-plain {
+  font-family: var(--font);
+  font-weight: 600;
+}
+
+.map-tip-card {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 0.55rem;
+  min-width: 220px;
+  max-width: 280px;
+  padding: 0.55rem;
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.map-tip-school {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.map-tip-thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #ece6db;
+}
+
+.map-tip-empty {
+  background: linear-gradient(145deg, #e4eee8 0%, #ece6db 100%);
+}
+
+.map-tip-body {
+  display: grid;
+  gap: 0.15rem;
+  align-content: start;
+  font-size: 0.85rem;
+}
+
+.map-tip-body strong {
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
+}
+
+.map-tip-houses {
+  margin: 0.35rem 0 0;
+  padding-left: 1rem;
+}
+
+.map-tip-muted {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+
+@media (min-width: 720px) {
+  .toolbar-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
   }
 }

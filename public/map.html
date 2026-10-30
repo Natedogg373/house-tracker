@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Map · House Tracker</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/vendor/leaflet.css" />
+    <link rel="stylesheet" href="/vendor/leaflet.draw.css" />
+  </head>
+  <body class="map-page">
+    <header class="site-header">
+      <a class="brand" href="/">
+        <img src="/favicon.svg" alt="" />
+        <span>House Tracker</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">House Details</a>
+        <a href="/map" aria-current="page">Map</a>
+        <a href="/rankings">Rankings</a>
+        <a href="/graveyard">Graveyard</a>
+        <a href="/add">Add house</a>
+        <a href="/about">About</a>
+      </nav>
+    </header>
+
+    <main class="map-main">
+      <p id="sample-banner" class="banner sample map-banner" hidden>
+        Showing sample houses and fake schools for demo. Real pins appear when house JSON includes
+        <code>lat</code>/<code>lng</code> (or geocoding succeeds) and the bot commits
+        <code>data/schools.json</code>.
+      </p>
+      <p id="error-banner" class="banner error map-banner" hidden></p>
+      <div class="map-layout">
+        <div id="map" class="full-map" role="application" aria-label="Houses and schools map"></div>
+        <aside class="map-panel" aria-label="Map legend and geofences">
+          <section>
+            <h1>Map</h1>
+            <p class="lede map-lede">
+              House pins are circles; schools are squares. Matching colors tie a house to its schools.
+              Draw an area to flag homes inside it.
+            </p>
+            <p id="in-area-count" class="map-stat">0 houses in area</p>
+            <p id="missing-coords" class="map-note hidden"></p>
+          </section>
+          <section>
+            <h2>Legend</h2>
+            <ul id="legend-list" class="legend-list"></ul>
+            <p class="legend-key">
+              <span class="legend-swatch house-swatch"></span> House
+              <span class="legend-swatch school-swatch"></span> School
+            </p>
+          </section>
+          <section>
+            <h2>Geofences</h2>
+            <p id="draw-hint" class="map-note">Draw a rectangle, circle, or polygon, then name it.</p>
+            <div class="actions map-actions">
+              <button type="button" id="draw-rect" class="secondary">Rectangle</button>
+              <button type="button" id="draw-circle" class="secondary">Circle</button>
+              <button type="button" id="draw-polygon" class="secondary">Polygon</button>
+            </div>
+            <p id="geofence-status" class="banner hidden" hidden></p>
+            <ul id="geofence-list" class="geofence-list"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <script src="/vendor/leaflet.js"></script>
+    <script src="/vendor/leaflet.draw.js"></script>
+    <script type="module" src="/js/map.js"></script>
+  </body>
+</html>

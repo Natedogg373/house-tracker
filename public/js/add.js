@@ -36,7 +36,7 @@ form.addEventListener("submit", async (event) => {
     showMessage(
       "ok",
       data.message ||
-        "Request sent. The house will appear on the dashboard in a few minutes."
+        "Request sent. The house will appear on House Details in a few minutes."
     );
     form.reset();
   } catch {

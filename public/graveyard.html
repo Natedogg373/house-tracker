@@ -20,7 +20,8 @@
         <span>House Tracker</span>
       </a>
       <nav class="nav" aria-label="Primary">
-        <a href="/">Dashboard</a>
+        <a href="/">House Details</a>
+        <a href="/map">Map</a>
         <a href="/rankings">Rankings</a>
         <a href="/graveyard" aria-current="page">Graveyard</a>
         <a href="/add">Add house</a>
@@ -32,29 +33,38 @@
       <section class="panel graveyard-intro">
         <h1>Graveyard</h1>
         <p class="lede">
-          Houses that sold while we were watching them. Original and lowest list prices come from
-          weekly history; sale price is shown when House Tracker can get it from Zillow — often it
-          cannot.
+          Houses that sold while we were watching them, plus listings we marked as no longer interested.
+          Original and lowest list prices come from weekly history; sale price is shown when House Tracker
+          can get it from Zillow — often it cannot.
         </p>
         <p id="sample-banner" class="banner sample" hidden>
           Showing sample houses for demo. Real sold listings appear here once JSON files in
           <code>data/houses/</code> are marked Sold.
         </p>
         <p id="error-banner" class="banner error" hidden></p>
+        <p id="action-banner" class="banner" hidden></p>
       </section>
 
       <section id="empty" class="panel empty hidden">
         <h2>Nothing in the graveyard yet</h2>
         <p>
-          When a watched listing is marked Sold, it will show up here with list-price history and
-          days on market. Pending and for-sale homes stay on the dashboard.
+          When a watched listing is marked Sold, or you tap Not interested on House Details, it will show
+          up here. Pending and for-sale homes stay on House Details.
         </p>
-        <p><a href="/">Back to dashboard</a></p>
+        <p><a href="/">Back to House Details</a></p>
       </section>
 
       <section id="graveyard-view" class="hidden">
-        <p id="graveyard-count" class="graveyard-count"></p>
-        <ol id="graveyard-list" class="graveyard-list" aria-label="Sold houses"></ol>
+        <section id="sold-section" class="grave-section hidden">
+          <h2>Sold</h2>
+          <p id="graveyard-count" class="graveyard-count"></p>
+          <ol id="graveyard-list" class="graveyard-list" aria-label="Sold houses"></ol>
+        </section>
+        <section id="not-interested-section" class="grave-section hidden">
+          <h2>No longer interested</h2>
+          <p id="not-interested-count" class="graveyard-count"></p>
+          <ol id="not-interested-list" class="graveyard-list" aria-label="No longer interested houses"></ol>
+        </section>
       </section>
     </main>
 

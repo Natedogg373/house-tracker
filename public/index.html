@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>House Tracker</title>
+    <title>House Details · House Tracker</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,7 +21,8 @@
         <span>House Tracker</span>
       </a>
       <nav class="nav" aria-label="Primary">
-        <a href="/" aria-current="page">Dashboard</a>
+        <a href="/" aria-current="page">House Details</a>
+        <a href="/map">Map</a>
         <a href="/rankings">Rankings</a>
         <a href="/graveyard">Graveyard</a>
         <a href="/add">Add house</a>
@@ -31,10 +32,16 @@
 
     <main>
       <section class="panel toolbar">
-        <label for="house-select">
-          Viewing
-          <select id="house-select"></select>
-        </label>
+        <div class="toolbar-row">
+          <label for="house-select">
+            Viewing
+            <select id="house-select"></select>
+          </label>
+          <label class="include-toggle" for="include-not-interested">
+            <input type="checkbox" id="include-not-interested" />
+            Include not interested
+          </label>
+        </div>
         <p id="sample-banner" class="banner sample" hidden>
           Showing sample houses for demo. Real listings appear here once JSON files land in
           <code>data/houses/</code>.
@@ -49,9 +56,16 @@
 
       <section id="house-view">
         <div class="hero">
-          <p class="kicker"><span id="status" class="pill">For sale</span></p>
+          <p class="kicker">
+            <span id="status" class="pill">For sale</span>
+            <span id="inside-badge" class="pill inside hidden"></span>
+            <span id="interest-badge" class="pill not-interested hidden"></span>
+          </p>
           <h1 id="address">Loading…</h1>
           <p id="budget-banner" class="banner" hidden></p>
+          <div class="actions house-actions">
+            <button type="button" id="not-interested-btn" class="danger">Not interested</button>
+          </div>
         </div>
 
         <div class="metrics" id="metrics"></div>
