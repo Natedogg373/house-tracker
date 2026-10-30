@@ -176,5 +176,12 @@
       "week": "2026-10-12",
       "price": null
     }
+  ],
+  "lat": 32.873571,
+  "lng": -96.741115,
+  "schoolIds": [
+    "merriman-park-elementary",
+    "forest-meadow-middle",
+    "lake-highlands-high"
   ]
 }

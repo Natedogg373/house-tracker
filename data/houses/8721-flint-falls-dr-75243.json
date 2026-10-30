@@ -172,5 +172,12 @@
       "week": "2026-10-05",
       "price": 589900
     }
+  ],
+  "lat": 32.89709,
+  "lng": -96.738471,
+  "schoolIds": [
+    "skyview-elementary",
+    "forest-meadow-middle",
+    "lake-highlands-high"
   ]
 }

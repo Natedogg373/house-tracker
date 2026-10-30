@@ -172,5 +172,12 @@
       "week": "2026-10-05",
       "price": 699999
     }
+  ],
+  "lat": 32.837296,
+  "lng": -96.698794,
+  "schoolIds": [
+    "hexter-elementary",
+    "robert-t-hill-middle",
+    "bryan-adams-high"
   ]
 }

@@ -172,5 +172,12 @@
       "week": "2026-10-05",
       "price": 525000
     }
+  ],
+  "lat": 32.915897,
+  "lng": -96.728141,
+  "schoolIds": [
+    "aikin-elementary",
+    "forest-meadow-middle",
+    "lake-highlands-high"
   ]
 }
