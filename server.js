@@ -23,6 +23,18 @@ const {
   housePoint,
 } = require("./lib/geofences");
 const { resolveSchools } = require("./lib/schools");
+const {
+  listQuestions,
+  createQuestion,
+  updateQuestion,
+  archiveQuestion,
+  reorderQuestions,
+  listAnswersForHouse,
+  saveAnswersForHouse,
+  surveyStatusForHouse,
+  houseAnswerSummaries,
+  QUESTION_TYPES,
+} = require("./lib/survey");
 
 const app = express();
 
@@ -48,6 +60,14 @@ app.get("/graveyard", (_req, res) => {
 
 app.get("/map", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "map.html"));
+});
+
+app.get("/survey", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "survey.html"));
+});
+
+app.get("/survey/fill", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "survey-fill.html"));
 });
 
 app.get("/api/health", (_req, res) => {
@@ -314,6 +334,105 @@ app.post("/api/houses", async (req, res) => {
       error: err.message || "Could not send the request.",
       code: err.code,
     });
+  }
+});
+
+function surveyError(res, err, fallback) {
+  const status = err.statusCode || 500;
+  if (status >= 500) console.error("[api] survey error:", err);
+  return res.status(status).json({
+    error: err.message || fallback,
+    code: err.code,
+  });
+}
+
+app.get("/api/survey/questions", (req, res) => {
+  try {
+    const includeArchived =
+      req.query.includeArchived === "1" ||
+      req.query.includeArchived === "true" ||
+      req.query.archived === "1";
+    const questions = listQuestions({ includeArchived });
+    res.json({ questions, types: QUESTION_TYPES });
+  } catch (err) {
+    surveyError(res, err, "Failed to load survey questions.");
+  }
+});
+
+app.post("/api/survey/questions", (req, res) => {
+  try {
+    const question = createQuestion(req.body || {});
+    return res.status(201).json({ ok: true, question });
+  } catch (err) {
+    return surveyError(res, err, "Failed to create question.");
+  }
+});
+
+app.put("/api/survey/questions/reorder", (req, res) => {
+  try {
+    const ids = Array.isArray(req.body) ? req.body : req.body?.ids;
+    const questions = reorderQuestions(ids);
+    return res.json({ ok: true, questions });
+  } catch (err) {
+    return surveyError(res, err, "Failed to reorder questions.");
+  }
+});
+
+app.put("/api/survey/questions/:id", (req, res) => {
+  try {
+    const question = updateQuestion(req.params.id, req.body || {});
+    return res.json({ ok: true, question });
+  } catch (err) {
+    return surveyError(res, err, "Failed to update question.");
+  }
+});
+
+app.delete("/api/survey/questions/:id", (req, res) => {
+  try {
+    const question = archiveQuestion(req.params.id);
+    return res.json({ ok: true, question });
+  } catch (err) {
+    return surveyError(res, err, "Failed to delete question.");
+  }
+});
+
+app.get("/api/survey/answers/:slug", (req, res) => {
+  try {
+    const slug = String(req.params.slug || "").trim();
+    if (!slug) {
+      return res.status(400).json({ error: "Missing house slug." });
+    }
+    const questions = listQuestions({ includeArchived: false });
+    const answers = listAnswersForHouse(slug);
+    const status = surveyStatusForHouse(slug, questions);
+    return res.json({ slug, questions, answers, status });
+  } catch (err) {
+    return surveyError(res, err, "Failed to load survey answers.");
+  }
+});
+
+app.put("/api/survey/answers/:slug", (req, res) => {
+  try {
+    const slug = String(req.params.slug || "").trim();
+    const items = Array.isArray(req.body) ? req.body : req.body?.answers;
+    const saved = saveAnswersForHouse(slug, items);
+    return res.json({ ok: true, slug, ...saved });
+  } catch (err) {
+    return surveyError(res, err, "Failed to save survey answers.");
+  }
+});
+
+app.get("/api/survey/status", (req, res) => {
+  try {
+    let slugs = [];
+    if (typeof req.query.slugs === "string" && req.query.slugs.trim()) {
+      slugs = req.query.slugs.split(",").map((s) => s.trim()).filter(Boolean);
+    } else {
+      slugs = currentHouses().houses.map((house) => house.slug);
+    }
+    return res.json({ statuses: houseAnswerSummaries(slugs) });
+  } catch (err) {
+    return surveyError(res, err, "Failed to load survey status.");
   }
 });
 

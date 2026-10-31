@@ -13,6 +13,7 @@ process.env.GEOCODE_CACHE_PATH = path.join(os.tmpdir(), `geocode-api-${process.p
 process.env.RANKINGS_PATH = path.join(os.tmpdir(), `rankings-api-${process.pid}.json`);
 process.env.INTEREST_PATH = path.join(os.tmpdir(), `interest-api-${process.pid}.json`);
 process.env.GEOFENCES_PATH = path.join(os.tmpdir(), `geofences-api-${process.pid}.json`);
+process.env.SURVEY_DB_PATH = path.join(os.tmpdir(), `survey-api-main-${process.pid}.db`);
 delete process.env.HOUSE_TRACKER_WEBHOOK_URL;
 delete process.env.HOUSE_TRACKER_WEBHOOK_AUTH;
 
@@ -53,10 +54,13 @@ describe("API", () => {
     assert.match(html, /price-chart/);
     assert.match(html, /href="\/about"/);
     assert.match(html, /href="\/rankings"/);
+    assert.match(html, /href="\/survey"/);
     assert.match(html, /href="\/graveyard"/);
     assert.match(html, /href="\/map"/);
     assert.match(html, /id="not-interested-btn"/);
     assert.match(html, /id="zillow-cta"/);
+    assert.match(html, /id="fill-survey-cta"/);
+    assert.match(html, /id="survey-section"/);
     assert.match(html, /View on Zillow/);
     assert.match(html, /target="_blank"/);
     assert.match(html, /rel="noopener/);
@@ -70,6 +74,7 @@ describe("API", () => {
     assert.equal(res.status, 200);
     assert.match(html, /Add a house/);
     assert.match(html, /href="\/rankings"/);
+    assert.match(html, /href="\/survey"/);
     assert.match(html, /href="\/graveyard"/);
     assert.match(html, /href="\/map"/);
     assert.match(html, /House Details/);
@@ -85,6 +90,7 @@ describe("API", () => {
     assert.match(html, /leaflet.draw/);
     assert.match(html, /House Details/);
     assert.match(html, /href="\/map"/);
+    assert.match(html, /href="\/survey"/);
     assert.match(html, /href="\/graveyard"/);
   });
 
@@ -95,6 +101,7 @@ describe("API", () => {
     assert.match(html, /Rankings/);
     assert.match(html, /id="rank-list"/);
     assert.match(html, /href="\/rankings"/);
+    assert.match(html, /href="\/survey"/);
     assert.match(html, /href="\/graveyard"/);
     assert.match(html, /href="\/map"/);
     assert.match(html, /House Details/);
@@ -108,6 +115,7 @@ describe("API", () => {
     assert.match(html, /id="graveyard-list"/);
     assert.match(html, /id="not-interested-list"/);
     assert.match(html, /href="\/graveyard"/);
+    assert.match(html, /href="\/survey"/);
     assert.match(html, /href="\/map"/);
     assert.match(html, /House Details/);
   });
@@ -122,6 +130,7 @@ describe("API", () => {
     assert.match(html, /Client-side password/);
     assert.match(html, /npm start/);
     assert.match(html, /href="\/rankings"/);
+    assert.match(html, /href="\/survey"/);
     assert.match(html, /href="\/graveyard"/);
     assert.match(html, /href="\/map"/);
     assert.match(html, /House Details/);

@@ -951,6 +951,13 @@ button.secondary,
   user-select: none;
 }
 
+.rank-survey-link {
+  grid-column: 1 / -1;
+  justify-content: center;
+  min-height: 44px;
+  user-select: none;
+}
+
 .rank-link {
   display: grid;
   grid-template-columns: 72px minmax(0, 1fr);
@@ -1977,5 +1984,333 @@ button,
 
   .leaflet-popup.map-tip-popup .map-tip-card {
     padding: 0.75rem 1.85rem 0.75rem 0.8rem;
+  }
+}
+
+/* —— House Survey —— */
+
+.survey-intro-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.survey-intro-row .lede {
+  margin-bottom: 0;
+  max-width: 40rem;
+}
+
+.survey-add {
+  flex: 0 0 auto;
+  width: 3rem;
+  height: 3rem;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0;
+  border-radius: 999px;
+  font-size: 1.6rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.survey-question-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.survey-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.05rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.survey-card-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.75rem;
+}
+
+.survey-card-index {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: auto;
+}
+
+.survey-reorder {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.icon-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.55rem 0.85rem;
+  border-radius: 12px;
+  background: #f3efe7;
+  color: var(--forest);
+  font: 600 0.95rem var(--font);
+}
+
+.icon-btn:hover {
+  background: #e4eee8;
+}
+
+.icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.icon-btn.danger-text,
+.danger-text {
+  background: transparent;
+  color: var(--over);
+  border: 1px solid #fdba74;
+}
+
+.icon-btn.danger-text:hover {
+  background: var(--over-bg);
+}
+
+.survey-input,
+.survey-type,
+textarea.survey-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font: 1rem var(--font);
+  background: #fff;
+  color: var(--ink);
+  min-height: 44px;
+}
+
+textarea.survey-input {
+  resize: vertical;
+  min-height: 4.5rem;
+  line-height: 1.4;
+}
+
+.survey-type {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--forest) 50%),
+    linear-gradient(135deg, var(--forest) 50%, transparent 50%);
+  background-position: calc(100% - 1.15rem) calc(50% - 0.15rem), calc(100% - 0.85rem) calc(50% - 0.15rem);
+  background-size: 0.35rem 0.35rem, 0.35rem 0.35rem;
+  background-repeat: no-repeat;
+  padding-right: 2.4rem;
+}
+
+.survey-config {
+  margin: 0;
+}
+
+.survey-type-hint,
+.muted {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.survey-question-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.survey-answer-control {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.yes-no,
+.choice-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.choice-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.choice-chip:has(input:checked) {
+  border-color: var(--forest);
+  background: #e4eee8;
+  color: var(--forest);
+}
+
+.choice-chip input {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--forest);
+}
+
+.rating-bubbles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.rating-bubble {
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font: 650 1rem var(--serif);
+  display: inline-grid;
+  place-items: center;
+}
+
+button.rating-bubble:hover {
+  background: #e4eee8;
+  color: var(--forest);
+}
+
+.rating-bubble.is-selected,
+button.rating-bubble.is-selected {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #f6f3ee;
+}
+
+.text-btn {
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  padding: 0.55rem 0.7rem;
+  min-height: 44px;
+  font: 600 0.9rem var(--font);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.text-btn:hover {
+  background: transparent;
+  color: var(--forest);
+}
+
+.survey-answers-card {
+  margin-top: 0;
+}
+
+.survey-answers-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.survey-answers-head h2 {
+  margin: 0;
+}
+
+.survey-empty-note {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.survey-answers-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.survey-answer-row {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  background: #fffcf7;
+}
+
+.survey-answer-row.is-archived {
+  background: #f3efe7;
+  opacity: 0.92;
+}
+
+.survey-answer-question {
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.survey-answer-meta {
+  margin: 0 0 0.35rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.survey-answer-value {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.survey-answer-notes {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+  white-space: pre-wrap;
+}
+
+.house-actions .button-link,
+.house-actions .button-link-solid {
+  min-height: 44px;
+  justify-content: center;
+}
+
+@media (max-width: 839px) {
+  .survey-intro-row {
+    align-items: center;
+  }
+
+  .survey-card-toolbar {
+    gap: 0.45rem;
+  }
+
+  .icon-btn.danger-text {
+    margin-left: auto;
+  }
+
+  .survey-answers-head .button-link {
+    width: 100%;
+    justify-content: center;
   }
 }

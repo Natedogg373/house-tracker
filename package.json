@@ -10,7 +10,7 @@
     "mock-webhook": "node scripts/mock-webhook.js"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22.5"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

@@ -1,4 +1,5 @@
-import { detailsUrl, fetchHouses, formatMoney, isActiveHouse, show, statusClass } from "./common.js";
+import { detailsUrl, escapeHtml, fetchHouses, formatMoney, isActiveHouse, show, statusClass } from "./common.js";
+import { surveyFillUrl } from "./survey-shared.js";
 
 const listEl = document.querySelector("#rank-list");
 const emptyEl = document.querySelector("#empty");
@@ -8,13 +9,7 @@ const saveStatus = document.querySelector("#save-status");
 let houses = [];
 let persistTimer = 0;
 
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
+let surveyStatusBySlug = new Map();
 
 function moveToRank(list, fromIndex, rank) {
   const items = list.slice();
@@ -109,6 +104,11 @@ function cardHtml(house, rank, total) {
   const pillClass = statusClass(house.status);
   const price = formatMoney(house.listPrice);
   const href = detailsUrl(house.slug);
+  const surveyHref = surveyFillUrl(house.slug);
+  const survey = surveyStatusBySlug.get(house.slug);
+  let surveyLabel = "Fill survey";
+  if (survey?.filled) surveyLabel = "Survey done";
+  else if (survey?.started) surveyLabel = "Continue survey";
   return `<li class="rank-card" data-slug="${escapeHtml(house.slug)}">
     <button type="button" class="rank-handle" aria-label="Drag to reorder ${escapeHtml(house.address || house.slug)}">
       <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -142,6 +142,7 @@ function cardHtml(house, rank, total) {
         </p>
       </div>
     </a>
+    <a class="rank-survey-link button-link" href="${escapeHtml(surveyHref)}">${escapeHtml(surveyLabel)}</a>
   </li>`;
 }
 
@@ -251,6 +252,20 @@ async function fetchRankings() {
   return res.json();
 }
 
+async function fetchSurveyStatus(slugs) {
+  if (!slugs.length) {
+    surveyStatusBySlug = new Map();
+    return;
+  }
+  const res = await fetch(`/api/survey/status?slugs=${encodeURIComponent(slugs.join(","))}`);
+  if (!res.ok) {
+    surveyStatusBySlug = new Map();
+    return;
+  }
+  const data = await res.json().catch(() => ({}));
+  surveyStatusBySlug = new Map((data.statuses || []).map((item) => [item.houseSlug, item]));
+}
+
 async function init() {
   bindList();
   try {
@@ -260,6 +275,7 @@ async function init() {
     houses = orderHouses(payload.houses || [], ranking.slugs || []).filter((house) =>
       isActiveHouse(house, interest)
     );
+    await fetchSurveyStatus(houses.map((house) => house.slug));
     render();
   } catch {
     showSave("error", "Could not load houses.");

@@ -2,7 +2,7 @@
 
 A small local web app for Nate and partner to browse houses they’re considering. House data is written into this repo as JSON by a separate House Tracker bot; this app reads those files, shows House Details, a map, rankings, and a graveyard, and can ask the bot to look up a new listing.
 
-No database. After install, one command starts it.
+House listing JSON stays file-based. The House Survey feature uses a local SQLite file (Node’s built-in `node:sqlite`, so no native addon build). After install, one command starts it.
 
 ## Setup
 
@@ -34,6 +34,7 @@ Copy `.env.example` to `.env`. `.env` is gitignored; never commit secrets.
 | `INTEREST_PATH` | Optional override of not-interested / pending reactivation (default `data/interest.json`). |
 | `GEOFENCES_PATH` | Optional override of saved map areas (default `data/geofences.json`). |
 | `SCHOOLS_PATH` | Optional override of school pins (default `data/schools.json`). Sample mode uses `data/sample/schools.json`. |
+| `SURVEY_DB_PATH` | SQLite path for House Survey questions and answers (default `data/survey.db`). On Coolify, set this to a persistent volume path such as `/persist/survey.db`. |
 | `NOMINATIM_USER_AGENT` | Override the Nominatim User-Agent (a default identifying this app is already set). |
 | `GEOCODE_CACHE_PATH` | Override the geocode cache file (default `data/geocode-cache.json`). |
 | `GEOCODE_PREFETCH` | Set `false` to skip background geocoding of every loaded address. |
@@ -172,16 +173,25 @@ Commit `data/geofences.json` so the areas are shared.
 
 `data/sample/` has five clearly fake houses (Demo / Sample / Placeholder / Sold / Closed addresses) plus `data/sample/schools.json` with fake school pins and coordinates. They are used only when `data/houses/` has no house files, or when `USE_SAMPLE_DATA=true`. Do not copy that sample into `data/houses/` or `data/schools.json`.
 
+### House Survey
+
+Standardized visit checklist stored in SQLite (`SURVEY_DB_PATH`, default `data/survey.db`; gitignored). The Survey nav tab opens the setup page (`/survey`): start with no questions, tap **+** to add one, then edit text, answer type, and type-specific options (rating max, multiple-choice choices). Types: yes/no, number, rating 1..n, date, short text, multiple choice. Reorder with ↑/↓; delete soft-archives the question so old answers remain viewable.
+
+Fill a house’s answers at `/survey/fill?house=<slug>` — same question layout without editing the template. Reach it from **Fill survey** on House Details or from each Rankings row. Answers and notes show at the bottom of House Details (with an empty-state note when nothing is filled yet; archived questions are labeled).
+
+JSON API: `GET/POST /api/survey/questions`, `PUT /api/survey/questions/:id`, `DELETE /api/survey/questions/:id` (archive), `PUT /api/survey/questions/reorder`, `GET/PUT /api/survey/answers/:slug`, `GET /api/survey/status`. Changing a question’s type asks for confirmation and bumps a version; prior answers keep a type/text snapshot so they still render. This app never writes `data/houses/*.json`.
+
 ## Pages
 
-- **House Details** (`/`, deep link `/?house=<slug>`) — pick an address, see details, photo, and price history vs. the $700K budget line. The dropdown updates the URL; opening a deep link selects that house. **Not interested** moves it to the Graveyard list above.
+- **House Details** (`/`, deep link `/?house=<slug>`) — pick an address, see details, photo, and price history vs. the $700K budget line. The dropdown updates the URL; opening a deep link selects that house. **Not interested** moves it to the Graveyard list above. **Fill survey** and the survey answers section sit on this page.
 - **Map** (`/map`) — Leaflet + OSM. Active house pins (not sold, not not-interested), school pins for the selected level, a school legend, and drawable geofences. Hover a house pin for photo, price, address, and that level’s school; click the pin or tooltip to open House Details.
-- **Rankings** (`/rankings`) — drag houses into an order, or type a rank number (that house moves there and the rest shift). Saved to `data/rankings.json`. Sold and not-interested houses are excluded. Click a house (not the handle or rank input) to open House Details.
+- **Rankings** (`/rankings`) — drag houses into an order, or type a rank number (that house moves there and the rest shift). Saved to `data/rankings.json`. Sold and not-interested houses are excluded. Click a house (not the handle or rank input) to open House Details. Each row links to fill that house’s survey.
+- **Survey** (`/survey`) — edit the shared visit questionnaire. Fill-out UI: `/survey/fill?house=<slug>`.
 - **Graveyard** (`/graveyard`) — **Sold** (word match, so `Sold (10/1/2026)` counts) plus **No longer interested**. Sold cards show original list price, lowest list price, sale price (or Unknown), and days on market. Newest `soldDate` first; otherwise by address.
 - **Add house** (`/add`) — submit a Zillow URL or street address to the bot webhook.
 - **About** (`/about`) — what the project is, how the bot / GitHub JSON / web app fit together, and the plan to host on Cloudflare Pages with a public landing and a password-gated app.
 
-Nav on every page: House Details, Map, Rankings, Graveyard, Add house, About.
+Nav on every page: House Details, Map, Rankings, Survey, Graveyard, Add house, About.
 
 ## Webhook contract
 
@@ -278,14 +288,17 @@ Create an API token (**Keys & Tokens → API Tokens**) with the **deploy** permi
 
 ### Persistent volume (do not wipe user-written files)
 
-The process **writes** these files under `data/`, each via temp file then `rename`:
+The process **writes** these files under `data/` (JSON via temp file then `rename`; survey via SQLite):
 
 - `data/rankings.json` — Rankings page `POST /api/rankings` (`lib/rankings.js`). Override with `RANKINGS_PATH`.
 - `data/interest.json` — not-interested / pending reactivation (`lib/interest.js`). Override with `INTEREST_PATH`.
 - `data/geofences.json` — Map areas (`lib/geofences.js`). Override with `GEOFENCES_PATH`.
 - `data/geocode-cache.json` — Nominatim cache (`lib/geocode.js`, gitignored). Override with `GEOCODE_CACHE_PATH`.
+- `data/survey.db` — House Survey questions and per-house answers (`lib/survey.js`, gitignored). Override with `SURVEY_DB_PATH`.
 
-Do **not** bind-mount the whole `data/` directory over the checkout. That would hide `data/houses/` from bot-driven deploys. Because saves `rename` a sibling `.tmp` file, persist a **directory**, not a single-file bind (rename across filesystems fails).
+Do **not** bind-mount the whole `data/` directory over the checkout. That would hide `data/houses/` from bot-driven deploys. Because JSON saves `rename` a sibling `.tmp` file, persist a **directory**, not a single-file bind (rename across filesystems fails).
+
+**Persistent storage (survey):** visit notes are irreplaceable. Point `SURVEY_DB_PATH` at a Coolify persistent volume (for example `/persist/survey.db`) so the SQLite file survives redeploys. Railpack does not need a native SQLite addon — the app uses Node’s built-in `node:sqlite` (Node **≥ 22.5**).
 
 In Coolify, mount a persistent volume at a writable directory (for example `/persist`) and set:
 
@@ -294,6 +307,7 @@ RANKINGS_PATH=/persist/rankings.json
 INTEREST_PATH=/persist/interest.json
 GEOFENCES_PATH=/persist/geofences.json
 GEOCODE_CACHE_PATH=/persist/geocode-cache.json
+SURVEY_DB_PATH=/persist/survey.db
 ```
 
-Leave `data/houses/` in the image so each deploy picks up new listing JSON. Seed `/persist/rankings.json`, `/persist/interest.json`, and `/persist/geofences.json` once from the committed files if you want the current state on first boot; otherwise rankings start alphabetical and interest/geofences start empty until someone saves them in the app.
+Leave `data/houses/` in the image so each deploy picks up new listing JSON. Seed `/persist/rankings.json`, `/persist/interest.json`, and `/persist/geofences.json` once from the committed files if you want the current state on first boot; otherwise rankings start alphabetical and interest/geofences start empty until someone saves them in the app. Survey starts empty until questions are added in the app.

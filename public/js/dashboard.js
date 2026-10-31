@@ -20,6 +20,7 @@ import {
   statusClass,
   zillowHref,
 } from "./common.js";
+import { formatAnswerValue, surveyFillUrl, TYPE_LABELS } from "./survey-shared.js";
 
 const select = document.querySelector("#house-select");
 const includeToggle = document.querySelector("#include-not-interested");
@@ -42,8 +43,14 @@ const zillowCta = document.querySelector("#zillow-cta");
 const canvas = document.querySelector("#price-chart");
 const schoolsSection = document.querySelector("#schools-section");
 const schoolsList = document.querySelector("#schools-list");
+const fillSurveyCta = document.querySelector("#fill-survey-cta");
+const surveySectionFill = document.querySelector("#survey-section-fill");
+const surveyEmpty = document.querySelector("#survey-empty");
+const surveyNoQuestions = document.querySelector("#survey-no-questions");
+const surveyAnswersList = document.querySelector("#survey-answers-list");
 
 const STORAGE_KEY = "house-tracker:selected";
+let surveyCache = { slug: "", questions: [], answers: [], status: null };
 
 let chart;
 let payload = {
@@ -371,6 +378,82 @@ function renderSchools(house) {
   schoolsList.innerHTML = schools.map(schoolRowHtml).join("");
 }
 
+function surveyAnswerRowHtml(answer) {
+  const archived = answer.archived;
+  const typeLabel = TYPE_LABELS[answer.questionType] || answer.questionType || "";
+  const notes = String(answer.notes || "").trim();
+  return `<li class="survey-answer-row ${archived ? "is-archived" : ""}">
+    <div class="survey-answer-main">
+      <p class="survey-answer-question">
+        ${escapeHtml(answer.questionText || "Untitled question")}
+        ${archived ? '<span class="pill">Archived question</span>' : ""}
+      </p>
+      <p class="survey-answer-meta">${escapeHtml(typeLabel)}</p>
+      <p class="survey-answer-value">${escapeHtml(formatAnswerValue(answer))}</p>
+      ${notes ? `<p class="survey-answer-notes">${escapeHtml(notes)}</p>` : ""}
+    </div>
+  </li>`;
+}
+
+function renderSurveySection(house) {
+  const href = surveyFillUrl(house.slug);
+  if (fillSurveyCta) fillSurveyCta.href = href;
+  if (surveySectionFill) surveySectionFill.href = href;
+
+  const questions = surveyCache.questions || [];
+  const answers = surveyCache.answers || [];
+  const activeIds = new Set(questions.map((q) => q.id));
+  const activeAnswers = answers.filter((a) => activeIds.has(a.questionId) && !a.archived);
+  const archivedAnswers = answers.filter((a) => a.archived);
+  const hasContent = [...activeAnswers, ...archivedAnswers].some(
+    (a) =>
+      (a.value !== null && a.value !== undefined && a.value !== "") || String(a.notes || "").trim()
+  );
+
+  if (!questions.length && !archivedAnswers.length) {
+    surveyNoQuestions.hidden = false;
+    surveyEmpty.hidden = true;
+    surveyAnswersList.hidden = true;
+    surveyAnswersList.innerHTML = "";
+    return;
+  }
+
+  surveyNoQuestions.hidden = true;
+  surveyEmpty.hidden = hasContent;
+  if (!hasContent) {
+    surveyAnswersList.hidden = true;
+    surveyAnswersList.innerHTML = "";
+    return;
+  }
+
+  const rows = [
+    ...activeAnswers.map(surveyAnswerRowHtml),
+    ...archivedAnswers.map(surveyAnswerRowHtml),
+  ];
+  surveyAnswersList.hidden = false;
+  surveyAnswersList.innerHTML = rows.join("");
+}
+
+async function loadSurvey(slug) {
+  if (!slug) {
+    surveyCache = { slug: "", questions: [], answers: [], status: null };
+    return;
+  }
+  try {
+    const res = await fetch(`/api/survey/answers/${encodeURIComponent(slug)}`);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || "Could not load survey.");
+    surveyCache = {
+      slug,
+      questions: data.questions || [],
+      answers: data.answers || [],
+      status: data.status || null,
+    };
+  } catch {
+    surveyCache = { slug, questions: [], answers: [], status: null };
+  }
+}
+
 function renderHouse(house) {
   const budget = payload.budget || 700000;
   const delta = budgetDelta(house.listPrice, budget);
@@ -418,6 +501,12 @@ function renderHouse(house) {
   renderSchools(house);
   setMedia(house);
   renderChart(house, budget);
+  if (surveyCache.slug === house.slug) renderSurveySection(house);
+  else {
+    loadSurvey(house.slug).then(() => {
+      if (selectedHouse()?.slug === house.slug) renderSurveySection(house);
+    });
+  }
 }
 
 function preferredSlug(houses) {

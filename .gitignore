@@ -7,3 +7,7 @@ data/geocode-cache.json.tmp
 data/rankings.json.tmp
 data/interest.json.tmp
 data/geofences.json.tmp
+data/survey.db
+data/survey.db-wal
+data/survey.db-shm
+data/survey.db.tmp
