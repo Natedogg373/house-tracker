@@ -27,6 +27,7 @@
         <a href="/" aria-current="page">House Details</a>
         <a href="/map">Map</a>
         <a href="/rankings">Rankings</a>
+        <a href="/survey">Survey</a>
         <a href="/graveyard">Graveyard</a>
         <a href="/add">Add house</a>
         <a href="/about">About</a>
@@ -73,6 +74,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >View on Zillow</a>
+            <a id="fill-survey-cta" class="button-link button-link-solid" href="/survey/fill">Fill survey</a>
             <button type="button" id="not-interested-btn" class="danger">Not interested</button>
           </div>
         </div>
@@ -100,6 +102,20 @@
           <div class="chart-wrap">
             <canvas id="price-chart" aria-label="Listing price over time"></canvas>
           </div>
+        </section>
+
+        <section class="panel survey-answers-card" id="survey-section">
+          <div class="survey-answers-head">
+            <h2>House survey</h2>
+            <a id="survey-section-fill" class="button-link" href="/survey/fill">Fill survey</a>
+          </div>
+          <p id="survey-empty" class="survey-empty-note" hidden>
+            Survey not filled out yet for this house.
+          </p>
+          <p id="survey-no-questions" class="survey-empty-note" hidden>
+            No survey questions yet. Add some on the <a href="/survey">Survey</a> page.
+          </p>
+          <ul id="survey-answers-list" class="survey-answers-list" hidden></ul>
         </section>
       </section>
     </main>
