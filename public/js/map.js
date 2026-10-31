@@ -1,14 +1,13 @@
 import {
-  detailsUrl,
   escapeHtml,
   fetchHouses,
-  formatMoney,
   houseLatLng,
   isActiveHouse,
   schoolLevelLabel,
   schoolRatingLabel,
   show,
 } from "./common.js";
+import { houseTipHtml, schoolTipHtml } from "./map-tips.js";
 import {
   MAP_LEVEL_STORAGE_KEY,
   NEUTRAL_HOUSE_COLOR,
@@ -79,10 +78,6 @@ function visibleSchools() {
   return schoolsAtLevel(payload.schools, currentLevel);
 }
 
-function housesForSchool(school) {
-  return mappableHouses().filter((house) => (house.schoolIds || []).includes(school.id));
-}
-
 function houseIcon(color) {
   return Leaflet.divIcon({
     className: "pin-wrap",
@@ -90,6 +85,7 @@ function houseIcon(color) {
     iconSize: [18, 18],
     iconAnchor: [9, 9],
     tooltipAnchor: [0, -12],
+    popupAnchor: [0, -12],
   });
 }
 
@@ -100,50 +96,29 @@ function schoolIcon(color) {
     iconSize: [22, 22],
     iconAnchor: [11, 11],
     tooltipAnchor: [0, -12],
+    popupAnchor: [0, -12],
   });
 }
 
-function insideBadge(house) {
-  const names = Array.isArray(house.inside) ? house.inside.filter(Boolean) : [];
-  if (!names.length) return "";
-  return `<span class="pill inside">In area</span>`;
-}
-
-function houseTooltip(house, school) {
-  const href = detailsUrl(house.slug);
-  const photo = house.photoUrl
-    ? `<img class="map-tip-thumb" src="${escapeHtml(house.photoUrl)}" alt="" />`
-    : `<div class="map-tip-thumb map-tip-empty" aria-hidden="true"></div>`;
-  const schoolLine = school
-    ? `<span>${escapeHtml(school.name)}</span>`
-    : `<span class="map-tip-muted">No ${escapeHtml(schoolLevelLabel(currentLevel).toLowerCase())} school</span>`;
-  return `<a class="map-tip-card" href="${escapeHtml(href)}">
-    ${photo}
-    <div class="map-tip-body">
-      <strong>${escapeHtml(house.address || house.slug)}</strong>
-      <span>${escapeHtml(formatMoney(house.listPrice))}</span>
-      ${schoolLine}
-      ${insideBadge(house)}
-    </div>
-  </a>`;
-}
-
-function schoolTooltip(school, houses) {
-  const list = houses.length
-    ? `<ul class="map-tip-houses">${houses
-        .map(
-          (house) =>
-            `<li><a href="${escapeHtml(detailsUrl(house.slug))}">${escapeHtml(house.address || house.slug)}</a></li>`
-        )
-        .join("")}</ul>`
-    : `<p class="map-tip-muted">No matching active houses</p>`;
-  return `<div class="map-tip-card map-tip-school">
-    <div class="map-tip-body">
-      <strong>${escapeHtml(school.name)}</strong>
-      <span>${escapeHtml(schoolLevelLabel(school.level))} · ${escapeHtml(schoolRatingLabel(school.rating))}</span>
-      ${list}
-    </div>
-  </div>`;
+function bindMapTip(marker, html) {
+  marker.bindTooltip(html, {
+    direction: "top",
+    opacity: 1,
+    className: "map-tip",
+    interactive: false,
+  });
+  marker.bindPopup(html, {
+    className: "map-tip-popup",
+    maxWidth: 280,
+    minWidth: 220,
+    autoPan: true,
+    autoPanPadding: [28, 56],
+    keepInView: true,
+    closeButton: true,
+  });
+  marker.on("popupopen", () => {
+    marker.closeTooltip();
+  });
 }
 
 function layerFromFence(fence) {
@@ -359,22 +334,13 @@ function renderPins(colors) {
       title: house.address || house.slug,
       riseOnHover: true,
     });
-    marker.bindTooltip(houseTooltip(house, school), {
-      direction: "top",
-      opacity: 1,
-      className: "map-tip",
-      interactive: true,
-    });
-    marker.on("click", () => {
-      window.location.href = detailsUrl(house.slug);
-    });
+    bindMapTip(marker, houseTipHtml(house, school, currentLevel));
     overlay.addLayer(marker);
   }
 
   for (const school of visibleSchools()) {
     const point = schoolPoint(school);
     if (!point) continue;
-    const related = housesForSchool(school);
     const color = colors.get(school.id) || NEUTRAL_HOUSE_COLOR;
     const marker = Leaflet.marker([point.lat, point.lng], {
       icon: schoolIcon(color),
@@ -382,12 +348,7 @@ function renderPins(colors) {
       riseOnHover: true,
       zIndexOffset: 200,
     });
-    marker.bindTooltip(schoolTooltip(school, related), {
-      direction: "top",
-      opacity: 1,
-      className: "map-tip",
-      interactive: true,
-    });
+    bindMapTip(marker, schoolTipHtml(school));
     overlay.addLayer(marker);
   }
 }
