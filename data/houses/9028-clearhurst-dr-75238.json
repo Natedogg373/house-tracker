@@ -10,7 +10,7 @@
   "beds": 3,
   "baths": 2,
   "lotAcres": 0.09,
-  "lastUpdated": "2026-10-25",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -171,6 +171,30 @@
     {
       "week": "2026-10-05",
       "price": 615000
+    },
+    {
+      "week": "2026-10-12",
+      "price": null
+    },
+    {
+      "week": "2026-10-19",
+      "price": null
+    },
+    {
+      "week": "2026-10-26",
+      "price": null
+    },
+    {
+      "week": "2026-11-02",
+      "price": null
+    },
+    {
+      "week": "2026-11-09",
+      "price": null
+    },
+    {
+      "week": "2026-11-16",
+      "price": null
     }
   ],
   "lat": 32.869509,

@@ -2,7 +2,7 @@
   "address": "9517 Fallbrook Dr, Dallas, TX 75243",
   "zillowUrl": "https://www.zillow.com/homedetails/9517-Fallbrook-Dr-Dallas-TX-75243/26869003_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/dfbb4a376c32249c3a5454173071694a-cc_ft_1536.jpg",
-  "status": "For sale (price cut 10/1/2026)",
+  "status": "Sold (found 11/8/2026; price/date not shown; last listed $600,000)",
   "listPrice": 600000,
   "yearBuilt": 1973,
   "sqft": 2556,
@@ -10,7 +10,7 @@
   "beds": 3,
   "baths": 2.5,
   "lotAcres": 0.19,
-  "lastUpdated": "2026-10-11",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -171,6 +171,30 @@
     {
       "week": "2026-10-05",
       "price": 600000
+    },
+    {
+      "week": "2026-10-12",
+      "price": 600000
+    },
+    {
+      "week": "2026-10-19",
+      "price": 600000
+    },
+    {
+      "week": "2026-10-26",
+      "price": 600000
+    },
+    {
+      "week": "2026-11-02",
+      "price": null
+    },
+    {
+      "week": "2026-11-09",
+      "price": null
+    },
+    {
+      "week": "2026-11-16",
+      "price": null
     }
   ],
   "lat": 32.901777,

@@ -2,15 +2,15 @@
   "address": "7221 Pleasant View Dr, Dallas, TX 75231",
   "zillowUrl": "https://www.zillow.com/homedetails/7221-Pleasant-View-Dr-Dallas-TX-75231/26867873_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/6bb36d6312db0d03169131d02b433700-cc_ft_1536.jpg",
-  "status": "For sale (relisted 9/9/2026)",
-  "listPrice": 800000,
+  "status": "For sale (price cut 11/13/2026)",
+  "listPrice": 775000,
   "yearBuilt": 1979,
   "sqft": 2785,
-  "pricePerSqft": 287,
+  "pricePerSqft": 278,
   "beds": 3,
   "baths": 2.5,
   "lotAcres": 0.21,
-  "lastUpdated": "2026-10-11",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -171,6 +171,30 @@
     {
       "week": "2026-10-05",
       "price": 800000
+    },
+    {
+      "week": "2026-10-12",
+      "price": 800000
+    },
+    {
+      "week": "2026-10-19",
+      "price": 800000
+    },
+    {
+      "week": "2026-10-26",
+      "price": 800000
+    },
+    {
+      "week": "2026-11-02",
+      "price": 800000
+    },
+    {
+      "week": "2026-11-09",
+      "price": 775000
+    },
+    {
+      "week": "2026-11-16",
+      "price": 775000
     }
   ],
   "lat": 32.880929,

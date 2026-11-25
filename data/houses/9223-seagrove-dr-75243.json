@@ -2,15 +2,15 @@
   "address": "9223 Seagrove Dr, Dallas, TX 75243",
   "zillowUrl": "https://www.zillow.com/homedetails/9223-Seagrove-Dr-Dallas-TX-75243/26869989_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/bfcb0134b9dce2ef2d1cc991dc2965c5-cc_ft_1536.jpg",
-  "status": "For sale",
-  "listPrice": 739000,
+  "status": "Pending (since 11/15/2026)",
+  "listPrice": 719000,
   "yearBuilt": 1972,
   "sqft": 2381,
-  "pricePerSqft": 310,
+  "pricePerSqft": 302,
   "beds": 4,
   "baths": 2.5,
   "lotAcres": 0.2,
-  "lastUpdated": "2026-10-13",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -171,6 +171,30 @@
     {
       "week": "2026-10-05",
       "price": 739000
+    },
+    {
+      "week": "2026-10-12",
+      "price": 739000
+    },
+    {
+      "week": "2026-10-19",
+      "price": 739000
+    },
+    {
+      "week": "2026-10-26",
+      "price": 719000
+    },
+    {
+      "week": "2026-11-02",
+      "price": 719000
+    },
+    {
+      "week": "2026-11-09",
+      "price": 719000
+    },
+    {
+      "week": "2026-11-16",
+      "price": 719000
     }
   ],
   "lat": 32.898748,

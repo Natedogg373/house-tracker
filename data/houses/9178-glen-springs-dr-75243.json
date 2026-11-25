@@ -2,7 +2,7 @@
   "address": "9178 Glen Springs Dr, Dallas, TX 75243",
   "zillowUrl": "https://www.zillow.com/homedetails/9178-Glen-Springs-Dr-Dallas-TX-75243/26869083_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/b63c07c3f761e972c75a210849e80595-cc_ft_1536.jpg",
-  "status": "For sale (price cut 10/13/2026)",
+  "status": "For sale (back on market, found 11/15/2026)",
   "listPrice": 699000,
   "yearBuilt": 1973,
   "sqft": 3910,
@@ -10,7 +10,7 @@
   "beds": 4,
   "baths": 3.5,
   "lotAcres": 0.23,
-  "lastUpdated": "2026-10-13",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -171,6 +171,30 @@
     {
       "week": "2026-10-05",
       "price": 709900
+    },
+    {
+      "week": "2026-10-12",
+      "price": 699000
+    },
+    {
+      "week": "2026-10-19",
+      "price": 699000
+    },
+    {
+      "week": "2026-10-26",
+      "price": 699000
+    },
+    {
+      "week": "2026-11-02",
+      "price": null
+    },
+    {
+      "week": "2026-11-09",
+      "price": 699000
+    },
+    {
+      "week": "2026-11-16",
+      "price": 699000
     }
   ],
   "lat": 32.901035,
