@@ -2185,7 +2185,7 @@ button,
 
 .survey-collapse-toggle {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 0.55rem 0.75rem;
   width: 100%;
@@ -2203,10 +2203,85 @@ button,
   background: #f7f3ec;
 }
 
-.survey-collapse-title {
+.survey-collapse-heading {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.survey-title-short,
+.survey-title-full {
+  display: block;
   font-weight: 650;
   font-size: 1.02rem;
-  line-height: 1.3;
+  line-height: 1.35;
+}
+
+.survey-title-full {
+  font-family: var(--serif);
+  letter-spacing: -0.02em;
+}
+
+.survey-card.is-collapsed .survey-title-full {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.survey-card.is-expanded .survey-title-short {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.survey-card.is-expanded .survey-title-full {
+  opacity: 1;
+  visibility: visible;
+}
+
+.survey-card.is-collapsed .survey-title-short {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .survey-title-short,
+  .survey-title-full {
+    transition: opacity 0.22s ease, visibility 0.22s ease;
+  }
+
+  .survey-collapse-body {
+    transition: opacity 0.2s ease;
+  }
+
+  .survey-card.is-expanded .survey-collapse-body:not([hidden]) {
+    animation: survey-body-in 0.22s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .survey-title-short,
+  .survey-title-full,
+  .survey-collapse-chevron,
+  .survey-collapse-body {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@keyframes survey-body-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .survey-collapse-meta,
@@ -2217,6 +2292,10 @@ button,
   text-transform: uppercase;
   color: var(--muted);
   white-space: nowrap;
+}
+
+.survey-card.is-expanded .survey-collapse-meta {
+  display: none;
 }
 
 .survey-answer-status.is-answered {
@@ -2235,6 +2314,7 @@ button,
   transform: rotate(45deg);
   transition: transform 0.15s ease;
   justify-self: end;
+  flex: 0 0 auto;
 }
 
 .survey-card.is-expanded .survey-collapse-chevron {
@@ -2244,7 +2324,7 @@ button,
 .survey-collapse-body {
   display: grid;
   gap: 0.85rem;
-  padding: 0 1.05rem 1rem;
+  padding: 0.85rem 1.05rem 1rem;
   border-top: 1px solid var(--line);
 }
 
@@ -2414,34 +2494,37 @@ textarea.survey-input {
   accent-color: var(--forest);
 }
 
-.rating-bubbles {
+.rating-pills {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.45rem;
+  align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.15rem;
 }
 
-.rating-bubble {
-  width: 2.75rem;
-  height: 2.75rem;
+.rating-pill {
+  position: relative;
+  justify-content: center;
   min-width: 44px;
-  min-height: 44px;
-  padding: 0;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--ink);
+  width: 2.75rem;
+  padding-left: 0;
+  padding-right: 0;
   font: 650 1rem var(--serif);
-  display: inline-grid;
-  place-items: center;
 }
 
-button.rating-bubble:hover {
-  background: #e4eee8;
-  color: var(--forest);
+.rating-pill input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
 }
 
-.rating-bubble.is-selected,
-button.rating-bubble.is-selected {
+.rating-pill.is-selected,
+.rating-pill:has(input:checked) {
   background: var(--forest);
   border-color: var(--forest);
   color: #f6f3ee;
@@ -2550,23 +2633,28 @@ button.rating-bubble.is-selected {
   }
 
   .survey-collapse-toggle {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
-      "title chevron"
+      "heading chevron"
       "status chevron";
   }
 
-  .survey-collapse-title {
-    grid-area: title;
+  .survey-collapse-heading {
+    grid-area: heading;
   }
 
   .survey-collapse-meta,
-  .survey-answer-status {
+  .survey-answer-status,
+  .survey-collapse-toggle > .pill {
     grid-area: status;
   }
 
   .survey-collapse-chevron {
     grid-area: chevron;
+  }
+
+  .rating-pills {
+    flex-wrap: wrap;
   }
 
   .survey-card-toolbar {

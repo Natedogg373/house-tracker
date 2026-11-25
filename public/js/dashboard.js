@@ -23,11 +23,10 @@ import {
   zillowHref,
 } from "./common.js";
 import {
-  TYPE_LABELS,
+  answerControlHtml,
   answerHasContent,
-  formatAnswerValue,
+  collapseToggleHtml,
   groupQuestionsBySection,
-  questionDisplayTitle,
   sectionProgress,
   surveyFillUrl,
 } from "./survey-shared.js";
@@ -392,28 +391,32 @@ function renderSchools(house) {
 
 function surveyAnswerRowHtml(answer, question) {
   const archived = answer.archived;
-  const typeLabel = TYPE_LABELS[answer.questionType] || answer.questionType || "";
   const notes = String(answer.notes || "").trim();
   const answered = answerHasContent(answer);
-  const display = questionDisplayTitle({
+  const questionForTitle = {
     title: question?.title || answer.questionTitle,
     text: answer.questionText,
-  });
+  };
+  const trailing = `<span class="survey-answer-status ${answered ? "is-answered" : "is-unanswered"}">${
+    answered ? "Answered" : "Unanswered"
+  }</span>${archived ? '<span class="pill">Archived</span>' : ""}`;
+  const valueHtml = answerControlHtml(
+    {
+      id: answer.questionId,
+      type: answer.questionType,
+      config: answer.questionConfig,
+      questionType: answer.questionType,
+      questionConfig: answer.questionConfig,
+    },
+    answer.value,
+    { readonly: true }
+  );
   return `<li class="survey-answer-row survey-card is-collapsed ${archived ? "is-archived" : ""}" data-answer-id="${escapeHtml(
     answer.id || answer.questionId
   )}">
-    <button type="button" class="survey-collapse-toggle" aria-expanded="false">
-      <span class="survey-collapse-title">${escapeHtml(display)}</span>
-      <span class="survey-answer-status ${answered ? "is-answered" : "is-unanswered"}">${
-        answered ? "Answered" : "Unanswered"
-      }</span>
-      ${archived ? '<span class="pill">Archived</span>' : ""}
-      <span class="survey-collapse-chevron" aria-hidden="true"></span>
-    </button>
+    ${collapseToggleHtml(questionForTitle, { expanded: false, trailingHtml: trailing })}
     <div class="survey-collapse-body" hidden>
-      <p class="survey-answer-question">${escapeHtml(answer.questionText || "Untitled question")}</p>
-      <p class="survey-answer-meta">${escapeHtml(typeLabel)}</p>
-      <p class="survey-answer-value">${escapeHtml(formatAnswerValue(answer))}</p>
+      <div class="survey-answer-control">${valueHtml}</div>
       ${notes ? `<p class="survey-answer-notes">${escapeHtml(notes)}</p>` : ""}
     </div>
   </li>`;

@@ -4,8 +4,8 @@ import {
   answerControlHtml,
   answerHasContent,
   bindAnswerControls,
+  collapseToggleHtml,
   groupQuestionsBySection,
-  questionDisplayTitle,
   readAnswerValue,
   sectionProgress,
 } from "./survey-shared.js";
@@ -58,7 +58,6 @@ function cardHtml(question) {
   const versionMatch = existing && Number(existing.questionVersion) === Number(question.version);
   const value = versionMatch ? existing.value : null;
   const notes = versionMatch ? existing.notes || "" : "";
-  const typeLabel = TYPE_LABELS[question.type] || question.type;
   const answered = answerHasContent(versionMatch ? existing : null);
   const expanded = expandedIds.has(question.id);
   const previous =
@@ -73,21 +72,14 @@ function cardHtml(question) {
           existing.notes ? ` · notes: ${escapeHtml(existing.notes)}` : ""
         }. Enter a new answer to replace it.</p>`
       : "";
+  const status = `<span class="survey-answer-status ${answered ? "is-answered" : "is-unanswered"}">${
+    answered ? "Answered" : "Unanswered"
+  }</span>`;
   return `<li class="survey-card survey-card-fill ${
     expanded ? "is-expanded" : "is-collapsed"
   }" data-id="${escapeHtml(question.id)}">
-    <button type="button" class="survey-collapse-toggle" aria-expanded="${expanded ? "true" : "false"}">
-      <span class="survey-collapse-title">${escapeHtml(questionDisplayTitle(question))}</span>
-      <span class="survey-answer-status ${answered ? "is-answered" : "is-unanswered"}">${
-        answered ? "Answered" : "Unanswered"
-      }</span>
-      <span class="survey-collapse-chevron" aria-hidden="true"></span>
-    </button>
+    ${collapseToggleHtml(question, { expanded, trailingHtml: status })}
     <div class="survey-collapse-body" ${expanded ? "" : "hidden"}>
-      <div class="survey-card-toolbar">
-        <span class="survey-card-index">${escapeHtml(typeLabel)}</span>
-      </div>
-      <h2 class="survey-question-title">${escapeHtml(question.text || "Untitled question")}</h2>
       ${previous}
       <div class="survey-answer-control">
         ${answerControlHtml(question, value, { name: `q-${question.id}` })}

@@ -2,6 +2,7 @@ import { escapeHtml, show } from "./common.js";
 import {
   OTHER_SECTION_TITLE,
   TYPE_LABELS,
+  collapseToggleHtml,
   groupQuestionsBySection,
   questionDisplayTitle,
   typeSelectHtml,
@@ -89,17 +90,11 @@ function sectionSelectHtml(selectedId) {
 }
 
 function cardHtml(question, index, total, sectionId) {
-  const label = TYPE_LABELS[question.type] || question.type;
   const expanded = expandedIds.has(question.id);
-  const display = questionDisplayTitle(question);
   return `<li class="survey-card ${expanded ? "is-expanded" : "is-collapsed"}" data-id="${escapeHtml(
     question.id
   )}" data-type="${escapeHtml(question.type)}" data-section="${escapeHtml(sectionId || "")}">
-    <button type="button" class="survey-collapse-toggle" aria-expanded="${expanded ? "true" : "false"}">
-      <span class="survey-collapse-title">${escapeHtml(display)}</span>
-      <span class="survey-collapse-meta">${escapeHtml(label)}</span>
-      <span class="survey-collapse-chevron" aria-hidden="true"></span>
-    </button>
+    ${collapseToggleHtml(question, { expanded })}
     <div class="survey-collapse-body" ${expanded ? "" : "hidden"}>
       <div class="survey-card-toolbar">
         <span class="survey-card-index">Q${index + 1}</span>
@@ -138,7 +133,6 @@ function cardHtml(question, index, total, sectionId) {
         Notes field
         <textarea class="survey-input" rows="2" disabled placeholder="Filled per house when answering"></textarea>
       </label>
-      <p class="survey-type-hint muted">Type: ${escapeHtml(label)}</p>
     </div>
   </li>`;
 }
@@ -311,10 +305,10 @@ async function persistCard(card, { confirmTypeChange = false } = {}) {
     wrap.innerHTML = configEditorHtml(data.question);
     configHost.replaceWith(wrap.firstElementChild);
   }
-  const hint = card.querySelector(".survey-type-hint");
-  if (hint) hint.textContent = `Type: ${TYPE_LABELS[data.question.type] || data.question.type}`;
-  const titleSpan = card.querySelector(".survey-collapse-title");
-  if (titleSpan) titleSpan.textContent = questionDisplayTitle(data.question);
+  const shortEl = card.querySelector(".survey-title-short");
+  const fullEl = card.querySelector(".survey-title-full");
+  if (shortEl) shortEl.textContent = questionDisplayTitle(data.question);
+  if (fullEl) fullEl.textContent = data.question.text || "Untitled question";
   return data.question;
 }
 
