@@ -22,7 +22,15 @@ import {
   statusClass,
   zillowHref,
 } from "./common.js";
-import { formatAnswerValue, surveyFillUrl, TYPE_LABELS } from "./survey-shared.js";
+import {
+  TYPE_LABELS,
+  answerHasContent,
+  formatAnswerValue,
+  groupQuestionsBySection,
+  questionDisplayTitle,
+  sectionProgress,
+  surveyFillUrl,
+} from "./survey-shared.js";
 
 const select = document.querySelector("#house-select");
 const includeToggle = document.querySelector("#include-not-interested");
@@ -52,7 +60,7 @@ const surveyNoQuestions = document.querySelector("#survey-no-questions");
 const surveyAnswersList = document.querySelector("#survey-answers-list");
 
 const STORAGE_KEY = "house-tracker:selected";
-let surveyCache = { slug: "", questions: [], answers: [], status: null };
+let surveyCache = { slug: "", questions: [], sections: [], answers: [], status: null };
 
 let chart;
 let payload = {
@@ -382,20 +390,52 @@ function renderSchools(house) {
   schoolsList.innerHTML = schools.map(schoolRowHtml).join("");
 }
 
-function surveyAnswerRowHtml(answer) {
+function surveyAnswerRowHtml(answer, question) {
   const archived = answer.archived;
   const typeLabel = TYPE_LABELS[answer.questionType] || answer.questionType || "";
   const notes = String(answer.notes || "").trim();
-  return `<li class="survey-answer-row ${archived ? "is-archived" : ""}">
-    <div class="survey-answer-main">
-      <p class="survey-answer-question">
-        ${escapeHtml(answer.questionText || "Untitled question")}
-        ${archived ? '<span class="pill">Archived question</span>' : ""}
-      </p>
+  const answered = answerHasContent(answer);
+  const display = questionDisplayTitle({
+    title: question?.title || answer.questionTitle,
+    text: answer.questionText,
+  });
+  return `<li class="survey-answer-row survey-card is-collapsed ${archived ? "is-archived" : ""}" data-answer-id="${escapeHtml(
+    answer.id || answer.questionId
+  )}">
+    <button type="button" class="survey-collapse-toggle" aria-expanded="false">
+      <span class="survey-collapse-title">${escapeHtml(display)}</span>
+      <span class="survey-answer-status ${answered ? "is-answered" : "is-unanswered"}">${
+        answered ? "Answered" : "Unanswered"
+      }</span>
+      ${archived ? '<span class="pill">Archived</span>' : ""}
+      <span class="survey-collapse-chevron" aria-hidden="true"></span>
+    </button>
+    <div class="survey-collapse-body" hidden>
+      <p class="survey-answer-question">${escapeHtml(answer.questionText || "Untitled question")}</p>
       <p class="survey-answer-meta">${escapeHtml(typeLabel)}</p>
       <p class="survey-answer-value">${escapeHtml(formatAnswerValue(answer))}</p>
       ${notes ? `<p class="survey-answer-notes">${escapeHtml(notes)}</p>` : ""}
     </div>
+  </li>`;
+}
+
+function surveySectionAnswersHtml(group, answersByQuestion) {
+  if (!group.questions.length) return "";
+  const progress = sectionProgress(group.questions, answersByQuestion);
+  const rows = group.questions
+    .map((q) => {
+      const answer = answersByQuestion.get(q.id);
+      if (!answer || !answerHasContent(answer)) return "";
+      return surveyAnswerRowHtml(answer, q);
+    })
+    .filter(Boolean);
+  if (!rows.length) return "";
+  return `<li class="survey-section survey-section-answers">
+    <div class="survey-section-head">
+      <h3 class="survey-section-title">${escapeHtml(group.title)}</h3>
+      <p class="survey-section-progress">${progress.answered}/${progress.total} answered</p>
+    </div>
+    <ol class="survey-question-list survey-section-questions">${rows.join("")}</ol>
   </li>`;
 }
 
@@ -405,14 +445,12 @@ function renderSurveySection(house) {
   if (surveySectionFill) surveySectionFill.href = href;
 
   const questions = surveyCache.questions || [];
+  const sections = surveyCache.sections || [];
   const answers = surveyCache.answers || [];
   const activeIds = new Set(questions.map((q) => q.id));
-  const activeAnswers = answers.filter((a) => activeIds.has(a.questionId) && !a.archived);
-  const archivedAnswers = answers.filter((a) => a.archived);
-  const hasContent = [...activeAnswers, ...archivedAnswers].some(
-    (a) =>
-      (a.value !== null && a.value !== undefined && a.value !== "") || String(a.notes || "").trim()
-  );
+  const answersByQuestion = new Map(answers.map((a) => [a.questionId, a]));
+  const archivedAnswers = answers.filter((a) => a.archived || !activeIds.has(a.questionId));
+  const hasContent = answers.some(answerHasContent);
 
   if (!questions.length && !archivedAnswers.length) {
     surveyNoQuestions.hidden = false;
@@ -430,17 +468,28 @@ function renderSurveySection(house) {
     return;
   }
 
-  const rows = [
-    ...activeAnswers.map(surveyAnswerRowHtml),
-    ...archivedAnswers.map(surveyAnswerRowHtml),
-  ];
+  const groups = groupQuestionsBySection(questions, sections);
+  const sectionRows = groups.map((group) => surveySectionAnswersHtml(group, answersByQuestion)).join("");
+  const archivedRows = archivedAnswers
+    .filter(answerHasContent)
+    .map((answer) => surveyAnswerRowHtml(answer, null))
+    .join("");
+  const archivedBlock = archivedRows
+    ? `<li class="survey-section survey-section-answers">
+        <div class="survey-section-head">
+          <h3 class="survey-section-title">Archived questions</h3>
+        </div>
+        <ol class="survey-question-list survey-section-questions">${archivedRows}</ol>
+      </li>`
+    : "";
+
   surveyAnswersList.hidden = false;
-  surveyAnswersList.innerHTML = rows.join("");
+  surveyAnswersList.innerHTML = `${sectionRows}${archivedBlock}`;
 }
 
 async function loadSurvey(slug) {
   if (!slug) {
-    surveyCache = { slug: "", questions: [], answers: [], status: null };
+    surveyCache = { slug: "", questions: [], answers: [], sections: [], status: null };
     return;
   }
   try {
@@ -450,11 +499,12 @@ async function loadSurvey(slug) {
     surveyCache = {
       slug,
       questions: data.questions || [],
+      sections: data.sections || [],
       answers: data.answers || [],
       status: data.status || null,
     };
   } catch {
-    surveyCache = { slug, questions: [], answers: [], status: null };
+    surveyCache = { slug, questions: [], sections: [], answers: [], status: null };
   }
 }
 
@@ -560,6 +610,19 @@ function selectHouse(slug, { replace = true } = {}) {
   const house = selectedHouse();
   if (house) renderHouse(house);
 }
+
+surveyAnswersList?.addEventListener("click", (event) => {
+  const toggle = event.target.closest(".survey-collapse-toggle");
+  if (!toggle || !surveyAnswersList.contains(toggle)) return;
+  const row = toggle.closest(".survey-answer-row");
+  if (!row) return;
+  const body = row.querySelector(".survey-collapse-body");
+  const expanding = row.classList.contains("is-collapsed");
+  row.classList.toggle("is-collapsed", !expanding);
+  row.classList.toggle("is-expanded", expanding);
+  toggle.setAttribute("aria-expanded", expanding ? "true" : "false");
+  if (body) body.hidden = !expanding;
+});
 
 select.addEventListener("change", () => {
   selectHouse(select.value, { replace: false });

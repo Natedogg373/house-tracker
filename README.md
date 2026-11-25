@@ -175,18 +175,20 @@ Commit `data/geofences.json` so the areas are shared.
 
 ### House Survey
 
-Standardized visit checklist stored in SQLite (`SURVEY_DB_PATH`, default `data/survey.db`; gitignored). The Survey nav tab opens the setup page (`/survey`): start with no questions, tap **+** to add one, then edit text, answer type, and type-specific options (rating max, multiple-choice choices). Types: yes/no, number, rating 1..n, date, short text, multiple choice. Reorder with ↑/↓; delete soft-archives the question so old answers remain viewable.
+Standardized visit checklist stored in SQLite (`SURVEY_DB_PATH`, default `data/survey.db`; gitignored). The Survey nav tab opens the setup page (`/survey`): organize questions into **sections**, tap **+** / **Add section**, then edit short title, full question text, answer type, and type-specific options (rating max, number unit, multiple-choice choices). Types: yes/no, number, rating 1..n, date, short text, multiple choice. Reorder sections and questions with ↑/↓; delete soft-archives a question so old answers remain viewable. Unassigned questions sit under **Other**.
 
-Fill a house’s answers at `/survey/fill?house=<slug>` — same question layout without editing the template. Reach it from **Fill survey** on House Details or from each Rankings row. Answers and notes show at the bottom of House Details (with an empty-state note when nothing is filled yet; archived questions are labeled).
+Fill a house’s answers at `/survey/fill?house=<slug>` — questions are collapsed by default (short title + answered/unanswered), grouped under section headers with progress (e.g. `3/7 answered`). Reach it from **Fill survey** on House Details or from each Rankings row. Answers and notes show the same collapsible layout at the bottom of House Details (archived questions are labeled).
 
-JSON API: `GET/POST /api/survey/questions`, `PUT /api/survey/questions/:id`, `DELETE /api/survey/questions/:id` (archive), `PUT /api/survey/questions/reorder`, `GET/PUT /api/survey/answers/:slug`, `GET /api/survey/status`. Changing a question’s type asks for confirmation and bumps a version; prior answers keep a type/text snapshot so they still render. This app never writes `data/houses/*.json`.
+On first startup with an empty survey DB (zero question rows, including soft-deleted), the app loads `data/survey-seed.json` once. After any question exists it never re-seeds. You can also bulk-load JSON with `POST /api/survey/import` or `npm run survey:import -- file.json` (reuses sections by title; skips questions whose text already exists in the same section).
+
+JSON API: `GET/POST /api/survey/questions`, `PUT /api/survey/questions/:id`, `DELETE /api/survey/questions/:id` (archive), `PUT /api/survey/questions/reorder`, `GET/POST /api/survey/sections`, `PUT /api/survey/sections/:id`, `DELETE /api/survey/sections/:id`, `PUT /api/survey/sections/reorder`, `POST /api/survey/import`, `GET/PUT /api/survey/answers/:slug`, `GET /api/survey/status`. Changing a question’s type asks for confirmation and bumps a version; prior answers keep a type/text snapshot so they still render. This app never writes `data/houses/*.json`.
 
 ## Pages
 
 - **House Details** (`/`, deep link `/?house=<slug>`) — pick an address, see details, photo, and price history vs. the $700K budget line. The dropdown updates the URL; opening a deep link selects that house. **Not interested** moves it to the Graveyard list above. **Fill survey** and the survey answers section sit on this page.
 - **Map** (`/map`) — Leaflet + OSM. Active house pins (not sold, not not-interested), school pins for the selected level, a school legend, and drawable geofences. Hover a house pin for photo, price, address, and that level’s school; click the pin or tooltip to open House Details.
 - **Rankings** (`/rankings`) — drag houses into an order, or type a rank number (that house moves there and the rest shift). Saved to `data/rankings.json`. Sold and not-interested houses are excluded. Click a house (not the handle or rank input) to open House Details. Each row links to fill that house’s survey.
-- **Survey** (`/survey`) — edit the shared visit questionnaire. Fill-out UI: `/survey/fill?house=<slug>`.
+- **Survey** (`/survey`) — edit the shared visit questionnaire (sections + questions). Fill-out UI: `/survey/fill?house=<slug>`.
 - **Graveyard** (`/graveyard`) — **Sold** (word match, so `Sold (10/1/2026)` counts) plus **No longer interested**. Sold cards show original list price, lowest list price, sale price (or Unknown), and days on market. Newest `soldDate` first; otherwise by address.
 - **Add house** (`/add`) — submit a Zillow URL or street address to the bot webhook.
 - **About** (`/about`) — what the project is, how the bot / GitHub JSON / web app fit together, and the plan to host on Cloudflare Pages with a public landing and a password-gated app.
@@ -294,7 +296,8 @@ The process **writes** these files under `data/` (JSON via temp file then `renam
 - `data/interest.json` — not-interested / pending reactivation (`lib/interest.js`). Override with `INTEREST_PATH`.
 - `data/geofences.json` — Map areas (`lib/geofences.js`). Override with `GEOFENCES_PATH`.
 - `data/geocode-cache.json` — Nominatim cache (`lib/geocode.js`, gitignored). Override with `GEOCODE_CACHE_PATH`.
-- `data/survey.db` — House Survey questions and per-house answers (`lib/survey.js`, gitignored). Override with `SURVEY_DB_PATH`.
+- `data/survey.db` — House Survey sections, questions, and per-house answers (`lib/survey.js`, gitignored). Override with `SURVEY_DB_PATH`.
+- `data/survey-seed.json` — bundled walkthrough checklist imported once when the survey DB has no questions.
 
 Do **not** bind-mount the whole `data/` directory over the checkout. That would hide `data/houses/` from bot-driven deploys. Because JSON saves `rename` a sibling `.tmp` file, persist a **directory**, not a single-file bind (rename across filesystems fails).
 

@@ -9,8 +9,55 @@ export const TYPE_LABELS = {
   multiple_choice: "Multiple choice",
 };
 
+export const OTHER_SECTION_TITLE = "Other";
+export const TITLE_FALLBACK_MAX = 72;
+
 export function surveyFillUrl(slug) {
   return `/survey/fill?house=${encodeURIComponent(slug)}`;
+}
+
+export function questionDisplayTitle(question, maxLen = TITLE_FALLBACK_MAX) {
+  const short = String(question?.title || question?.questionTitle || "").trim();
+  if (short) return short;
+  const text = String(question?.text || question?.questionText || "").trim() || "Untitled question";
+  if (text.length <= maxLen) return text;
+  return `${text.slice(0, Math.max(1, maxLen - 1)).trimEnd()}…`;
+}
+
+export function answerHasContent(answer) {
+  if (!answer) return false;
+  if (String(answer.notes || "").trim()) return true;
+  if (answer.value === null || answer.value === undefined || answer.value === "") return false;
+  return true;
+}
+
+export function groupQuestionsBySection(questions = [], sections = []) {
+  const bySection = new Map(sections.map((s) => [s.id, []]));
+  const other = [];
+  for (const q of questions) {
+    if (q.sectionId && bySection.has(q.sectionId)) bySection.get(q.sectionId).push(q);
+    else other.push(q);
+  }
+  const groups = sections.map((section) => ({
+    id: section.id,
+    title: section.title || "Untitled section",
+    questions: bySection.get(section.id) || [],
+  }));
+  groups.push({
+    id: null,
+    title: OTHER_SECTION_TITLE,
+    questions: other,
+  });
+  return groups;
+}
+
+export function sectionProgress(questions, answersById) {
+  const total = questions.length;
+  let answered = 0;
+  for (const q of questions) {
+    if (answerHasContent(answersById.get(q.id))) answered += 1;
+  }
+  return { answered, total };
 }
 
 export function formatAnswerValue(answer) {
@@ -25,8 +72,10 @@ export function formatAnswerValue(answer) {
       const max = Number(answer.questionConfig?.maxRating || answer.config?.maxRating || 5);
       return `${value} / ${max}`;
     }
-    case "number":
-      return String(value);
+    case "number": {
+      const unit = String(answer.questionConfig?.unit || answer.config?.unit || "").trim();
+      return unit ? `${value} ${unit}` : String(value);
+    }
     case "date": {
       const date = new Date(`${value}T00:00:00`);
       if (Number.isNaN(date.getTime())) return String(value);
@@ -111,10 +160,17 @@ export function answerControlHtml(question, value, { name, readonly = false } = 
         </label>
         <button type="button" class="text-btn clear-yes-no" data-clear="${escapeHtml(fieldName)}">Clear</button>
       </div>`;
-    case "number":
-      return `<input class="survey-input" type="number" inputmode="decimal" name="${escapeHtml(
+    case "number": {
+      const unit = String(config.unit || "").trim();
+      const input = `<input class="survey-input" type="number" inputmode="decimal" name="${escapeHtml(
         fieldName
       )}" value="${escapeHtml(safeValue)}" />`;
+      if (!unit) return input;
+      return `<div class="survey-number-with-unit">
+        ${input}
+        <span class="survey-unit-label">${escapeHtml(unit)}</span>
+      </div>`;
+    }
     case "rating":
       return ratingBubblesHtml({ ...question, config }, safeValue, { name: fieldName });
     case "date":

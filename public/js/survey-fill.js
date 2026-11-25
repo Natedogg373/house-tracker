@@ -1,9 +1,13 @@
 import { detailsUrl, escapeHtml, fetchHouses, show } from "./common.js";
 import {
-  answerControlHtml,
-  bindAnswerControls,
-  readAnswerValue,
   TYPE_LABELS,
+  answerControlHtml,
+  answerHasContent,
+  bindAnswerControls,
+  groupQuestionsBySection,
+  questionDisplayTitle,
+  readAnswerValue,
+  sectionProgress,
 } from "./survey-shared.js";
 
 const listEl = document.querySelector("#question-list");
@@ -18,8 +22,11 @@ const intro = document.querySelector(".survey-intro");
 
 let house = null;
 let questions = [];
+let sections = [];
 let answersById = new Map();
 let persistTimer = 0;
+/** @type {Set<string>} */
+const expandedIds = new Set();
 
 function slugFromQuery() {
   return new URLSearchParams(window.location.search).get("house") || "";
@@ -37,12 +44,23 @@ function showSave(kind, text) {
   }
 }
 
+function liveAnswerForQuestion(question) {
+  const card = listEl.querySelector(`.survey-card[data-id="${CSS.escape(question.id)}"]`);
+  if (!card) return answersById.get(question.id) || null;
+  return {
+    value: readAnswerValue(card, question),
+    notes: card.querySelector(".answer-notes")?.value || "",
+  };
+}
+
 function cardHtml(question) {
   const existing = answersById.get(question.id);
   const versionMatch = existing && Number(existing.questionVersion) === Number(question.version);
   const value = versionMatch ? existing.value : null;
   const notes = versionMatch ? existing.notes || "" : "";
   const typeLabel = TYPE_LABELS[question.type] || question.type;
+  const answered = answerHasContent(versionMatch ? existing : null);
+  const expanded = expandedIds.has(question.id);
   const previous =
     existing && !versionMatch
       ? `<p class="survey-previous muted">Previous answer kept (${escapeHtml(
@@ -55,21 +73,48 @@ function cardHtml(question) {
           existing.notes ? ` · notes: ${escapeHtml(existing.notes)}` : ""
         }. Enter a new answer to replace it.</p>`
       : "";
-  return `<li class="survey-card survey-card-fill" data-id="${escapeHtml(question.id)}">
-    <div class="survey-card-toolbar">
-      <span class="survey-card-index">${escapeHtml(typeLabel)}</span>
+  return `<li class="survey-card survey-card-fill ${
+    expanded ? "is-expanded" : "is-collapsed"
+  }" data-id="${escapeHtml(question.id)}">
+    <button type="button" class="survey-collapse-toggle" aria-expanded="${expanded ? "true" : "false"}">
+      <span class="survey-collapse-title">${escapeHtml(questionDisplayTitle(question))}</span>
+      <span class="survey-answer-status ${answered ? "is-answered" : "is-unanswered"}">${
+        answered ? "Answered" : "Unanswered"
+      }</span>
+      <span class="survey-collapse-chevron" aria-hidden="true"></span>
+    </button>
+    <div class="survey-collapse-body" ${expanded ? "" : "hidden"}>
+      <div class="survey-card-toolbar">
+        <span class="survey-card-index">${escapeHtml(typeLabel)}</span>
+      </div>
+      <h2 class="survey-question-title">${escapeHtml(question.text || "Untitled question")}</h2>
+      ${previous}
+      <div class="survey-answer-control">
+        ${answerControlHtml(question, value, { name: `q-${question.id}` })}
+      </div>
+      <label class="field">
+        Notes
+        <textarea class="survey-input answer-notes" rows="3" maxlength="2000" placeholder="Visit notes for this question">${escapeHtml(
+          notes
+        )}</textarea>
+      </label>
     </div>
-    <h2 class="survey-question-title">${escapeHtml(question.text || "Untitled question")}</h2>
-    ${previous}
-    <div class="survey-answer-control">
-      ${answerControlHtml(question, value, { name: `q-${question.id}` })}
+  </li>`;
+}
+
+function sectionBlockHtml(group) {
+  if (!group.questions.length) return "";
+  const progress = sectionProgress(group.questions, answersById);
+  return `<li class="survey-section survey-section-fill" data-section-id="${escapeHtml(group.id || "")}">
+    <div class="survey-section-head">
+      <h2 class="survey-section-title">${escapeHtml(group.title)}</h2>
+      <p class="survey-section-progress" aria-label="${progress.answered} of ${progress.total} answered">
+        ${progress.answered}/${progress.total} answered
+      </p>
     </div>
-    <label class="field">
-      Notes
-      <textarea class="survey-input answer-notes" rows="3" maxlength="2000" placeholder="Visit notes for this question">${escapeHtml(
-        notes
-      )}</textarea>
-    </label>
+    <ol class="survey-question-list survey-section-questions">
+      ${group.questions.map(cardHtml).join("")}
+    </ol>
   </li>`;
 }
 
@@ -96,7 +141,8 @@ function render() {
   show(emptyEl, false);
   listEl.hidden = false;
   saveBtn.disabled = false;
-  listEl.innerHTML = questions.map(cardHtml).join("");
+  const groups = groupQuestionsBySection(questions, sections);
+  listEl.innerHTML = groups.map(sectionBlockHtml).join("");
 }
 
 function collectAnswers() {
@@ -111,6 +157,33 @@ function collectAnswers() {
   });
 }
 
+function refreshStatusBadges() {
+  for (const question of questions) {
+    const card = listEl.querySelector(`.survey-card[data-id="${CSS.escape(question.id)}"]`);
+    if (!card) continue;
+    const answered = answerHasContent(liveAnswerForQuestion(question));
+    const badge = card.querySelector(".survey-answer-status");
+    if (badge) {
+      badge.textContent = answered ? "Answered" : "Unanswered";
+      badge.classList.toggle("is-answered", answered);
+      badge.classList.toggle("is-unanswered", !answered);
+    }
+  }
+  for (const section of listEl.querySelectorAll(".survey-section-fill")) {
+    const sectionId = section.dataset.sectionId || null;
+    const groupQuestions = questions.filter((q) => (q.sectionId || null) === (sectionId || null));
+    const liveMap = new Map(
+      groupQuestions.map((q) => [q.id, liveAnswerForQuestion(q)])
+    );
+    const progress = sectionProgress(groupQuestions, liveMap);
+    const el = section.querySelector(".survey-section-progress");
+    if (el) {
+      el.textContent = `${progress.answered}/${progress.total} answered`;
+      el.setAttribute("aria-label", `${progress.answered} of ${progress.total} answered`);
+    }
+  }
+}
+
 async function save() {
   if (!house) return;
   saveBtn.disabled = true;
@@ -123,6 +196,7 @@ async function save() {
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || "Could not save answers.");
     answersById = new Map((data.answers || []).map((a) => [a.questionId, a]));
+    refreshStatusBadges();
     showSave("ok", "Answers saved.");
   } catch (err) {
     showSave("error", err.message || "Could not save answers.");
@@ -136,6 +210,32 @@ async function init() {
   saveBtn.addEventListener("click", () => {
     save();
   });
+
+  listEl.addEventListener("click", (event) => {
+    const toggle = event.target.closest(".survey-collapse-toggle");
+    if (!toggle) return;
+    const card = toggle.closest(".survey-card");
+    if (!card) return;
+    const id = card.dataset.id;
+    // Preserve in-progress answers across re-render
+    const draftAnswers = collectAnswers();
+    for (const item of draftAnswers) {
+      const prev = answersById.get(item.questionId) || {};
+      answersById.set(item.questionId, {
+        ...prev,
+        questionId: item.questionId,
+        questionVersion: questions.find((q) => q.id === item.questionId)?.version,
+        value: item.value,
+        notes: item.notes,
+      });
+    }
+    if (expandedIds.has(id)) expandedIds.delete(id);
+    else expandedIds.add(id);
+    render();
+  });
+
+  listEl.addEventListener("change", () => refreshStatusBadges());
+  listEl.addEventListener("input", () => refreshStatusBadges());
 
   const slug = slugFromQuery();
   if (!slug) {
@@ -159,12 +259,14 @@ async function init() {
       ledeEl.textContent = "This slug is not in the current house list, but answers can still be saved.";
     }
     questions = surveyPayload.questions || [];
+    sections = surveyPayload.sections || [];
     answersById = new Map((surveyPayload.answers || []).map((a) => [a.questionId, a]));
     render();
   } catch (err) {
     showSave("error", err.message || "Could not load survey.");
     house = { slug, address: slug };
     questions = [];
+    sections = [];
     render();
   }
 }

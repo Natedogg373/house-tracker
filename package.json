@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "node --test test/*.test.js",
+    "survey:import": "node scripts/survey-import.js",
     "mock-webhook": "node scripts/mock-webhook.js"
   },
   "engines": {
