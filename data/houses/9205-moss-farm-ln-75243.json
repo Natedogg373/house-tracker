@@ -2,15 +2,15 @@
   "address": "9205 Moss Farm Ln, Dallas, TX 75243",
   "zillowUrl": "https://www.zillow.com/homedetails/9205-Moss-Farm-Ln-Dallas-TX-75243/26868426_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/9f4a7c495ee855a85667d4d5c65ef802-cc_ft_1536.jpg",
-  "status": "For sale (price cut 9/26/2026)",
-  "listPrice": 670000,
+  "status": "For sale (price cut 10/29/2026)",
+  "listPrice": 660000,
   "yearBuilt": 1976,
   "sqft": 2509,
-  "pricePerSqft": 267,
+  "pricePerSqft": 263,
   "beds": 4,
   "baths": 2.5,
   "lotAcres": 0.16,
-  "lastUpdated": "2026-10-11",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -171,6 +171,30 @@
     {
       "week": "2026-10-05",
       "price": 670000
+    },
+    {
+      "week": "2026-10-12",
+      "price": 670000
+    },
+    {
+      "week": "2026-10-19",
+      "price": 670000
+    },
+    {
+      "week": "2026-10-26",
+      "price": 660000
+    },
+    {
+      "week": "2026-11-02",
+      "price": 660000
+    },
+    {
+      "week": "2026-11-09",
+      "price": 660000
+    },
+    {
+      "week": "2026-11-16",
+      "price": 660000
     }
   ],
   "lat": 32.896178,

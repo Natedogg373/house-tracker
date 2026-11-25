@@ -2,15 +2,15 @@
   "address": "9902 Galway Dr, Dallas, TX 75218",
   "zillowUrl": "https://www.zillow.com/homedetails/9902-Galway-Dr-Dallas-TX-75218/26744176_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/df66018e4880930ab65e7b4006dc9e8f-cc_ft_1536.jpg",
-  "status": "For sale (relisted 10/2/2026)",
-  "listPrice": 699999,
+  "status": "For sale (price cut 11/5/2026)",
+  "listPrice": 685000,
   "yearBuilt": 1971,
   "sqft": 2653,
-  "pricePerSqft": 264,
+  "pricePerSqft": 258,
   "beds": 4,
   "baths": 4,
   "lotAcres": 0.46,
-  "lastUpdated": "2026-10-10",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -171,6 +171,30 @@
     {
       "week": "2026-10-05",
       "price": 699999
+    },
+    {
+      "week": "2026-10-12",
+      "price": 699999
+    },
+    {
+      "week": "2026-10-19",
+      "price": 699999
+    },
+    {
+      "week": "2026-10-26",
+      "price": 699999
+    },
+    {
+      "week": "2026-11-02",
+      "price": 685000
+    },
+    {
+      "week": "2026-11-09",
+      "price": 685000
+    },
+    {
+      "week": "2026-11-16",
+      "price": 685000
     }
   ],
   "lat": 32.837296,

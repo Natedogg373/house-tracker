@@ -2,15 +2,15 @@
   "address": "8026 Westover Dr, Dallas, TX 75231",
   "zillowUrl": "https://www.zillow.com/homedetails/8026-Westover-Dr-Dallas-TX-75231/26868573_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/caa98f7befe2c7f2c2abf8b26b0f83c2-cc_ft_1536.jpg",
-  "status": "For sale (price cut 9/23/2026)",
-  "listPrice": 675000,
+  "status": "For sale (price cut 11/19/2026)",
+  "listPrice": 600000,
   "yearBuilt": 1978,
   "sqft": 2079,
-  "pricePerSqft": 325,
+  "pricePerSqft": 289,
   "beds": 4,
   "baths": 2,
   "lotAcres": 0.18,
-  "lastUpdated": "2026-10-11",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -171,6 +171,30 @@
     {
       "week": "2026-10-05",
       "price": 675000
+    },
+    {
+      "week": "2026-10-12",
+      "price": 650000
+    },
+    {
+      "week": "2026-10-19",
+      "price": 650000
+    },
+    {
+      "week": "2026-10-26",
+      "price": 650000
+    },
+    {
+      "week": "2026-11-02",
+      "price": 625000
+    },
+    {
+      "week": "2026-11-09",
+      "price": 625000
+    },
+    {
+      "week": "2026-11-16",
+      "price": 600000
     }
   ],
   "lat": 32.886045,

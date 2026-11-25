@@ -2,15 +2,15 @@
   "address": "9006 Church Rd, Dallas, TX 75231",
   "zillowUrl": "https://www.zillow.com/homedetails/9006-Church-Rd-Dallas-TX-75231/26893384_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/77cebed1b915ee4df4f709f846e609f5-cc_ft_1536.jpg",
-  "status": "For sale (listed 10/2/2026)",
-  "listPrice": 749000,
+  "status": "For sale (price cut 11/3/2026)",
+  "listPrice": 699000,
   "yearBuilt": 1979,
   "sqft": 2204,
-  "pricePerSqft": 340,
+  "pricePerSqft": 317,
   "beds": 3,
   "baths": 2.5,
   "lotAcres": 0.24,
-  "lastUpdated": "2026-10-11",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -171,6 +171,30 @@
     {
       "week": "2026-10-05",
       "price": 749000
+    },
+    {
+      "week": "2026-10-12",
+      "price": 749000
+    },
+    {
+      "week": "2026-10-19",
+      "price": 749000
+    },
+    {
+      "week": "2026-10-26",
+      "price": 749000
+    },
+    {
+      "week": "2026-11-02",
+      "price": 699000
+    },
+    {
+      "week": "2026-11-09",
+      "price": 699000
+    },
+    {
+      "week": "2026-11-16",
+      "price": 699000
     }
   ],
   "lat": 32.886003,

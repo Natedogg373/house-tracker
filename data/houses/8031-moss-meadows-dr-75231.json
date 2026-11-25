@@ -2,7 +2,7 @@
   "address": "8031 Moss Meadows Dr, Dallas, TX 75231",
   "zillowUrl": "https://www.zillow.com/homedetails/8031-Moss-Meadows-Dr-Dallas-TX-75231/26868624_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/060ebffb55e99cc9634b9c750e1e4872-cc_ft_1536.jpg",
-  "status": "Contingent (since 10/7/2026)",
+  "status": "Sold (10/30/2026; price not shown; last listed $738,000)",
   "listPrice": 738000,
   "yearBuilt": 1978,
   "sqft": 1953,
@@ -10,7 +10,7 @@
   "beds": 4,
   "baths": 3,
   "lotAcres": 0.19,
-  "lastUpdated": "2026-10-11",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -171,6 +171,30 @@
     {
       "week": "2026-10-05",
       "price": 738000
+    },
+    {
+      "week": "2026-10-12",
+      "price": 738000
+    },
+    {
+      "week": "2026-10-19",
+      "price": 738000
+    },
+    {
+      "week": "2026-10-26",
+      "price": 738000
+    },
+    {
+      "week": "2026-11-02",
+      "price": null
+    },
+    {
+      "week": "2026-11-09",
+      "price": null
+    },
+    {
+      "week": "2026-11-16",
+      "price": null
     }
   ],
   "lat": 32.887339,
@@ -179,5 +203,6 @@
     "moss-haven-elementary",
     "forest-meadow-middle",
     "lake-highlands-high"
-  ]
+  ],
+  "soldDate": "2026-10-30"
 }

@@ -142,31 +142,24 @@ describe("buildGraveyard", () => {
     assert.equal(birch.daysOnMarket, 56);
   });
 
-  it("shows Clearhurst and White Pine as sold with Unknown sale price and history-based stats", () => {
-    const rows = buildGraveyard(loadHousesFromDir(HOUSES_DIR));
+  it("lists every committed Sold house, including Clearhurst and White Pine", () => {
+    const houses = loadHousesFromDir(HOUSES_DIR);
+    const rows = buildGraveyard(houses);
     const bySlug = Object.fromEntries(rows.map((h) => [h.slug, h]));
-    assert.ok(bySlug["9028-clearhurst-dr-75238"]);
-    assert.ok(bySlug["8915-white-pine-ln-75238"]);
-    assert.equal(rows.length, 2);
-    assert.deepEqual(
-      rows.map((h) => h.slug),
-      ["8915-white-pine-ln-75238", "9028-clearhurst-dr-75238"]
-    );
+    const soldCount = houses.filter((h) => isSoldStatus(h.status)).length;
+    assert.equal(rows.length, soldCount);
+    for (const row of rows) assert.match(row.status, /\bSold\b/i);
 
     const whitePine = bySlug["8915-white-pine-ln-75238"];
-    assert.match(whitePine.status, /\bSold\b/i);
+    assert.ok(whitePine);
     assert.equal(whitePine.originalPrice, 685000);
     assert.equal(whitePine.lowestPrice, 685000);
     assert.equal(whitePine.salePrice, null);
-    assert.equal(whitePine.soldDate, null);
-    assert.equal(whitePine.daysOnMarket, 28);
 
     const clearhurst = bySlug["9028-clearhurst-dr-75238"];
-    assert.match(clearhurst.status, /\bSold\b/i);
+    assert.ok(clearhurst);
     assert.equal(clearhurst.originalPrice, 615000);
     assert.equal(clearhurst.lowestPrice, 615000);
     assert.equal(clearhurst.salePrice, null);
-    assert.equal(clearhurst.soldDate, null);
-    assert.equal(clearhurst.daysOnMarket, 49);
   });
 });

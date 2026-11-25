@@ -2,7 +2,7 @@
   "address": "7130 Abrams Rd, Dallas, TX 75231",
   "zillowUrl": "https://www.zillow.com/homedetails/7130-Abrams-Rd-Dallas-TX-75231/26912796_zpid/",
   "photoUrl": "https://photos.zillowstatic.com/fp/f7a135f2744fa6cf298cc786ae8f562a-cc_ft_1536.jpg",
-  "status": "For sale",
+  "status": "Sold (found 11/22/2026; price/date not shown; last listed $699,000)",
   "listPrice": 699000,
   "yearBuilt": 1986,
   "sqft": 2764,
@@ -10,7 +10,7 @@
   "beds": 3,
   "baths": 3,
   "lotAcres": 0.19,
-  "lastUpdated": "2026-10-25",
+  "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
       "week": "2026-01-05",
@@ -174,6 +174,26 @@
     },
     {
       "week": "2026-10-12",
+      "price": null
+    },
+    {
+      "week": "2026-10-19",
+      "price": 699000
+    },
+    {
+      "week": "2026-10-26",
+      "price": 699000
+    },
+    {
+      "week": "2026-11-02",
+      "price": 699000
+    },
+    {
+      "week": "2026-11-09",
+      "price": 699000
+    },
+    {
+      "week": "2026-11-16",
       "price": null
     }
   ],
