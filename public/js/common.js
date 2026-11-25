@@ -154,6 +154,18 @@ export function isActiveHouse(house, interest) {
   return !hiddenInterestSlugs(interest).has(house.slug);
 }
 
+/** Active houses for House Details dropdown; optionally keep one graveyard house as the selected entry. */
+export function housesForDetailsSelect(houses, interest, currentSlug = "") {
+  const list = Array.isArray(houses) ? houses : [];
+  const active = list.filter((house) => isActiveHouse(house, interest));
+  const slug = String(currentSlug || "");
+  if (!slug) return active;
+  const current = list.find((house) => house.slug === slug);
+  if (!current || isActiveHouse(current, interest)) return active;
+  if (active.some((house) => house.slug === slug)) return active;
+  return [...active, current];
+}
+
 export function houseLatLng(house) {
   const lat = Number(house?.lat ?? house?.coords?.lat);
   const lng = Number(house?.lng ?? house?.lon ?? house?.coords?.lng ?? house?.coords?.lon);

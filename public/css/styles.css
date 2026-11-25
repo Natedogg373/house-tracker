@@ -314,7 +314,7 @@ h2 {
 
 .photo-card {
   position: relative;
-  margin: 0 0 1.15rem;
+  margin: 0;
   width: 100%;
   background: var(--surface);
   border: 1px solid var(--line);
