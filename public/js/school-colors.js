@@ -1,20 +1,14 @@
-export const SCHOOL_PALETTE = [
-  "#c2410c",
-  "#1d4ed8",
-  "#15803d",
-  "#7c3aed",
-  "#b45309",
-  "#be123c",
-  "#0f766e",
-  "#4338ca",
-  "#a16207",
-  "#0369a1",
-];
-
 export const NEUTRAL_HOUSE_COLOR = "#8a847c";
-export const MIN_SCHOOL_COLOR_DISTANCE_KM = 3;
 export const SCHOOL_LEVELS = ["elementary", "middle", "high"];
 export const MAP_LEVEL_STORAGE_KEY = "house-tracker:map-level";
+
+/** Hex fills for map pins / legend swatches by GreatSchools-style rating band. */
+export const RATING_COLORS = {
+  high: "#15803d",
+  mid: "#ca8a04",
+  low: "#b91c1c",
+  unrated: NEUTRAL_HOUSE_COLOR,
+};
 
 const EARTH_KM = 6371;
 
@@ -42,6 +36,26 @@ export function distanceKm(a, b) {
   return 2 * EARTH_KM * Math.asin(Math.min(1, Math.sqrt(h)));
 }
 
+/**
+ * Rating bands for color: 7–10 high (green), 4–6 mid (yellow), 1–3 low (red).
+ * Missing / non-numeric → unrated (neutral gray). 0 counts as low.
+ */
+export function schoolRatingBand(rating) {
+  if (rating == null || rating === "" || Number.isNaN(Number(rating))) return "unrated";
+  const n = Number(rating);
+  if (n >= 7) return "high";
+  if (n >= 4) return "mid";
+  return "low";
+}
+
+export function schoolRatingClass(rating) {
+  return schoolRatingBand(rating);
+}
+
+export function schoolRatingColor(rating) {
+  return RATING_COLORS[schoolRatingBand(rating)] || RATING_COLORS.unrated;
+}
+
 export function normalizeSchoolLevel(value) {
   const level = String(value || "").trim().toLowerCase();
   return SCHOOL_LEVELS.includes(level) ? level : "elementary";
@@ -63,62 +77,26 @@ export function schoolAtLevel(house, schools, level) {
   return null;
 }
 
-function colorEntries(colorBySchoolId) {
-  return Object.fromEntries(colorBySchoolId);
+/** True when the house is zoned to schoolId at the given level (via schoolIds). */
+export function isHouseInSchoolZone(house, schools, schoolId, level) {
+  if (!schoolId) return true;
+  const school = schoolAtLevel(house, schools, level);
+  return Boolean(school && school.id === schoolId);
 }
 
-function nearestSameColorKm(school, color, assigned, schools) {
-  let nearest = Infinity;
-  for (const other of schools) {
-    if (other.id === school.id) continue;
-    if (assigned.get(other.id) !== color) continue;
-    nearest = Math.min(nearest, distanceKm(school, other));
-  }
-  return nearest;
+export function housesInSchoolZone(houses, schools, schoolId, level) {
+  return (houses || []).filter((house) => isHouseInSchoolZone(house, schools, schoolId, level));
 }
 
-function pickColor(school, used, palette, assigned, schools) {
-  const assignedColors = new Set(assigned.values());
-  const legal = palette.filter((color) => !used.has(color));
-  if (legal.length) {
-    return legal.find((color) => !assignedColors.has(color)) || legal[0];
-  }
-  let best = palette[0];
-  let bestDist = -1;
-  for (const color of palette) {
-    const dist = nearestSameColorKm(school, color, assigned, schools);
-    if (dist > bestDist) {
-      bestDist = dist;
-      best = color;
-    }
-  }
-  return best;
-}
-
-export function assignSchoolColors(schools, options = {}) {
-  const palette = Array.isArray(options.palette) && options.palette.length ? options.palette : SCHOOL_PALETTE;
-  const minKm = Number.isFinite(Number(options.minDistanceKm))
-    ? Number(options.minDistanceKm)
-    : MIN_SCHOOL_COLOR_DISTANCE_KM;
-
-  const valid = [];
+/** Assign each school its rating color (same API shape as the old palette helper). */
+export function assignSchoolColors(schools) {
+  const assigned = new Map();
   const seen = new Set();
   for (const school of schools || []) {
     const id = typeof school?.id === "string" ? school.id : "";
     if (!id || seen.has(id) || !schoolPoint(school)) continue;
     seen.add(id);
-    valid.push(school);
-  }
-  valid.sort((a, b) => a.id.localeCompare(b.id, "en"));
-
-  const assigned = new Map();
-  for (const school of valid) {
-    const used = new Set();
-    for (const other of valid) {
-      if (!assigned.has(other.id)) continue;
-      if (distanceKm(school, other) <= minKm) used.add(assigned.get(other.id));
-    }
-    assigned.set(school.id, pickColor(school, used, palette, assigned, valid));
+    assigned.set(id, schoolRatingColor(school.rating));
   }
   return assigned;
 }
@@ -126,9 +104,12 @@ export function assignSchoolColors(schools, options = {}) {
 export function colorForHouseAtLevel(house, colorBySchoolId, schools, level) {
   const school = schoolAtLevel(house, schools, level);
   if (!school) return NEUTRAL_HOUSE_COLOR;
-  return colorBySchoolId.get(school.id) || NEUTRAL_HOUSE_COLOR;
+  if (colorBySchoolId?.get) {
+    return colorBySchoolId.get(school.id) || schoolRatingColor(school.rating);
+  }
+  return schoolRatingColor(school.rating);
 }
 
 export function colorsToObject(colorBySchoolId) {
-  return colorEntries(colorBySchoolId);
+  return Object.fromEntries(colorBySchoolId);
 }

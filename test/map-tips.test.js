@@ -8,14 +8,16 @@ async function loadTips() {
 describe("map tips", async () => {
   const { houseTipHtml, schoolTipHtml } = await loadTips();
 
-  it("school tip is only name, level, and rating", () => {
+  it("school tip is only name, level, and rating badge", () => {
     const html = schoolTipHtml({
       name: "Moss Haven Elementary",
       level: "elementary",
       rating: 8,
     });
     assert.match(html, /Moss Haven Elementary/);
-    assert.match(html, /Elementary · 8\/10/);
+    assert.match(html, /Elementary ·/);
+    assert.match(html, /school-rating high/);
+    assert.match(html, /8\/10/);
     assert.doesNotMatch(html, /<ul/);
     assert.doesNotMatch(html, /map-tip-houses/);
     assert.doesNotMatch(html, /No matching active houses/);
@@ -23,7 +25,7 @@ describe("map tips", async () => {
     assert.doesNotMatch(html, /href=/);
   });
 
-  it("house tip stays concise and does not list other houses", () => {
+  it("house tip stays concise and shows a rating-colored school badge", () => {
     const html = houseTipHtml(
       {
         slug: "9205-moss-farm-ln-75243",
@@ -32,12 +34,13 @@ describe("map tips", async () => {
         photoUrl: "https://example.com/house.jpg",
         inside: ["Lake Highlands"],
       },
-      { name: "Moss Haven Elementary" },
+      { name: "Moss Haven Elementary", rating: 8 },
       "elementary"
     );
     assert.match(html, /9205 Moss Farm Ln/);
     assert.match(html, /\$670,000/);
     assert.match(html, /Moss Haven Elementary/);
+    assert.match(html, /school-rating high/);
     assert.match(html, /In area/);
     assert.match(html, /View details/);
     assert.match(html, /\?house=9205-moss-farm-ln-75243/);

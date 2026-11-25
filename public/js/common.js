@@ -172,17 +172,11 @@ export function schoolLevelLabel(level) {
   return "School";
 }
 
+export { schoolRatingClass } from "./school-colors.js";
+
 export function schoolRatingLabel(rating) {
   if (rating == null || rating === "" || Number.isNaN(Number(rating))) return "Not rated";
   return `${Number(rating)}/10`;
-}
-
-export function schoolRatingClass(rating) {
-  if (rating == null || rating === "" || Number.isNaN(Number(rating))) return "unrated";
-  const n = Number(rating);
-  if (n >= 8) return "high";
-  if (n >= 5) return "mid";
-  return "low";
 }
 
 const SCHOOL_LEVEL_ORDER = { elementary: 0, middle: 1, high: 2 };

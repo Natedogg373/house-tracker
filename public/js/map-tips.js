@@ -3,6 +3,7 @@ import {
   escapeHtml,
   formatMoney,
   schoolLevelLabel,
+  schoolRatingClass,
   schoolRatingLabel,
 } from "./common.js";
 
@@ -18,7 +19,7 @@ export function houseTipHtml(house, school, currentLevel) {
     ? `<img class="map-tip-thumb" src="${escapeHtml(house.photoUrl)}" alt="" />`
     : `<div class="map-tip-thumb map-tip-empty" aria-hidden="true"></div>`;
   const schoolLine = school
-    ? `<span>${escapeHtml(school.name)}</span>`
+    ? `<span>${escapeHtml(school.name)} <span class="pill school-rating ${schoolRatingClass(school.rating)}">${escapeHtml(schoolRatingLabel(school.rating))}</span></span>`
     : `<span class="map-tip-muted">No ${escapeHtml(schoolLevelLabel(currentLevel).toLowerCase())} school</span>`;
   return `<div class="map-tip-card">
     ${photo}
@@ -33,10 +34,11 @@ export function houseTipHtml(house, school, currentLevel) {
 }
 
 export function schoolTipHtml(school) {
+  const band = schoolRatingClass(school.rating);
   return `<div class="map-tip-card map-tip-school">
     <div class="map-tip-body">
       <strong>${escapeHtml(school.name)}</strong>
-      <span>${escapeHtml(schoolLevelLabel(school.level))} · ${escapeHtml(schoolRatingLabel(school.rating))}</span>
+      <span>${escapeHtml(schoolLevelLabel(school.level))} · <span class="pill school-rating ${band}">${escapeHtml(schoolRatingLabel(school.rating))}</span></span>
     </div>
   </div>`;
 }

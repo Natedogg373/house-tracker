@@ -6,85 +6,120 @@ async function loadColors() {
   return import("../public/js/school-colors.js");
 }
 
-function assertNearbyDoNotShare(schools, colors, distanceKm, minKm) {
-  for (let i = 0; i < schools.length; i += 1) {
-    for (let j = i + 1; j < schools.length; j += 1) {
-      const a = schools[i];
-      const b = schools[j];
-      const km = distanceKm(a, b);
-      if (km <= minKm) {
-        assert.notEqual(
-          colors.get(a.id),
-          colors.get(b.id),
-          `${a.id} and ${b.id} are ${km.toFixed(2)} km apart and share ${colors.get(a.id)}`
-        );
-      }
-    }
-  }
-}
-
-describe("assignSchoolColors", async () => {
+describe("school rating colors", async () => {
   const {
-    SCHOOL_PALETTE,
-    MIN_SCHOOL_COLOR_DISTANCE_KM,
     NEUTRAL_HOUSE_COLOR,
+    RATING_COLORS,
     assignSchoolColors,
     colorForHouseAtLevel,
     colorsToObject,
-    distanceKm,
+    housesInSchoolZone,
+    isHouseInSchoolZone,
     schoolAtLevel,
+    schoolRatingBand,
+    schoolRatingClass,
+    schoolRatingColor,
     schoolsAtLevel,
   } = await loadColors();
 
-  it("uses a palette of 8–10 distinct colors", () => {
-    assert.ok(SCHOOL_PALETTE.length >= 8);
-    assert.ok(SCHOOL_PALETTE.length <= 10);
-    assert.equal(new Set(SCHOOL_PALETTE).size, SCHOOL_PALETTE.length);
+  it("maps ratings to high/mid/low bands at 7 and 4 boundaries", () => {
+    assert.equal(schoolRatingBand(10), "high");
+    assert.equal(schoolRatingBand(7), "high");
+    assert.equal(schoolRatingBand(6.9), "mid");
+    assert.equal(schoolRatingBand(6), "mid");
+    assert.equal(schoolRatingBand(4), "mid");
+    assert.equal(schoolRatingBand(3.9), "low");
+    assert.equal(schoolRatingBand(3), "low");
+    assert.equal(schoolRatingBand(1), "low");
+    assert.equal(schoolRatingBand(0), "low");
+    assert.equal(schoolRatingBand(null), "unrated");
+    assert.equal(schoolRatingBand(undefined), "unrated");
+    assert.equal(schoolRatingBand(""), "unrated");
+    assert.equal(schoolRatingBand("n/a"), "unrated");
   });
 
-  it("is deterministic and ignores input order", () => {
-    const schools = [
-      { id: "zeta", lat: 32.9, lng: -96.74 },
-      { id: "alpha", lat: 32.901, lng: -96.741 },
-      { id: "mu", lat: 33.05, lng: -96.5 },
-    ];
-    const first = colorsToObject(assignSchoolColors(schools));
-    const second = colorsToObject(assignSchoolColors([...schools].reverse()));
-    const third = colorsToObject(assignSchoolColors(schools));
-    assert.deepEqual(second, first);
-    assert.deepEqual(third, first);
+  it("uses green / yellow / red hex colors for those bands", () => {
+    assert.equal(schoolRatingColor(7), RATING_COLORS.high);
+    assert.equal(schoolRatingColor(10), RATING_COLORS.high);
+    assert.equal(schoolRatingColor(4), RATING_COLORS.mid);
+    assert.equal(schoolRatingColor(6), RATING_COLORS.mid);
+    assert.equal(schoolRatingColor(3), RATING_COLORS.low);
+    assert.equal(schoolRatingColor(1), RATING_COLORS.low);
+    assert.equal(schoolRatingColor(null), RATING_COLORS.unrated);
+    assert.equal(schoolRatingColor(null), NEUTRAL_HOUSE_COLOR);
+    assert.equal(schoolRatingClass(7), "high");
+    assert.equal(schoolRatingClass(4), "mid");
+    assert.equal(schoolRatingClass(3), "low");
+    assert.equal(schoolRatingClass(null), "unrated");
   });
 
-  it("never shares a color between schools within ~3 km", () => {
+  it("assignSchoolColors paints each school by its rating", () => {
     const schools = [
-      { id: "near-a", lat: 32.9, lng: -96.74 },
-      { id: "near-b", lat: 32.905, lng: -96.745 },
-      { id: "near-c", lat: 32.91, lng: -96.735 },
-      { id: "far-north", lat: 33.1, lng: -96.74 },
+      { id: "a", lat: 32.9, lng: -96.74, rating: 9 },
+      { id: "b", lat: 32.91, lng: -96.75, rating: 5 },
+      { id: "c", lat: 32.92, lng: -96.76, rating: 2 },
+      { id: "d", lat: 32.93, lng: -96.77, rating: null },
     ];
-    assert.ok(distanceKm(schools[0], schools[1]) <= MIN_SCHOOL_COLOR_DISTANCE_KM);
-    assert.ok(distanceKm(schools[0], schools[2]) <= MIN_SCHOOL_COLOR_DISTANCE_KM);
-    assert.ok(distanceKm(schools[0], schools[3]) > MIN_SCHOOL_COLOR_DISTANCE_KM);
-
     const colors = assignSchoolColors(schools);
-    assertNearbyDoNotShare(schools, colors, distanceKm, MIN_SCHOOL_COLOR_DISTANCE_KM);
+    assert.equal(colors.get("a"), RATING_COLORS.high);
+    assert.equal(colors.get("b"), RATING_COLORS.mid);
+    assert.equal(colors.get("c"), RATING_COLORS.low);
+    assert.equal(colors.get("d"), RATING_COLORS.unrated);
+    assert.deepEqual(colorsToObject(assignSchoolColors([...schools].reverse())), colorsToObject(colors));
   });
 
-  it("reuses a color only when schools are far apart", () => {
-    const palette = ["#111111", "#222222"];
+  it("colors houses from their school at the selected level", () => {
     const schools = [
-      { id: "cluster-a", lat: 32.9, lng: -96.74 },
-      { id: "cluster-b", lat: 32.902, lng: -96.742 },
-      { id: "isolated", lat: 33.2, lng: -96.2 },
+      { id: "elem-1", level: "elementary", lat: 32.9, lng: -96.74, name: "Elem", rating: 8 },
+      { id: "mid-1", level: "middle", lat: 32.91, lng: -96.74, name: "Mid", rating: 3 },
+      { id: "high-1", level: "high", lat: 32.95, lng: -96.7, name: "High", rating: 5 },
     ];
-    const colors = assignSchoolColors(schools, { palette });
-    assert.notEqual(colors.get("cluster-a"), colors.get("cluster-b"));
-    assert.equal(new Set(colors.values()).size, 2);
-    assert.ok(distanceKm(schools[0], schools[2]) > MIN_SCHOOL_COLOR_DISTANCE_KM);
-    assert.ok(distanceKm(schools[1], schools[2]) > MIN_SCHOOL_COLOR_DISTANCE_KM);
+    const colors = assignSchoolColors(schoolsAtLevel(schools, "elementary"));
+    const house = { schoolIds: ["elem-1", "mid-1", "high-1"] };
+    assert.equal(schoolAtLevel(house, schools, "elementary").id, "elem-1");
+    assert.equal(colorForHouseAtLevel(house, colors, schools, "elementary"), RATING_COLORS.high);
+    assert.equal(colorForHouseAtLevel(house, colors, schools, "middle"), RATING_COLORS.low);
+    assert.equal(colorForHouseAtLevel(house, colors, schools, "high"), RATING_COLORS.mid);
+    assert.equal(colorForHouseAtLevel({ schoolIds: [] }, colors, schools, "elementary"), NEUTRAL_HOUSE_COLOR);
   });
 
-  it("colors each committed school so neighbors within 3 km never match, per level", () => {
+  it("filters houses zoned to a selected school at the current level", () => {
+    const schools = [
+      { id: "elem-a", level: "elementary", lat: 32.9, lng: -96.74, name: "A", rating: 8 },
+      { id: "elem-b", level: "elementary", lat: 32.91, lng: -96.75, name: "B", rating: 4 },
+      { id: "mid-a", level: "middle", lat: 32.92, lng: -96.76, name: "Mid", rating: 6 },
+    ];
+    const houses = [
+      { slug: "h1", schoolIds: ["elem-a", "mid-a"] },
+      { slug: "h2", schoolIds: ["elem-b", "mid-a"] },
+      { slug: "h3", schoolIds: ["mid-a"] },
+      { slug: "h4", schoolIds: ["elem-a"] },
+    ];
+
+    assert.equal(isHouseInSchoolZone(houses[0], schools, "elem-a", "elementary"), true);
+    assert.equal(isHouseInSchoolZone(houses[1], schools, "elem-a", "elementary"), false);
+    assert.equal(isHouseInSchoolZone(houses[2], schools, "elem-a", "elementary"), false);
+    assert.equal(isHouseInSchoolZone(houses[0], schools, null, "elementary"), true);
+
+    assert.deepEqual(
+      housesInSchoolZone(houses, schools, "elem-a", "elementary").map((h) => h.slug),
+      ["h1", "h4"]
+    );
+    assert.deepEqual(
+      housesInSchoolZone(houses, schools, "elem-b", "elementary").map((h) => h.slug),
+      ["h2"]
+    );
+    assert.deepEqual(
+      housesInSchoolZone(houses, schools, "mid-a", "middle").map((h) => h.slug),
+      ["h1", "h2", "h3"]
+    );
+    assert.deepEqual(
+      housesInSchoolZone(houses, schools, "mid-a", "elementary").map((h) => h.slug),
+      []
+    );
+  });
+
+  it("colors live catalog schools by rating at each level", () => {
     const loaded = loadSchoolsFromFile(DEFAULT_SCHOOLS_PATH);
     assert.equal(loaded.source, "file");
     assert.ok(loaded.schools.length > 0);
@@ -94,28 +129,18 @@ describe("assignSchoolColors", async () => {
       assert.ok(schools.length > 0, `expected ${level} schools in live catalog`);
       const colors = assignSchoolColors(schools);
       assert.equal(colors.size, schools.length);
-      assertNearbyDoNotShare(schools, colors, distanceKm, MIN_SCHOOL_COLOR_DISTANCE_KM);
-      assert.deepEqual(colorsToObject(assignSchoolColors([...schools].reverse())), colorsToObject(colors));
+      for (const school of schools) {
+        assert.equal(colors.get(school.id), schoolRatingColor(school.rating));
+      }
     }
   });
 
-  it("keeps sample schools distinct when they sit more than 3 km apart", () => {
+  it("colors sample schools by rating including unrated", () => {
     const loaded = loadSchoolsFromFile(SAMPLE_SCHOOLS_PATH);
     const elementary = schoolsAtLevel(loaded.schools, "elementary");
     const colors = assignSchoolColors(elementary);
-    assertNearbyDoNotShare(elementary, colors, distanceKm, MIN_SCHOOL_COLOR_DISTANCE_KM);
-  });
-
-  it("uses the matching school color for a house and grey when that level is missing", () => {
-    const schools = [
-      { id: "elem-1", level: "elementary", lat: 32.9, lng: -96.74, name: "Elem" },
-      { id: "high-1", level: "high", lat: 32.95, lng: -96.7, name: "High" },
-    ];
-    const colors = assignSchoolColors(schoolsAtLevel(schools, "elementary"));
-    const house = { schoolIds: ["elem-1", "high-1"] };
-    assert.equal(schoolAtLevel(house, schools, "elementary").id, "elem-1");
-    assert.equal(colorForHouseAtLevel(house, colors, schools, "elementary"), colors.get("elem-1"));
-    assert.equal(colorForHouseAtLevel(house, colors, schools, "middle"), NEUTRAL_HOUSE_COLOR);
-    assert.equal(colorForHouseAtLevel({ schoolIds: [] }, colors, schools, "elementary"), NEUTRAL_HOUSE_COLOR);
+    const unrated = elementary.find((school) => school.rating == null);
+    assert.ok(unrated, "sample set includes an unrated elementary");
+    assert.equal(colors.get(unrated.id), NEUTRAL_HOUSE_COLOR);
   });
 });
