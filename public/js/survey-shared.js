@@ -24,6 +24,27 @@ export function questionDisplayTitle(question, maxLen = TITLE_FALLBACK_MAX) {
   return `${text.slice(0, Math.max(1, maxLen - 1)).trimEnd()}…`;
 }
 
+export function questionFullText(question) {
+  return String(question?.text || question?.questionText || "").trim() || "Untitled question";
+}
+
+/**
+ * Shared collapse header: short title crossfades into full question text in-place.
+ * Optional trailing status/meta HTML (answered badge, etc.).
+ */
+export function collapseToggleHtml(question, { expanded = false, trailingHtml = "" } = {}) {
+  const short = questionDisplayTitle(question);
+  const full = questionFullText(question);
+  return `<button type="button" class="survey-collapse-toggle" aria-expanded="${expanded ? "true" : "false"}">
+    <span class="survey-collapse-heading">
+      <span class="survey-title-short">${escapeHtml(short)}</span>
+      <span class="survey-title-full">${escapeHtml(full)}</span>
+    </span>
+    ${trailingHtml}
+    <span class="survey-collapse-chevron" aria-hidden="true"></span>
+  </button>`;
+}
+
 export function answerHasContent(answer) {
   if (!answer) return false;
   if (String(answer.notes || "").trim()) return true;
@@ -106,28 +127,34 @@ export function typeSelectHtml(selected, { id, name = "type", disabled = false }
   }>${options}</select>`;
 }
 
-function ratingBubblesHtml(question, value, { name, readonly = false } = {}) {
+function ratingPillsHtml(question, value, { name, readonly = false } = {}) {
   const max = Math.min(10, Math.max(2, Number(question.config?.maxRating || question.questionConfig?.maxRating || 5)));
   const selected = value == null || value === "" ? null : Number(value);
-  const bubbles = [];
-  for (let i = 1; i <= max; i += 1) {
-    const pressed = selected === i;
-    if (readonly) {
-      bubbles.push(
-        `<span class="rating-bubble ${pressed ? "is-selected" : ""}" aria-hidden="true">${i}</span>`
-      );
-    } else {
-      bubbles.push(
-        `<button type="button" class="rating-bubble ${pressed ? "is-selected" : ""}" data-rating="${i}" aria-pressed="${
-          pressed ? "true" : "false"
-        }">${i}</button>`
+  if (readonly) {
+    const pills = [];
+    for (let i = 1; i <= max; i += 1) {
+      const on = selected === i;
+      pills.push(
+        `<span class="choice-chip rating-pill ${on ? "is-selected" : ""}" aria-hidden="true"><span>${i}</span></span>`
       );
     }
+    return `<div class="choice-list rating-pills" role="group" aria-label="Rating 1 to ${max}">${pills.join(
+      ""
+    )}</div>`;
   }
-  const hidden = readonly
-    ? ""
-    : `<input type="hidden" name="${escapeHtml(name)}" value="${selected == null ? "" : selected}" />`;
-  return `<div class="rating-bubbles" role="group" aria-label="Rating 1 to ${max}">${bubbles.join("")}${hidden}</div>`;
+  const pills = [];
+  for (let i = 1; i <= max; i += 1) {
+    pills.push(
+      `<label class="choice-chip rating-pill">
+        <input type="radio" name="${escapeHtml(name)}" value="${i}" ${selected === i ? "checked" : ""} />
+        <span>${i}</span>
+      </label>`
+    );
+  }
+  return `<div class="choice-list rating-pills" role="radiogroup" aria-label="Rating 1 to ${max}">
+    ${pills.join("")}
+    <button type="button" class="text-btn clear-rating" data-clear="${escapeHtml(name)}">Clear</button>
+  </div>`;
 }
 
 export function answerControlHtml(question, value, { name, readonly = false } = {}) {
@@ -138,7 +165,7 @@ export function answerControlHtml(question, value, { name, readonly = false } = 
 
   if (readonly) {
     if (type === "rating") {
-      return ratingBubblesHtml({ ...question, config }, safeValue, { readonly: true });
+      return ratingPillsHtml({ ...question, config }, safeValue, { readonly: true });
     }
     return `<p class="survey-answer-value">${escapeHtml(formatAnswerValue({
       questionType: type,
@@ -172,7 +199,7 @@ export function answerControlHtml(question, value, { name, readonly = false } = 
       </div>`;
     }
     case "rating":
-      return ratingBubblesHtml({ ...question, config }, safeValue, { name: fieldName });
+      return ratingPillsHtml({ ...question, config }, safeValue, { name: fieldName });
     case "date":
       return `<input class="survey-input" type="date" name="${escapeHtml(fieldName)}" value="${escapeHtml(
         safeValue
@@ -216,9 +243,9 @@ export function readAnswerValue(root, question) {
     return checked.value === "true";
   }
   if (type === "rating") {
-    const hidden = root.querySelector(`input[name="${CSS.escape(name)}"]`);
-    if (!hidden || hidden.value === "") return null;
-    const n = Number(hidden.value);
+    const checked = root.querySelector(`input[type="radio"][name="${CSS.escape(name)}"]:checked`);
+    if (!checked) return null;
+    const n = Number(checked.value);
     return Number.isFinite(n) ? n : null;
   }
   if (type === "multiple_choice") {
@@ -239,22 +266,6 @@ export function readAnswerValue(root, question) {
 
 export function bindAnswerControls(root) {
   root.addEventListener("click", (event) => {
-    const bubble = event.target.closest(".rating-bubble[data-rating]");
-    if (bubble && root.contains(bubble)) {
-      const wrap = bubble.closest(".rating-bubbles");
-      const hidden = wrap?.querySelector('input[type="hidden"]');
-      const rating = bubble.dataset.rating;
-      if (hidden) {
-        const same = hidden.value === rating;
-        hidden.value = same ? "" : rating;
-        for (const btn of wrap.querySelectorAll(".rating-bubble[data-rating]")) {
-          const on = !same && btn.dataset.rating === rating;
-          btn.classList.toggle("is-selected", on);
-          btn.setAttribute("aria-pressed", on ? "true" : "false");
-        }
-      }
-      return;
-    }
     const clear = event.target.closest("[data-clear]");
     if (clear && root.contains(clear)) {
       const name = clear.dataset.clear;
@@ -262,6 +273,7 @@ export function bindAnswerControls(root) {
         if (input.type === "radio" || input.type === "checkbox") input.checked = false;
         else input.value = "";
       }
+      clear.dispatchEvent(new Event("change", { bubbles: true }));
     }
   });
 }
