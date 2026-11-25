@@ -8,6 +8,8 @@ import {
   formatYear,
   hiddenInterestSlugs,
   houseAge,
+  housesForDetailsSelect,
+  isActiveHouse,
   isSoldStatus,
   pricePerSqft,
   schoolLevelLabel,
@@ -309,23 +311,25 @@ function hiddenSet() {
   return hiddenInterestSlugs(payload.interest);
 }
 
-function visibleHouses() {
-  const houses = payload.houses || [];
-  const hidden = hiddenSet();
-  const includeHidden = includeToggle.checked;
-  return houses.filter((house) => includeHidden || !hidden.has(house.slug));
+function activeHouses() {
+  return (payload.houses || []).filter((house) => isActiveHouse(house, payload.interest));
 }
 
 function selectedHouse() {
   const houses = payload.houses || [];
-  return houses.find((h) => h.slug === select.value) || visibleHouses()[0] || houses[0];
+  return (
+    houses.find((h) => h.slug === select.value) ||
+    activeHouses()[0] ||
+    houses[0]
+  );
 }
 
 function fillSelect(houses, preferred) {
   select.innerHTML = houses
     .map((house) => {
       const hidden = hiddenSet().has(house.slug);
-      const suffix = hidden ? " (not interested)" : "";
+      const sold = isSoldStatus(house.status);
+      const suffix = hidden ? " (not interested)" : sold ? " (sold)" : "";
       return `<option value="${escapeHtml(house.slug)}">${escapeHtml(
         (house.address || house.slug) + suffix
       )}</option>`;
@@ -509,12 +513,13 @@ function renderHouse(house) {
   }
 }
 
-function preferredSlug(houses) {
+function preferredSlug(allHouses) {
   const fromUrl = slugFromLocation();
-  if (fromUrl && houses.some((house) => house.slug === fromUrl)) return fromUrl;
+  if (fromUrl && allHouses.some((house) => house.slug === fromUrl)) return fromUrl;
+  const active = allHouses.filter((house) => isActiveHouse(house, payload.interest));
   const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored && houses.some((house) => house.slug === stored)) return stored;
-  return houses[0]?.slug || "";
+  if (stored && active.some((house) => house.slug === stored)) return stored;
+  return active[0]?.slug || "";
 }
 
 function renderAll() {
@@ -524,7 +529,8 @@ function renderAll() {
   if (fromUrl && hiddenSet().has(fromUrl)) {
     includeToggle.checked = true;
   }
-  const houses = visibleHouses();
+  const preferred = preferredSlug(all);
+  const houses = housesForDetailsSelect(all, payload.interest, preferred);
   if (!houses.length) {
     show(empty, true);
     show(view, false);
@@ -533,7 +539,6 @@ function renderAll() {
   }
   show(empty, false);
   show(view, true);
-  const preferred = preferredSlug(houses);
   fillSelect(houses, preferred);
   const house = selectedHouse();
   if (house) {
@@ -544,11 +549,10 @@ function renderAll() {
 }
 
 function selectHouse(slug, { replace = true } = {}) {
-  const houses = visibleHouses();
-  if (!houses.some((house) => house.slug === slug) && payload.houses.some((house) => house.slug === slug)) {
-    includeToggle.checked = true;
-    fillSelect(visibleHouses(), slug);
-  }
+  const all = payload.houses || [];
+  if (!all.some((house) => house.slug === slug)) return;
+  if (hiddenSet().has(slug)) includeToggle.checked = true;
+  fillSelect(housesForDetailsSelect(all, payload.interest, slug), slug);
   if (![...select.options].some((option) => option.value === slug)) return;
   select.value = slug;
   localStorage.setItem(STORAGE_KEY, slug);
@@ -596,7 +600,7 @@ notInterestedBtn.addEventListener("click", async () => {
     const updated = payload.houses.find((item) => item.slug === house.slug);
     if (updated) updated.interestStatus = "notInterested";
     if (!includeToggle.checked) {
-      const remaining = visibleHouses().filter((item) => item.slug !== house.slug);
+      const remaining = activeHouses().filter((item) => item.slug !== house.slug);
       if (remaining[0]) setHouseUrl(remaining[0].slug);
       else setHouseUrl("");
     }
