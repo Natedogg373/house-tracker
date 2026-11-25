@@ -59,6 +59,17 @@
       </section>
 
       <section id="house-view">
+        <figure class="photo-card" id="media-card">
+          <img id="photo" alt="House photo" />
+          <div id="photo-fallback" class="photo-fallback">
+            <div id="house-map" class="house-map hidden" title="Map of the selected house" hidden></div>
+            <div id="map-placeholder" class="map-placeholder">
+              <img src="/img/placeholder.svg" alt="" />
+              <p id="map-placeholder-text">Looking up this address on the map…</p>
+            </div>
+          </div>
+        </figure>
+
         <div class="hero">
           <p class="kicker">
             <span id="status" class="pill">For sale</span>
@@ -85,17 +96,6 @@
           <h2>Schools</h2>
           <ul class="schools-list" id="schools-list"></ul>
         </section>
-
-        <figure class="photo-card" id="media-card">
-          <img id="photo" alt="House photo" />
-          <div id="photo-fallback" class="photo-fallback">
-            <div id="house-map" class="house-map hidden" title="Map of the selected house" hidden></div>
-            <div id="map-placeholder" class="map-placeholder">
-              <img src="/img/placeholder.svg" alt="" />
-              <p id="map-placeholder-text">Looking up this address on the map…</p>
-            </div>
-          </div>
-        </figure>
 
         <section class="panel chart-card">
           <h2>Price over time</h2>

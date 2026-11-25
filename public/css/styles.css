@@ -315,6 +315,7 @@ h2 {
 .photo-card {
   position: relative;
   margin: 0 0 1.15rem;
+  width: 100%;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -335,6 +336,19 @@ h2 {
   width: 100%;
   aspect-ratio: 16 / 9;
   background: #ece6db;
+}
+
+@media (min-width: 840px) {
+  .photo-card > img,
+  .photo-fallback {
+    aspect-ratio: auto;
+    height: min(420px, 42vw);
+    max-height: 420px;
+  }
+
+  .photo-card > img {
+    object-fit: cover;
+  }
 }
 
 .photo-fallback.visible {

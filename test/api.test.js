@@ -66,6 +66,13 @@ describe("API", () => {
     assert.match(html, /rel="noopener/);
     assert.match(html, /id="schools-section"/);
     assert.match(html, /id="schools-list"/);
+    assert.match(html, /id="media-card"/);
+    assert.match(html, /id="photo"/);
+    // Photo sits above address/title so the house is recognizable at a glance.
+    const mediaIdx = html.indexOf('id="media-card"');
+    const addressIdx = html.indexOf('id="address"');
+    assert.ok(mediaIdx !== -1 && addressIdx !== -1);
+    assert.ok(mediaIdx < addressIdx, "house photo should appear above the address title");
   });
 
   it("serves the add page", async () => {
