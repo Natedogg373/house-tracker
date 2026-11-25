@@ -1,0 +1,149 @@
+{
+  "sections": [
+    {
+      "title": "Seller & History",
+      "questions": [
+        {
+          "title": "Owner tenure",
+          "text": "How long have the current owners lived here?",
+          "type": "number",
+          "unit": "years"
+        }
+      ]
+    },
+    {
+      "title": "Systems & Structure",
+      "questions": [
+        {
+          "title": "Roof age",
+          "text": "How old is the roof?",
+          "type": "number",
+          "unit": "years"
+        },
+        {
+          "title": "AC age",
+          "text": "How old is the AC unit? (Note if AC and heat are one combined system.)",
+          "type": "number",
+          "unit": "years"
+        },
+        {
+          "title": "Heating age",
+          "text": "How old is the heating system / furnace?",
+          "type": "number",
+          "unit": "years"
+        },
+        {
+          "title": "Windows",
+          "text": "How old are the windows? Try opening a few — do they open, close and lock smoothly?",
+          "type": "number",
+          "unit": "years"
+        },
+        {
+          "title": "Electrical panel",
+          "text": "How old is the electrical panel / circuit breaker, and how many open breaker slots are available? (Note brand — watch for Federal Pacific or Zinsco.)",
+          "type": "number",
+          "unit": "years"
+        },
+        {
+          "title": "Foundation",
+          "text": "Has the foundation been repaired or redone? (Note when, by whom, and any transferable warranty.)",
+          "type": "yes_no"
+        }
+      ]
+    },
+    {
+      "title": "Kitchen",
+      "questions": [
+        {
+          "title": "Kitchen space",
+          "text": "How good is the kitchen space and layout?",
+          "type": "rating",
+          "config": { "maxRating": 5 }
+        },
+        {
+          "title": "Kitchen style & cabinets",
+          "text": "How do you like the kitchen style, and is there enough cabinet space?",
+          "type": "rating",
+          "config": { "maxRating": 5 }
+        },
+        {
+          "title": "Appliances convey",
+          "text": "Do the appliances convey (washer, dryer, refrigerator)? (Note which ones.)",
+          "type": "yes_no"
+        }
+      ]
+    },
+    {
+      "title": "Bedrooms & Bathrooms",
+      "questions": [
+        {
+          "title": "Renovated bathrooms",
+          "text": "How many bathrooms have been renovated?",
+          "type": "number"
+        },
+        {
+          "title": "Master bath sinks",
+          "text": "Does the master bath have a double sink?",
+          "type": "yes_no"
+        },
+        {
+          "title": "Master on same floor",
+          "text": "Is the master bedroom on the same floor as the other bedrooms?",
+          "type": "yes_no"
+        }
+      ]
+    },
+    {
+      "title": "Space, Light & Storage",
+      "questions": [
+        {
+          "title": "Natural light",
+          "text": "How good is the natural lighting?",
+          "type": "rating",
+          "config": { "maxRating": 5 }
+        },
+        {
+          "title": "Ceiling height",
+          "text": "What is the ceiling height?",
+          "type": "number",
+          "unit": "feet"
+        },
+        {
+          "title": "Closet space",
+          "text": "How is the closet space?",
+          "type": "rating",
+          "config": { "maxRating": 5 }
+        },
+        {
+          "title": "Extra storage",
+          "text": "How much extra storage is there (attic, garage shelving, etc.)?",
+          "type": "rating",
+          "config": { "maxRating": 5 }
+        }
+      ]
+    },
+    {
+      "title": "Outside & Garage",
+      "questions": [
+        {
+          "title": "Garage",
+          "text": "How many cars does the garage fit?",
+          "type": "number",
+          "unit": "cars"
+        },
+        {
+          "title": "Fence",
+          "text": "Does it have a fence? If not, could one be added? (Note HOA rules.)",
+          "type": "multiple_choice",
+          "options": ["Has one", "Could add", "No"]
+        },
+        {
+          "title": "Shed",
+          "text": "Does it have a shed? If not, is there room / is it allowed to add one?",
+          "type": "multiple_choice",
+          "options": ["Has one", "Could add", "No"]
+        }
+      ]
+    }
+  ]
+}

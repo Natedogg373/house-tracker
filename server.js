@@ -33,6 +33,14 @@ const {
   saveAnswersForHouse,
   surveyStatusForHouse,
   houseAnswerSummaries,
+  listSections,
+  createSection,
+  updateSection,
+  deleteSection,
+  reorderSections,
+  importSurvey,
+  groupQuestionsBySection,
+  maybeSeedSurveyFromFile,
   QUESTION_TYPES,
 } = require("./lib/survey");
 
@@ -353,7 +361,13 @@ app.get("/api/survey/questions", (req, res) => {
       req.query.includeArchived === "true" ||
       req.query.archived === "1";
     const questions = listQuestions({ includeArchived });
-    res.json({ questions, types: QUESTION_TYPES });
+    const sections = listSections();
+    res.json({
+      questions,
+      sections,
+      groups: groupQuestionsBySection(questions, sections),
+      types: QUESTION_TYPES,
+    });
   } catch (err) {
     surveyError(res, err, "Failed to load survey questions.");
   }
@@ -371,8 +385,14 @@ app.post("/api/survey/questions", (req, res) => {
 app.put("/api/survey/questions/reorder", (req, res) => {
   try {
     const ids = Array.isArray(req.body) ? req.body : req.body?.ids;
-    const questions = reorderQuestions(ids);
-    return res.json({ ok: true, questions });
+    const sectionId = Array.isArray(req.body) ? undefined : req.body?.sectionId;
+    const questions = reorderQuestions(ids, sectionId);
+    return res.json({
+      ok: true,
+      questions,
+      sections: listSections(),
+      groups: groupQuestionsBySection(questions, listSections()),
+    });
   } catch (err) {
     return surveyError(res, err, "Failed to reorder questions.");
   }
@@ -396,6 +416,60 @@ app.delete("/api/survey/questions/:id", (req, res) => {
   }
 });
 
+app.get("/api/survey/sections", (_req, res) => {
+  try {
+    return res.json({ sections: listSections() });
+  } catch (err) {
+    return surveyError(res, err, "Failed to load survey sections.");
+  }
+});
+
+app.post("/api/survey/sections", (req, res) => {
+  try {
+    const section = createSection(req.body || {});
+    return res.status(201).json({ ok: true, section });
+  } catch (err) {
+    return surveyError(res, err, "Failed to create section.");
+  }
+});
+
+app.put("/api/survey/sections/reorder", (req, res) => {
+  try {
+    const ids = Array.isArray(req.body) ? req.body : req.body?.ids;
+    const sections = reorderSections(ids);
+    return res.json({ ok: true, sections });
+  } catch (err) {
+    return surveyError(res, err, "Failed to reorder sections.");
+  }
+});
+
+app.put("/api/survey/sections/:id", (req, res) => {
+  try {
+    const section = updateSection(req.params.id, req.body || {});
+    return res.json({ ok: true, section });
+  } catch (err) {
+    return surveyError(res, err, "Failed to update section.");
+  }
+});
+
+app.delete("/api/survey/sections/:id", (req, res) => {
+  try {
+    const section = deleteSection(req.params.id);
+    return res.json({ ok: true, section });
+  } catch (err) {
+    return surveyError(res, err, "Failed to delete section.");
+  }
+});
+
+app.post("/api/survey/import", (req, res) => {
+  try {
+    const result = importSurvey(req.body || {});
+    return res.status(200).json({ ok: true, ...result });
+  } catch (err) {
+    return surveyError(res, err, "Failed to import survey.");
+  }
+});
+
 app.get("/api/survey/answers/:slug", (req, res) => {
   try {
     const slug = String(req.params.slug || "").trim();
@@ -403,9 +477,17 @@ app.get("/api/survey/answers/:slug", (req, res) => {
       return res.status(400).json({ error: "Missing house slug." });
     }
     const questions = listQuestions({ includeArchived: false });
+    const sections = listSections();
     const answers = listAnswersForHouse(slug);
     const status = surveyStatusForHouse(slug, questions);
-    return res.json({ slug, questions, answers, status });
+    return res.json({
+      slug,
+      questions,
+      sections,
+      groups: groupQuestionsBySection(questions, sections),
+      answers,
+      status,
+    });
   } catch (err) {
     return surveyError(res, err, "Failed to load survey answers.");
   }
@@ -416,7 +498,13 @@ app.put("/api/survey/answers/:slug", (req, res) => {
     const slug = String(req.params.slug || "").trim();
     const items = Array.isArray(req.body) ? req.body : req.body?.answers;
     const saved = saveAnswersForHouse(slug, items);
-    return res.json({ ok: true, slug, ...saved });
+    return res.json({
+      ok: true,
+      slug,
+      ...saved,
+      sections: listSections(),
+      questions: listQuestions({ includeArchived: false }),
+    });
   } catch (err) {
     return surveyError(res, err, "Failed to save survey answers.");
   }
@@ -437,6 +525,19 @@ app.get("/api/survey/status", (req, res) => {
 });
 
 function start() {
+  try {
+    const seed = maybeSeedSurveyFromFile();
+    if (seed.seeded) {
+      console.log(
+        `[survey] Seeded ${seed.createdQuestions?.length || 0} questions in ${
+          seed.createdSections?.length || 0
+        } sections from ${seed.path}`
+      );
+    }
+  } catch (err) {
+    console.error("[survey] Seed failed:", err.message || err);
+  }
+
   const port = Number(process.env.PORT) || 3000;
   const server = app.listen(port, () => {
     console.log(`House Tracker running at http://localhost:${port}`);

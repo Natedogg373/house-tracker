@@ -39,21 +39,24 @@
           <div>
             <h1>House Survey</h1>
             <p class="lede">
-              Build a shared checklist for visits. Answers are saved per house so you can compare
-              listings and keep notes from walkthroughs.
+              Build a shared checklist for visits. Group questions into sections, then fill answers
+              per house with notes from walkthroughs.
             </p>
           </div>
-          <button type="button" id="add-question" class="survey-add" aria-label="Add question">+</button>
+          <div class="survey-intro-actions">
+            <button type="button" id="add-section" class="button-link">Add section</button>
+            <button type="button" id="add-question" class="survey-add" aria-label="Add question">+</button>
+          </div>
         </div>
         <p id="save-status" class="banner" hidden></p>
       </section>
 
       <section id="empty" class="panel empty">
         <h2>No questions yet</h2>
-        <p>Tap + to add the first survey question.</p>
+        <p>Tap + to add a question, or Add section to start organizing the checklist.</p>
       </section>
 
-      <ol id="question-list" class="survey-question-list" aria-label="Survey questions" hidden></ol>
+      <ol id="question-list" class="survey-section-list" aria-label="Survey sections" hidden></ol>
     </main>
 
     <script type="module" src="/js/nav.js"></script>
