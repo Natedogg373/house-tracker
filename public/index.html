@@ -59,17 +59,6 @@
       </section>
 
       <section id="house-view">
-        <figure class="photo-card" id="media-card">
-          <img id="photo" alt="House photo" />
-          <div id="photo-fallback" class="photo-fallback">
-            <div id="house-map" class="house-map hidden" title="Map of the selected house" hidden></div>
-            <div id="map-placeholder" class="map-placeholder">
-              <img src="/img/placeholder.svg" alt="" />
-              <p id="map-placeholder-text">Looking up this address on the map…</p>
-            </div>
-          </div>
-        </figure>
-
         <div class="hero">
           <p class="kicker">
             <span id="status" class="pill">For sale</span>
@@ -77,6 +66,16 @@
             <span id="interest-badge" class="pill not-interested hidden"></span>
           </p>
           <h1 id="address">Loading…</h1>
+          <figure class="photo-card" id="media-card">
+            <img id="photo" alt="House photo" />
+            <div id="photo-fallback" class="photo-fallback">
+              <div id="house-map" class="house-map hidden" title="Map of the selected house" hidden></div>
+              <div id="map-placeholder" class="map-placeholder">
+                <img src="/img/placeholder.svg" alt="" />
+                <p id="map-placeholder-text">Looking up this address on the map…</p>
+              </div>
+            </div>
+          </figure>
           <p id="budget-banner" class="banner" hidden></p>
           <div class="actions house-actions">
             <a
