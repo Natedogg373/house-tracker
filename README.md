@@ -148,7 +148,7 @@ The bot will commit this file. Missing or unreadable is fine — the Map still l
 ]
 ```
 
-`level` is `elementary`, `middle`, or `high`. `rating` is `0`–`10` or `null` (“Not rated”). The Map uses a square marker for schools and a round pin for houses. An Elementary / Middle / High toggle (remembered in `localStorage`) shows one level at a time. Each school gets one color; houses zoned to that school use the same color. Nearby schools (about 3 km) never share a color; far-apart schools may. Houses with no school at the selected level are grey. The legend lists only the schools for that level (color, name, rating).
+`level` is `elementary`, `middle`, or `high`. `rating` is `0`–`10` or `null` (“Not rated”). The Map uses a square marker for schools and a round pin for houses. An Elementary / Middle / High toggle (remembered in `localStorage`) shows one level at a time. Pin and legend colors follow school rating: **7–10 green**, **4–6 yellow**, **1–3 red**, unrated grey. Houses use their school’s color at the selected level (grey if none). Click a school in the legend to show only houses zoned to it; click again or **Show all houses** to clear. Switching level clears the filter.
 
 ### Geofences (`data/geofences.json`)
 

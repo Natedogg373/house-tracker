@@ -14,9 +14,11 @@ import {
   SCHOOL_LEVELS,
   assignSchoolColors,
   colorForHouseAtLevel,
+  isHouseInSchoolZone,
   normalizeSchoolLevel,
   schoolAtLevel,
   schoolPoint,
+  schoolRatingColor,
   schoolsAtLevel,
 } from "./school-colors.js";
 
@@ -25,6 +27,8 @@ const mapEl = document.querySelector("#map");
 const sampleBanner = document.querySelector("#sample-banner");
 const errorBanner = document.querySelector("#error-banner");
 const legendList = document.querySelector("#legend-list");
+const legendFilterBar = document.querySelector("#legend-filter-bar");
+const clearSchoolFilterBtn = document.querySelector("#clear-school-filter");
 const inAreaCount = document.querySelector("#in-area-count");
 const missingCoordsEl = document.querySelector("#missing-coords");
 const geofenceList = document.querySelector("#geofence-list");
@@ -40,6 +44,8 @@ let overlay;
 let drawer = null;
 let fenceLayers = new Map();
 let currentLevel = readStoredLevel();
+/** @type {string|null} school id when legend filter is active */
+let selectedSchoolId = null;
 let invalidateTimer = 0;
 
 const FENCE_STYLE = {
@@ -48,6 +54,14 @@ const FENCE_STYLE = {
   fillColor: "#3d6b57",
   fillOpacity: 0.12,
   dashArray: "6 4",
+};
+
+const FENCE_EMPHASIS = {
+  color: "#14532d",
+  weight: 3,
+  fillColor: "#15803d",
+  fillOpacity: 0.22,
+  dashArray: null,
 };
 
 function readStoredLevel() {
@@ -78,6 +92,38 @@ function visibleSchools() {
   return schoolsAtLevel(payload.schools, currentLevel);
 }
 
+function selectedSchool() {
+  if (!selectedSchoolId) return null;
+  return visibleSchools().find((school) => school.id === selectedSchoolId) || null;
+}
+
+function filteredHouses() {
+  const houses = mappableHouses();
+  if (!selectedSchoolId) return houses;
+  return houses.filter((house) =>
+    isHouseInSchoolZone(house, payload.schools, selectedSchoolId, currentLevel)
+  );
+}
+
+function clearSchoolFilter({ render = true } = {}) {
+  if (!selectedSchoolId) return;
+  selectedSchoolId = null;
+  if (render) renderAll({ fit: false });
+}
+
+function setSchoolFilter(schoolId) {
+  if (!schoolId) {
+    clearSchoolFilter();
+    return;
+  }
+  if (selectedSchoolId === schoolId) {
+    clearSchoolFilter();
+    return;
+  }
+  selectedSchoolId = schoolId;
+  renderAll({ fit: false });
+}
+
 function houseIcon(color) {
   return Leaflet.divIcon({
     className: "pin-wrap",
@@ -89,12 +135,14 @@ function houseIcon(color) {
   });
 }
 
-function schoolIcon(color) {
+function schoolIcon(color, { emphasized = false } = {}) {
+  const cls = emphasized ? "school-pin is-emphasized" : "school-pin";
+  const size = emphasized ? 26 : 22;
   return Leaflet.divIcon({
     className: "pin-wrap",
-    html: `<span class="school-pin" style="background:${color}"><span class="school-pin-mark" aria-hidden="true"></span></span>`,
-    iconSize: [22, 22],
-    iconAnchor: [11, 11],
+    html: `<span class="${cls}" style="background:${color}"><span class="school-pin-mark" aria-hidden="true"></span></span>`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
     tooltipAnchor: [0, -12],
     popupAnchor: [0, -12],
   });
@@ -121,7 +169,7 @@ function bindMapTip(marker, html) {
   });
 }
 
-function layerFromFence(fence) {
+function layerFromFence(fence, style = FENCE_STYLE) {
   const g = fence.geometry;
   if (fence.type === "rect") {
     return Leaflet.rectangle(
@@ -129,16 +177,31 @@ function layerFromFence(fence) {
         [g.south, g.west],
         [g.north, g.east],
       ],
-      FENCE_STYLE
+      style
     );
   }
   if (fence.type === "circle") {
-    return Leaflet.circle([g.lat, g.lng], { ...FENCE_STYLE, radius: g.radiusMeters });
+    return Leaflet.circle([g.lat, g.lng], { ...style, radius: g.radiusMeters });
   }
   if (fence.type === "polygon") {
-    return Leaflet.polygon(g.latlngs, FENCE_STYLE);
+    return Leaflet.polygon(g.latlngs, style);
   }
   return null;
+}
+
+function fenceStyleFor(fence) {
+  const school = selectedSchool();
+  if (!school) return FENCE_STYLE;
+  const fenceName = String(fence?.name || "").trim().toLowerCase();
+  const schoolName = String(school.name || "").trim().toLowerCase();
+  if (fenceName && schoolName && (fenceName === schoolName || fenceName.includes(schoolName) || schoolName.includes(fenceName))) {
+    return {
+      ...FENCE_EMPHASIS,
+      color: schoolRatingColor(school.rating),
+      fillColor: schoolRatingColor(school.rating),
+    };
+  }
+  return FENCE_STYLE;
 }
 
 function fenceFromLayer(layer, layerType, name) {
@@ -267,25 +330,36 @@ function renderLevelToggle() {
   }
 }
 
+function renderLegendFilterBar() {
+  if (!legendFilterBar || !clearSchoolFilterBtn) return;
+  const active = Boolean(selectedSchool());
+  legendFilterBar.hidden = !active;
+  clearSchoolFilterBtn.disabled = !active;
+}
+
 function renderLegend(colors) {
   const items = visibleSchools()
     .slice()
     .sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), "en", { sensitivity: "base" }))
     .map((school) => {
-      const color = colors.get(school.id);
+      const color = colors.get(school.id) || schoolRatingColor(school.rating);
+      const selected = school.id === selectedSchoolId;
+      const pressed = selected ? "true" : "false";
+      const selectedClass = selected ? " is-selected" : "";
       return `<li>
-        <div class="legend-school">
+        <button type="button" class="legend-school${selectedClass}" data-school-id="${escapeHtml(school.id)}" aria-pressed="${pressed}" title="Show only houses zoned to this school">
           <span class="legend-swatch school-swatch" style="background:${color}"></span>
           <span class="legend-school-text">
             <span class="legend-school-name">${escapeHtml(school.name)}</span>
             <span class="legend-school-rating">${escapeHtml(schoolRatingLabel(school.rating))}</span>
           </span>
-        </div>
+        </button>
       </li>`;
     });
   const levelName = schoolLevelLabel(currentLevel).toLowerCase();
   legendList.innerHTML =
     items.join("") || `<li class="map-note">No ${escapeHtml(levelName)} schools with coordinates yet.</li>`;
+  renderLegendFilterBar();
 }
 
 function renderGeofences() {
@@ -318,14 +392,14 @@ function renderPins(colors) {
   fenceLayers = new Map();
 
   for (const fence of payload.geofences || []) {
-    const layer = layerFromFence(fence);
+    const layer = layerFromFence(fence, fenceStyleFor(fence));
     if (!layer) continue;
     layer.bindTooltip(escapeHtml(fence.name), { sticky: true, className: "map-tip-plain" });
     overlay.addLayer(layer);
     fenceLayers.set(fence.id, layer);
   }
 
-  for (const house of mappableHouses()) {
+  for (const house of filteredHouses()) {
     const point = houseLatLng(house);
     const school = schoolAtLevel(house, payload.schools, currentLevel);
     const color = colorForHouseAtLevel(house, colors, payload.schools, currentLevel);
@@ -341,12 +415,14 @@ function renderPins(colors) {
   for (const school of visibleSchools()) {
     const point = schoolPoint(school);
     if (!point) continue;
-    const color = colors.get(school.id) || NEUTRAL_HOUSE_COLOR;
+    const color = colors.get(school.id) || schoolRatingColor(school.rating) || NEUTRAL_HOUSE_COLOR;
+    const emphasized = school.id === selectedSchoolId;
     const marker = Leaflet.marker([point.lat, point.lng], {
-      icon: schoolIcon(color),
+      icon: schoolIcon(color, { emphasized }),
       title: school.name,
       riseOnHover: true,
-      zIndexOffset: 200,
+      zIndexOffset: emphasized ? 400 : 200,
+      opacity: selectedSchoolId && !emphasized ? 0.45 : 1,
     });
     bindMapTip(marker, schoolTipHtml(school));
     overlay.addLayer(marker);
@@ -355,7 +431,7 @@ function renderPins(colors) {
 
 function fitMap() {
   const bounds = Leaflet.latLngBounds([]);
-  for (const house of mappableHouses()) {
+  for (const house of filteredHouses()) {
     const point = houseLatLng(house);
     bounds.extend([point.lat, point.lng]);
   }
@@ -377,6 +453,7 @@ function renderAll({ fit = true } = {}) {
   sampleBanner.hidden = payload.source !== "sample";
   const colors = assignSchoolColors(visibleSchools());
   const mapped = mappableHouses();
+  const shown = filteredHouses();
   const active = activeHouses();
   const missing = active.length - mapped.length;
   show(missingCoordsEl, missing > 0);
@@ -386,7 +463,13 @@ function renderAll({ fit = true } = {}) {
   }
   const inArea = mapped.filter((house) => (house.inside || []).length > 0).length;
   const noun = inArea === 1 ? "house" : "houses";
-  inAreaCount.textContent = `${inArea} ${noun} in area`;
+  const school = selectedSchool();
+  if (school) {
+    const shownNoun = shown.length === 1 ? "house" : "houses";
+    inAreaCount.textContent = `${shown.length} ${shownNoun} in ${school.name} · ${inArea} ${noun} in area`;
+  } else {
+    inAreaCount.textContent = `${inArea} ${noun} in area`;
+  }
   renderLevelToggle();
   renderLegend(colors);
   renderGeofences();
@@ -408,6 +491,7 @@ function setLevel(level, { persist = true, fit = false } = {}) {
     return;
   }
   currentLevel = next;
+  selectedSchoolId = null;
   if (persist) persistLevel(currentLevel);
   renderAll({ fit });
 }
@@ -461,6 +545,18 @@ if (levelToggle) {
   });
 }
 
+if (legendList) {
+  legendList.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-school-id]");
+    if (!button || !legendList.contains(button)) return;
+    setSchoolFilter(button.dataset.schoolId);
+  });
+}
+
+if (clearSchoolFilterBtn) {
+  clearSchoolFilterBtn.addEventListener("click", () => clearSchoolFilter());
+}
+
 geofenceList.addEventListener("click", async (event) => {
   const rename = event.target.closest(".rename-fence");
   const remove = event.target.closest(".delete-fence");
@@ -494,6 +590,7 @@ async function load() {
     payload = await fetchHouses();
     errorBanner.hidden = true;
     currentLevel = readStoredLevel();
+    selectedSchoolId = null;
     renderAll({ fit: true });
   } catch (err) {
     errorBanner.hidden = false;

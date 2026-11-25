@@ -1336,12 +1336,50 @@ body.map-page main.map-main {
   gap: 0.45rem;
 }
 
+.legend-filter-bar {
+  margin: 0 0 0.55rem;
+}
+
+.legend-filter-bar[hidden] {
+  display: none !important;
+}
+
+.legend-filter-bar button {
+  width: 100%;
+  min-height: 44px;
+}
+
 .legend-school {
   display: flex;
   gap: 0.55rem;
   align-items: flex-start;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
   color: inherit;
+  font: inherit;
   font-size: 0.92rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.legend-school:hover {
+  background: #f3eee4;
+}
+
+.legend-school:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
+}
+
+.legend-school.is-selected {
+  border-color: var(--forest);
+  background: #e7efe9;
+  box-shadow: inset 0 0 0 1px rgba(44, 74, 62, 0.12);
 }
 
 .legend-school-text {
@@ -1379,6 +1417,21 @@ body.map-page main.map-main {
   margin-top: 0.18rem;
 }
 
+.legend-swatch.rating-high {
+  background: #15803d;
+  border-radius: 3px;
+}
+
+.legend-swatch.rating-mid {
+  background: #ca8a04;
+  border-radius: 3px;
+}
+
+.legend-swatch.rating-low {
+  background: #b91c1c;
+  border-radius: 3px;
+}
+
 .legend-key {
   display: flex;
   gap: 0.55rem;
@@ -1387,6 +1440,11 @@ body.map-page main.map-main {
   margin: 0.75rem 0 0;
   color: var(--muted);
   font-size: 0.85rem;
+}
+
+.school-pin.is-emphasized {
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.35), 0 2px 8px rgba(31, 27, 22, 0.28);
+  transform: scale(1.08);
 }
 
 .geofence-item {

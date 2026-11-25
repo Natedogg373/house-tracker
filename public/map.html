@@ -48,8 +48,9 @@
           <section class="map-intro">
             <h1>Map</h1>
             <p class="lede map-lede">
-              House pins are circles; schools are squares. Each school has one color; houses use the
-              color of their school at the selected level. Draw an area to flag homes inside it.
+              House pins are circles; schools are squares. Pin color follows school rating
+              (green 7–10, yellow 4–6, red 1–3). Tap a school in the legend to show only houses
+              zoned to it. Draw an area to flag homes inside it.
             </p>
             <div id="level-toggle" class="level-toggle" role="radiogroup" aria-label="School level">
               <button type="button" data-level="elementary" aria-pressed="true">Elementary</button>
@@ -61,10 +62,16 @@
           </section>
           <details class="map-fold legend-fold">
             <summary>Legend</summary>
+            <div id="legend-filter-bar" class="legend-filter-bar" hidden>
+              <button type="button" id="clear-school-filter" class="secondary">Show all houses</button>
+            </div>
             <ul id="legend-list" class="legend-list"></ul>
             <p class="legend-key">
               <span class="legend-swatch house-swatch"></span> House
               <span class="legend-swatch school-swatch"></span> School
+              <span class="legend-swatch rating-high"></span> 7–10
+              <span class="legend-swatch rating-mid"></span> 4–6
+              <span class="legend-swatch rating-low"></span> 1–3
             </p>
           </details>
           <details class="map-fold geofence-fold">
