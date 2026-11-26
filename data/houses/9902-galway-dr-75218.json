@@ -10,6 +10,12 @@
   "beds": 4,
   "baths": 4,
   "lotAcres": 0.46,
+  "garageSpaces": 0,
+  "hoaMonthly": 0,
+  "stories": 1,
+  "hasPool": false,
+  "propertyTaxAnnual": 15222,
+  "daysOnMarket": 55,
   "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
