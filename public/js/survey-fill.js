@@ -10,15 +10,14 @@ import {
   sectionProgress,
 } from "./survey-shared.js";
 
-const listEl = document.querySelector("#question-list");
-const emptyEl = document.querySelector("#empty");
-const missingEl = document.querySelector("#missing");
-const titleEl = document.querySelector("#house-title");
-const ledeEl = document.querySelector("#house-lede");
-const backLink = document.querySelector("#back-details");
-const saveBtn = document.querySelector("#save-answers");
-const saveStatus = document.querySelector("#save-status");
-const intro = document.querySelector(".survey-intro");
+const root = document.querySelector("#survey-fill");
+const listEl = root?.querySelector("#fill-question-list");
+const emptyEl = root?.querySelector("#fill-empty");
+const missingEl = root?.querySelector("#fill-missing");
+const pickEl = root?.querySelector("#fill-pick");
+const backLink = root?.querySelector("#back-details");
+const saveBtn = root?.querySelector("#save-answers");
+const saveStatus = root?.querySelector("#fill-save-status");
 
 let house = null;
 let questions = [];
@@ -27,12 +26,11 @@ let answersById = new Map();
 let persistTimer = 0;
 /** @type {Set<string>} */
 const expandedIds = new Set();
-
-function slugFromQuery() {
-  return new URLSearchParams(window.location.search).get("house") || "";
-}
+let onHouseTitle = null;
+let bound = false;
 
 function showSave(kind, text) {
+  if (!saveStatus) return;
   saveStatus.hidden = false;
   saveStatus.className = `banner ${kind}`;
   saveStatus.textContent = text;
@@ -111,28 +109,32 @@ function sectionBlockHtml(group) {
 }
 
 function render() {
+  if (!listEl) return;
+
   if (!house) {
-    show(intro, false);
-    show(missingEl, true);
+    show(pickEl, true);
+    show(missingEl, false);
     show(emptyEl, false);
     listEl.hidden = true;
+    if (saveBtn) saveBtn.disabled = true;
+    if (backLink) backLink.href = "/";
     return;
   }
+
+  show(pickEl, false);
   show(missingEl, false);
-  show(intro, true);
-  titleEl.textContent = house.address || house.slug;
-  backLink.href = detailsUrl(house.slug);
-  document.title = `Survey · ${house.address || house.slug} · House Tracker`;
+  if (backLink) backLink.href = detailsUrl(house.slug);
+  if (typeof onHouseTitle === "function") onHouseTitle(house.address || house.slug);
 
   if (!questions.length) {
     show(emptyEl, true);
     listEl.hidden = true;
-    saveBtn.disabled = true;
+    if (saveBtn) saveBtn.disabled = true;
     return;
   }
   show(emptyEl, false);
   listEl.hidden = false;
-  saveBtn.disabled = false;
+  if (saveBtn) saveBtn.disabled = false;
   const groups = groupQuestionsBySection(questions, sections);
   listEl.innerHTML = groups.map(sectionBlockHtml).join("");
 }
@@ -164,9 +166,7 @@ function refreshStatusBadges() {
   for (const section of listEl.querySelectorAll(".survey-section-fill")) {
     const sectionId = section.dataset.sectionId || null;
     const groupQuestions = questions.filter((q) => (q.sectionId || null) === (sectionId || null));
-    const liveMap = new Map(
-      groupQuestions.map((q) => [q.id, liveAnswerForQuestion(q)])
-    );
+    const liveMap = new Map(groupQuestions.map((q) => [q.id, liveAnswerForQuestion(q)]));
     const progress = sectionProgress(groupQuestions, liveMap);
     const el = section.querySelector(".survey-section-progress");
     if (el) {
@@ -197,7 +197,9 @@ async function save() {
   }
 }
 
-async function init() {
+function bind() {
+  if (bound || !listEl || !saveBtn) return;
+  bound = true;
   bindAnswerControls(listEl);
   saveBtn.addEventListener("click", () => {
     save();
@@ -209,7 +211,6 @@ async function init() {
     const card = toggle.closest(".survey-card");
     if (!card) return;
     const id = card.dataset.id;
-    // Preserve in-progress answers across re-render
     const draftAnswers = collectAnswers();
     for (const item of draftAnswers) {
       const prev = answersById.get(item.questionId) || {};
@@ -228,10 +229,16 @@ async function init() {
 
   listEl.addEventListener("change", () => refreshStatusBadges());
   listEl.addEventListener("input", () => refreshStatusBadges());
+}
 
-  const slug = slugFromQuery();
-  if (!slug) {
+async function loadHouse(slug) {
+  const nextSlug = String(slug || "").trim();
+  expandedIds.clear();
+  if (!nextSlug) {
     house = null;
+    questions = [];
+    sections = [];
+    answersById = new Map();
     render();
     return;
   }
@@ -239,28 +246,56 @@ async function init() {
   try {
     const [housesPayload, surveyPayload] = await Promise.all([
       fetchHouses(),
-      fetch(`/api/survey/answers/${encodeURIComponent(slug)}`).then(async (res) => {
+      fetch(`/api/survey/answers/${encodeURIComponent(nextSlug)}`).then(async (res) => {
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.error || "Could not load survey.");
         return data;
       }),
     ]);
-    house = (housesPayload.houses || []).find((item) => item.slug === slug) || null;
+    house = (housesPayload.houses || []).find((item) => item.slug === nextSlug) || null;
     if (!house) {
-      house = { slug, address: slug };
-      ledeEl.textContent = "This slug is not in the current house list, but answers can still be saved.";
+      house = { slug: nextSlug, address: nextSlug };
+      show(missingEl, true);
+    } else {
+      show(missingEl, false);
     }
     questions = surveyPayload.questions || [];
     sections = surveyPayload.sections || [];
     answersById = new Map((surveyPayload.answers || []).map((a) => [a.questionId, a]));
-    render();
+    // Unknown slugs still get the fill UI; missing is an informational note only.
+    show(pickEl, false);
+    if (!questions.length) {
+      show(emptyEl, true);
+      listEl.hidden = true;
+      if (saveBtn) saveBtn.disabled = true;
+    } else {
+      show(emptyEl, false);
+      listEl.hidden = false;
+      if (saveBtn) saveBtn.disabled = false;
+      listEl.innerHTML = groupQuestionsBySection(questions, sections).map(sectionBlockHtml).join("");
+    }
+    if (backLink) backLink.href = detailsUrl(house.slug);
+    if (typeof onHouseTitle === "function") onHouseTitle(house.address || house.slug);
   } catch (err) {
     showSave("error", err.message || "Could not load survey.");
-    house = { slug, address: slug };
+    house = { slug: nextSlug, address: nextSlug };
     questions = [];
     sections = [];
-    render();
+    answersById = new Map();
+    show(pickEl, false);
+    show(missingEl, true);
+    show(emptyEl, true);
+    listEl.hidden = true;
+    if (saveBtn) saveBtn.disabled = true;
   }
 }
 
-init();
+export function initSurveyFill({ onHouseTitle: titleCb } = {}) {
+  onHouseTitle = titleCb || null;
+  bind();
+  render();
+  return {
+    loadHouse,
+    getSlug: () => house?.slug || "",
+  };
+}

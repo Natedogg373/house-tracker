@@ -361,20 +361,31 @@ describe("survey API", () => {
     fs.rmSync(dbPath, { force: true });
   });
 
-  it("serves survey setup and fill pages", async () => {
+  it("serves the unified Survey tab with Fill/View default and Edit mode", async () => {
     const setup = await fetch(`http://127.0.0.1:${port}/survey`);
     const setupHtml = await setup.text();
     assert.equal(setup.status, 200);
     assert.match(setupHtml, /House Survey/);
+    assert.match(setupHtml, /data-mode="fill"/);
+    assert.match(setupHtml, /data-mode="edit"/);
+    assert.match(setupHtml, /id="survey-house-input"/);
+    assert.match(setupHtml, /id="save-answers"/);
     assert.match(setupHtml, /id="add-question"/);
     assert.match(setupHtml, /id="add-section"/);
     assert.match(setupHtml, /href="\/survey"/);
+    assert.match(setupHtml, /survey-page\.js/);
+  });
 
-    const fill = await fetch(`http://127.0.0.1:${port}/survey/fill?house=demo`);
-    const fillHtml = await fill.text();
-    assert.equal(fill.status, 200);
-    assert.match(fillHtml, /id="save-answers"/);
-    assert.match(fillHtml, /House survey/);
+  it("redirects legacy /survey/fill to the Survey tab with house query", async () => {
+    const fill = await fetch(`http://127.0.0.1:${port}/survey/fill?house=demo`, {
+      redirect: "manual",
+    });
+    assert.equal(fill.status, 302);
+    assert.equal(fill.headers.get("location"), "/survey?house=demo");
+
+    const bare = await fetch(`http://127.0.0.1:${port}/survey/fill`, { redirect: "manual" });
+    assert.equal(bare.status, 302);
+    assert.equal(bare.headers.get("location"), "/survey");
   });
 
   it("creates, lists, updates, reorders, and archives questions over HTTP", async () => {

@@ -54,7 +54,8 @@ describe("survey expand UI helpers", () => {
 
   it("fill/setup/details JS keep expanded body free of type/section display rows", () => {
     const fill = fs.readFileSync(path.join(root, "public/js/survey-fill.js"), "utf8");
-    const setup = fs.readFileSync(path.join(root, "public/js/survey.js"), "utf8");
+    const setup = fs.readFileSync(path.join(root, "public/js/survey-edit.js"), "utf8");
+    const page = fs.readFileSync(path.join(root, "public/js/survey-page.js"), "utf8");
     const dashboard = fs.readFileSync(path.join(root, "public/js/dashboard.js"), "utf8");
     const css = fs.readFileSync(path.join(root, "public/css/styles.css"), "utf8");
 
@@ -64,6 +65,8 @@ describe("survey expand UI helpers", () => {
 
     assert.match(setup, /collapseToggleHtml/);
     assert.doesNotMatch(setup, /survey-type-hint/);
+    assert.match(page, /survey-mode-btn|data-mode/);
+    assert.match(page, /initSurveyFill|initSurveyEdit/);
 
     assert.match(dashboard, /collapseToggleHtml/);
     assert.doesNotMatch(dashboard, /survey-answer-meta/);

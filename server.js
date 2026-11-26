@@ -74,8 +74,13 @@ app.get("/survey", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "survey.html"));
 });
 
-app.get("/survey/fill", (_req, res) => {
-  res.sendFile(path.join(__dirname, "public", "survey-fill.html"));
+// Legacy fill URL → unified Survey tab (Fill / View is the default mode).
+app.get("/survey/fill", (req, res) => {
+  const params = new URLSearchParams();
+  const house = typeof req.query.house === "string" ? req.query.house.trim() : "";
+  if (house) params.set("house", house);
+  const query = params.toString();
+  res.redirect(302, query ? `/survey?${query}` : "/survey");
 });
 
 app.get("/api/health", (_req, res) => {
