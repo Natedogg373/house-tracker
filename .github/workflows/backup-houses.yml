@@ -1,0 +1,53 @@
+name: Backup house data
+
+on:
+  schedule:
+    # Nightly at 08:15 UTC
+    - cron: "15 8 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: backup-houses
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Join tailnet
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Fetch export snapshot
+        env:
+          EXPORT_URL: https://projectserver.tail6f8e33.ts.net/api/data/export
+        run: |
+          mkdir -p data/backup
+          curl -fsS --max-time 120 "$EXPORT_URL" -o data/backup/houses-export.json
+          # Pretty-print for readable diffs (fail closed if JSON is invalid).
+          python3 -c 'import json,sys; p="data/backup/houses-export.json"; data=json.load(open(p)); json.dump(data, open(p,"w"), indent=2, sort_keys=True); open(p,"a").write("\n")'
+          DATE=$(date -u +%Y-%m-%d)
+          cp data/backup/houses-export.json "data/backup/houses-export-${DATE}.json"
+          # Keep only the latest dated file plus the rolling snapshot.
+          ls -1t data/backup/houses-export-*.json 2>/dev/null | tail -n +8 | xargs -r rm -f
+
+      - name: Commit snapshot
+        run: |
+          git config user.name "house-tracker-backup[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/backup
+          if git diff --cached --quiet; then
+            echo "No backup changes."
+            exit 0
+          fi
+          git commit -m "chore: nightly house data backup [skip ci]"
+          git push

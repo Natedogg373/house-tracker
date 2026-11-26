@@ -45,7 +45,12 @@ describe("loadHousesFromDir", () => {
 describe("resolveHouses", () => {
   it("falls back to sample data when houses dir is empty", () => {
     const empty = fs.mkdtempSync(path.join(os.tmpdir(), "empty-houses-"));
-    const result = resolveHouses({ housesDir: empty, sampleDir: SAMPLE_DIR, useSampleData: "" });
+    const result = resolveHouses({
+      housesDir: empty,
+      sampleDir: SAMPLE_DIR,
+      useSampleData: "",
+      useDb: false,
+    });
     assert.equal(result.source, "sample");
     assert.equal(result.houses.length, 5);
   });
@@ -61,7 +66,12 @@ describe("resolveHouses", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "live-houses-"));
     fs.writeFileSync(path.join(dir, "index.json"), "[]");
     fs.writeFileSync(path.join(dir, "a.json"), JSON.stringify({ address: "A St", listPrice: 1 }));
-    const result = resolveHouses({ housesDir: dir, sampleDir: SAMPLE_DIR, useSampleData: "" });
+    const result = resolveHouses({
+      housesDir: dir,
+      sampleDir: SAMPLE_DIR,
+      useSampleData: "",
+      useDb: false,
+    });
     assert.equal(result.source, "houses");
     assert.equal(result.houses.length, 1);
   });

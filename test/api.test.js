@@ -262,11 +262,12 @@ describe("API", () => {
     assert.equal(data.code, "WEBHOOK_FAILED");
   });
 
-  it("ranks sample houses alphabetically when rankings.json is missing", async () => {
-    fs.rmSync(process.env.RANKINGS_PATH, { force: true });
+  it("ranks sample houses alphabetically when rankings are empty", async () => {
+    const { saveRankings } = require("../lib/rankings");
+    saveRankings([]);
     const { res, data } = await jsonRequest(port, "/api/rankings");
     assert.equal(res.status, 200);
-    assert.equal(data.source, "default");
+    assert.equal(data.source, "db");
     assert.deepEqual(data.slugs, [
       "123-maple-demo-st-dallas-tx",
       "321-willow-sold-st-dallas-tx",
@@ -285,7 +286,7 @@ describe("API", () => {
     assert.match(data.error, /slugs/);
   });
 
-  it("writes rankings.json and returns the merged slug order", async () => {
+  it("writes rankings to SQLite and returns the merged slug order", async () => {
     const { res, data } = await jsonRequest(port, "/api/rankings", {
       method: "POST",
       body: JSON.stringify({
@@ -302,12 +303,12 @@ describe("API", () => {
       "654-birch-closed-ave-garland-tx",
     ]);
 
-    const saved = JSON.parse(fs.readFileSync(process.env.RANKINGS_PATH, "utf8"));
-    assert.deepEqual(saved, data.slugs);
+    const { loadRankings } = require("../lib/rankings");
+    assert.deepEqual(loadRankings().slugs, data.slugs);
 
     const again = await jsonRequest(port, "/api/rankings");
     assert.equal(again.res.status, 200);
-    assert.equal(again.data.source, "file");
+    assert.equal(again.data.source, "db");
     assert.deepEqual(again.data.slugs, data.slugs);
   });
 
@@ -368,7 +369,8 @@ describe("API", () => {
   });
 
   it("moves a house to not interested and lists it on the graveyard", async () => {
-    fs.rmSync(process.env.INTEREST_PATH, { force: true });
+    const { saveInterest, emptyInterest, loadInterest } = require("../lib/interest");
+    saveInterest(emptyInterest());
     const { res, data } = await jsonRequest(port, "/api/interest/not-interested", {
       method: "POST",
       body: JSON.stringify({ slug: "123-maple-demo-st-dallas-tx" }),
@@ -378,11 +380,12 @@ describe("API", () => {
     assert.equal(data.interest.notInterested[0].slug, "123-maple-demo-st-dallas-tx");
     assert.match(data.interest.notInterested[0].since, /^\d{4}-\d{2}-\d{2}$/);
 
-    const saved = JSON.parse(fs.readFileSync(process.env.INTEREST_PATH, "utf8"));
+    const saved = loadInterest();
     assert.deepEqual(
       saved.notInterested.map((row) => row.slug),
       ["123-maple-demo-st-dallas-tx"]
     );
+    assert.equal(saved.source, "db");
 
     const grave = await jsonRequest(port, "/api/graveyard");
     assert.equal(grave.res.status, 200);
@@ -394,7 +397,8 @@ describe("API", () => {
   });
 
   it("POSTs a reactivate webhook body without changing the add-house { input } contract", async () => {
-    fs.rmSync(process.env.INTEREST_PATH, { force: true });
+    const { saveInterest, emptyInterest, loadInterest } = require("../lib/interest");
+    saveInterest(emptyInterest());
     const marked = await jsonRequest(port, "/api/interest/not-interested", {
       method: "POST",
       body: JSON.stringify({ slug: "123-maple-demo-st-dallas-tx" }),
@@ -442,7 +446,7 @@ describe("API", () => {
     });
     assert.equal(received[1].authorization, "Bearer test-token");
 
-    const saved = JSON.parse(fs.readFileSync(process.env.INTEREST_PATH, "utf8"));
+    const saved = loadInterest();
     assert.deepEqual(saved.notInterested, []);
     assert.equal(saved.pendingReactivation[0].slug, "123-maple-demo-st-dallas-tx");
 

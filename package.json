@@ -8,6 +8,7 @@
     "start": "node server.js",
     "test": "node --test test/*.test.js",
     "survey:import": "node scripts/survey-import.js",
+    "houses:import": "node scripts/houses-import.js",
     "mock-webhook": "node scripts/mock-webhook.js"
   },
   "engines": {

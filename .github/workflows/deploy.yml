@@ -3,6 +3,9 @@ name: Deploy
 on:
   push:
     branches: [main]
+    paths-ignore:
+      # Nightly DB snapshots must not redeploy Coolify.
+      - "data/backup/**"
   workflow_dispatch:
 
 concurrency:
@@ -12,6 +15,8 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Also honor [skip ci] / [ci skip] in the commit subject (backup workflow).
+    if: ${{ !contains(github.event.head_commit.message || '', '[skip ci]') && !contains(github.event.head_commit.message || '', '[ci skip]') }}
     steps:
       - name: Join tailnet
         uses: tailscale/github-action@v4
