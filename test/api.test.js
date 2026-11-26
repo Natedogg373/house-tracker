@@ -114,6 +114,8 @@ describe("API", () => {
     assert.match(html, /href="\/graveyard"/);
     assert.match(html, /href="\/map"/);
     assert.match(html, /House Details/);
+    assert.match(html, /\/js\/rankings\.js/);
+    assert.match(html, /up\/down arrows/);
   });
 
   it("serves the graveyard page", async () => {
