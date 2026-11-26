@@ -2782,3 +2782,262 @@ textarea.survey-input {
     justify-content: center;
   }
 }
+
+/* —— Prerequisites —— */
+.prereq-summary {
+  margin: 0.65rem 0 0;
+  font-weight: 600;
+  color: var(--forest);
+}
+
+.metric.prereq-green {
+  border-color: #86efac;
+  border-width: 2px;
+  background: #f0fdf4;
+}
+
+.metric.prereq-yellow {
+  border-color: #fcd34d;
+  border-width: 2px;
+  background: #fffbeb;
+}
+
+.metric.prereq-red {
+  border-color: #fca5a5;
+  border-width: 2px;
+  background: #fef2f2;
+}
+
+.metric.prereq-neutral {
+  border-color: #cbd5e1;
+  border-width: 2px;
+  background: #f8fafc;
+}
+
+.prereq-cue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.4rem;
+  min-width: 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  vertical-align: middle;
+}
+
+.metric.prereq-green .prereq-cue {
+  color: var(--under);
+}
+
+.metric.prereq-yellow .prereq-cue {
+  color: var(--pending);
+}
+
+.metric.prereq-red .prereq-cue {
+  color: var(--over);
+}
+
+.metric.prereq-neutral .prereq-cue {
+  color: var(--muted);
+}
+
+#prerequisites-page {
+  padding: 1.25rem 6vw 2.5rem;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.prereq-intro h1 {
+  margin-top: 0;
+}
+
+.prereq-settings,
+.prereq-list-panel,
+.prereq-actions-panel {
+  margin-top: 1rem;
+}
+
+.prereq-tolerance-row,
+.prereq-threshold-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.prereq-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.prereq-input:focus {
+  outline: 2px solid var(--forest-2);
+  outline-offset: 1px;
+}
+
+.prereq-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.prereq-unit {
+  color: var(--muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  min-width: 2.5rem;
+}
+
+.prereq-hint,
+.prereq-item-hint,
+.prereq-age-hint,
+.prereq-skipped {
+  margin: 0.45rem 0 0;
+  font-size: 0.9rem;
+}
+
+.prereq-list-title {
+  margin-top: 0;
+}
+
+.prereq-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.prereq-item {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 0.9rem 1rem;
+}
+
+.prereq-item-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 0.85rem 1rem;
+  align-items: end;
+}
+
+.prereq-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 44px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.prereq-toggle input {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  accent-color: var(--forest);
+  cursor: pointer;
+}
+
+.prereq-toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.prereq-name {
+  font-size: 1.02rem;
+}
+
+.prereq-dir {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.prereq-threshold-field {
+  margin: 0;
+}
+
+.prereq-status {
+  margin: 0 0 0.75rem;
+  min-height: 1.25rem;
+}
+
+.prereq-status.ok {
+  color: var(--under);
+}
+
+.prereq-status.warn {
+  color: var(--pending);
+}
+
+.prereq-status.error {
+  color: var(--over);
+}
+
+.prereq-actions {
+  flex-wrap: wrap;
+}
+
+.prereq-actions .button-link-solid,
+.prereq-actions button {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+@media (max-width: 639px) {
+  .prereq-item-main {
+    grid-template-columns: 1fr;
+  }
+
+  #prerequisites-page {
+    padding: 1rem 4vw 2rem;
+  }
+}
+
+.school-row.prereq-green,
+.school-row.prereq-yellow,
+.school-row.prereq-red,
+.school-row.prereq-neutral {
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 12px;
+  padding: 0.65rem 0.75rem;
+}
+
+.school-row.prereq-green {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.school-row.prereq-yellow {
+  border-color: #fcd34d;
+  background: #fffbeb;
+}
+
+.school-row.prereq-red {
+  border-color: #fca5a5;
+  background: #fef2f2;
+}
+
+.school-row.prereq-neutral {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.school-row .prereq-cue {
+  margin-left: 0.35rem;
+}
+
+.prereq-select {
+  appearance: auto;
+}

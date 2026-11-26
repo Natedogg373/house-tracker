@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Prerequisites · House Tracker</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <img src="/favicon.svg" alt="" />
+        <span>House Tracker</span>
+      </a>
+      <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+      <nav id="site-nav" class="nav" aria-label="Primary">
+        <a href="/">House Details</a>
+        <a href="/map">Map</a>
+        <a href="/rankings">Rankings</a>
+        <a href="/survey">Survey</a>
+        <a href="/prerequisites" aria-current="page">Prerequisites</a>
+        <a href="/graveyard">Graveyard</a>
+        <a href="/add">Add house</a>
+        <a href="/about">About</a>
+      </nav>
+    </header>
+
+    <main id="prerequisites-page">
+      <section class="panel prereq-intro">
+        <h1>Prerequisites</h1>
+        <p class="lede">
+          Set hard filters that mirror Zillow search criteria. Enabled rows color House Details
+          metrics green, yellow, or red against each threshold.
+        </p>
+      </section>
+
+      <section class="panel prereq-settings">
+        <label class="field prereq-tolerance" for="tolerance-input">
+          Tolerance
+          <span class="prereq-tolerance-row">
+            <input
+              id="tolerance-input"
+              class="prereq-input"
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              inputmode="decimal"
+              aria-describedby="tolerance-hint"
+            />
+            <span class="prereq-unit" aria-hidden="true">%</span>
+          </span>
+        </label>
+        <p id="tolerance-hint" class="muted prereq-hint">
+          Yellow when a value is within ± this percent of the threshold. Default 10%.
+        </p>
+      </section>
+
+      <section class="panel prereq-list-panel">
+        <h2 class="prereq-list-title">Criteria</h2>
+        <ul id="prereq-list" class="prereq-list" aria-label="Prerequisite criteria"></ul>
+        <p id="prereq-skipped" class="muted prereq-skipped" hidden></p>
+      </section>
+
+      <section class="panel prereq-actions-panel">
+        <p id="prereq-status" class="prereq-status muted" role="status" aria-live="polite"></p>
+        <div class="actions prereq-actions">
+          <button type="button" id="prereq-save" class="button-link-solid">Save prerequisites</button>
+          <a class="button-link" href="/">Back to House Details</a>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/js/nav.js"></script>
+    <script type="module" src="/js/prerequisites-page.js"></script>
+  </body>
+</html>

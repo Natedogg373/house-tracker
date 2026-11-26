@@ -43,6 +43,11 @@ const {
   maybeSeedSurveyFromFile,
   QUESTION_TYPES,
 } = require("./lib/survey");
+const {
+  loadPrerequisites,
+  savePrerequisites,
+  scoreHouse,
+} = require("./lib/prerequisites");
 
 const app = express();
 
@@ -72,6 +77,10 @@ app.get("/map", (_req, res) => {
 
 app.get("/survey", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "survey.html"));
+});
+
+app.get("/prerequisites", (_req, res) => {
+  res.sendFile(path.join(__dirname, "public", "prerequisites.html"));
 });
 
 // Legacy fill URL → unified Survey tab (Fill / View is the default mode).
@@ -526,6 +535,44 @@ app.get("/api/survey/status", (req, res) => {
     return res.json({ statuses: houseAnswerSummaries(slugs) });
   } catch (err) {
     return surveyError(res, err, "Failed to load survey status.");
+  }
+});
+
+app.get("/api/prerequisites", (_req, res) => {
+  try {
+    return res.json(loadPrerequisites());
+  } catch (err) {
+    console.error("[api] prerequisites load error:", err);
+    return res.status(500).json({ error: err.message || "Failed to load prerequisites." });
+  }
+});
+
+app.put("/api/prerequisites", (req, res) => {
+  try {
+    const saved = savePrerequisites(req.body || {});
+    return res.json({ ok: true, ...saved });
+  } catch (err) {
+    const status = err.statusCode || 500;
+    if (status >= 500) console.error("[api] prerequisites save error:", err);
+    return res.status(status).json({
+      error: err.message || "Failed to save prerequisites.",
+      code: err.code,
+    });
+  }
+});
+
+app.get("/api/prerequisites/score/:slug", (req, res) => {
+  try {
+    const slug = String(req.params.slug || "").trim();
+    const result = currentHouses();
+    const house = result.houses.find((item) => item.slug === slug);
+    if (!house) return res.status(404).json({ error: "House not found." });
+    const config = loadPrerequisites();
+    const schools = resolveSchools({ source: result.source }).schools;
+    return res.json({ slug, ...scoreHouse(house, config, { schools }), config });
+  } catch (err) {
+    console.error("[api] prerequisites score error:", err);
+    return res.status(500).json({ error: err.message || "Failed to score house." });
   }
 });
 

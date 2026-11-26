@@ -11,3 +11,4 @@ data/survey.db
 data/survey.db-wal
 data/survey.db-shm
 data/survey.db.tmp
+# Prerequisites config lives in the same SQLite file as the survey.

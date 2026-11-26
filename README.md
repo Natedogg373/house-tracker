@@ -34,7 +34,7 @@ Copy `.env.example` to `.env`. `.env` is gitignored; never commit secrets.
 | `INTEREST_PATH` | Optional override of not-interested / pending reactivation (default `data/interest.json`). |
 | `GEOFENCES_PATH` | Optional override of saved map areas (default `data/geofences.json`). |
 | `SCHOOLS_PATH` | Optional override of school pins (default `data/schools.json`). Sample mode uses `data/sample/schools.json`. |
-| `SURVEY_DB_PATH` | SQLite path for House Survey questions and answers (default `data/survey.db`). On Coolify, set this to a persistent volume path such as `/persist/survey.db`. |
+| `SURVEY_DB_PATH` | SQLite path for House Survey questions/answers and Prerequisites settings (default `data/survey.db`). On Coolify, set this to a persistent volume path such as `/persist/survey.db`. |
 | `NOMINATIM_USER_AGENT` | Override the Nominatim User-Agent (a default identifying this app is already set). |
 | `GEOCODE_CACHE_PATH` | Override the geocode cache file (default `data/geocode-cache.json`). |
 | `GEOCODE_PREFETCH` | Set `false` to skip background geocoding of every loaded address. |
@@ -173,6 +173,10 @@ Commit `data/geofences.json` so the areas are shared.
 
 `data/sample/` has five clearly fake houses (Demo / Sample / Placeholder / Sold / Closed addresses) plus `data/sample/schools.json` with fake school pins and coordinates. They are used only when `data/houses/` has no house files, or when `USE_SAMPLE_DATA=true`. Do not copy that sample into `data/houses/` or `data/schools.json`.
 
+### Prerequisites
+
+Hard filters that mirror Zillow search criteria, stored in the same SQLite file as the survey (`SURVEY_DB_PATH`). The **Prerequisites** tab (`/prerequisites`) covers Price (max), Square footage, Beds, Baths, Garage (`garageSpaces`), Lot size (`lotAcres`), Year built, HOA (`hoaMonthly` max; 0 = no HOA), Stories (max), Pool (require / exclude / don't care), Property tax (`propertyTaxAnnual` max), and minimum school ratings for elementary / middle / high (from the house’s `schoolIds` + `data/schools.json`). Each row has an enable toggle (all disabled by default) and a threshold; one global tolerance % (default 10) paints House Details metrics green / yellow / red (plus a ✓ / ~ / ✗ cue). School ratings use a fixed ±1 point yellow band instead of the percent tolerance. Missing fields stay neutral grey. `daysOnMarket` is shown on House Details when present but has no criterion. API: `GET/PUT /api/prerequisites`.
+
 ### House Survey
 
 Standardized visit checklist stored in SQLite (`SURVEY_DB_PATH`, default `data/survey.db`; gitignored). The Survey nav tab (`/survey`) defaults to **Fill / View**: searchable address picker (active houses, matching House Details) and the collapsible fill UI (short title crossfades to full question; answer + notes; rating radio pills). Toggle **Edit survey** to organize questions into **sections**, tap **+** / **Add section**, then edit short title, full question text, answer type, and type-specific options (rating max, number unit, multiple-choice choices). Types: yes/no, number, rating 1..n, date, short text, multiple choice. Reorder sections and questions with ↑/↓; delete soft-archives a question so old answers remain viewable. Unassigned questions sit under **Other**.
@@ -189,11 +193,12 @@ JSON API: `GET/POST /api/survey/questions`, `PUT /api/survey/questions/:id`, `DE
 - **Map** (`/map`) — Leaflet + OSM. Active house pins (not sold, not not-interested), school pins for the selected level, a school legend, and drawable geofences. Hover a house pin for photo, price, address, and that level’s school; click the pin or tooltip to open House Details.
 - **Rankings** (`/rankings`) — drag houses into an order, or type a rank number (that house moves there and the rest shift). Saved to `data/rankings.json`. Sold and not-interested houses are excluded. Click a house (not the handle or rank input) to open House Details. Each row links to fill that house’s survey.
 - **Survey** (`/survey`) — fill/view per house by default; toggle Edit survey for the shared questionnaire. Deep link: `/survey?house=<slug>` (legacy `/survey/fill` redirects).
+- **Prerequisites** (`/prerequisites`) — enable Zillow-style thresholds (price, sqft, beds, baths, garage, lot, year built) and a global tolerance %; colors matching House Details metric boxes.
 - **Graveyard** (`/graveyard`) — **Sold** (word match, so `Sold (10/1/2026)` counts) plus **No longer interested**. Sold cards show original list price, lowest list price, sale price (or Unknown), and days on market. Newest `soldDate` first; otherwise by address.
 - **Add house** (`/add`) — submit a Zillow URL or street address to the bot webhook.
 - **About** (`/about`) — what the project is, how the bot / GitHub JSON / web app fit together, and the plan to host on Cloudflare Pages with a public landing and a password-gated app.
 
-Nav on every page: House Details, Map, Rankings, Survey, Graveyard, Add house, About.
+Nav on every page: House Details, Map, Rankings, Survey, Prerequisites, Graveyard, Add house, About.
 
 ## Webhook contract
 
@@ -296,12 +301,12 @@ The process **writes** these files under `data/` (JSON via temp file then `renam
 - `data/interest.json` — not-interested / pending reactivation (`lib/interest.js`). Override with `INTEREST_PATH`.
 - `data/geofences.json` — Map areas (`lib/geofences.js`). Override with `GEOFENCES_PATH`.
 - `data/geocode-cache.json` — Nominatim cache (`lib/geocode.js`, gitignored). Override with `GEOCODE_CACHE_PATH`.
-- `data/survey.db` — House Survey sections, questions, and per-house answers (`lib/survey.js`, gitignored). Override with `SURVEY_DB_PATH`.
+- `data/survey.db` — House Survey sections, questions, per-house answers, and Prerequisites config (`lib/survey.js`, `lib/prerequisites.js`, gitignored). Override with `SURVEY_DB_PATH`.
 - `data/survey-seed.json` — bundled walkthrough checklist imported once when the survey DB has no questions.
 
 Do **not** bind-mount the whole `data/` directory over the checkout. That would hide `data/houses/` from bot-driven deploys. Because JSON saves `rename` a sibling `.tmp` file, persist a **directory**, not a single-file bind (rename across filesystems fails).
 
-**Persistent storage (survey):** visit notes are irreplaceable. Point `SURVEY_DB_PATH` at a Coolify persistent volume (for example `/persist/survey.db`) so the SQLite file survives redeploys. Railpack does not need a native SQLite addon — the app uses Node’s built-in `node:sqlite` (Node **≥ 22.5**).
+**Persistent storage (survey + prerequisites):** visit notes and prerequisite thresholds are irreplaceable. Point `SURVEY_DB_PATH` at a Coolify persistent volume (for example `/persist/survey.db`) so the SQLite file survives redeploys. Railpack does not need a native SQLite addon — the app uses Node’s built-in `node:sqlite` (Node **≥ 22.5**).
 
 In Coolify, mount a persistent volume at a writable directory (for example `/persist`) and set:
 
