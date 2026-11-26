@@ -10,6 +10,12 @@
   "beds": 3,
   "baths": 2.5,
   "lotAcres": 0.09,
+  "garageSpaces": 2,
+  "hoaMonthly": 100,
+  "stories": 2,
+  "hasPool": false,
+  "propertyTaxAnnual": 14028,
+  "daysOnMarket": null,
   "lastUpdated": "2026-11-22",
   "priceHistory": [
     {
