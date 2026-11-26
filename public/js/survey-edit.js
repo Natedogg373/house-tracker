@@ -8,11 +8,12 @@ import {
   typeSelectHtml,
 } from "./survey-shared.js";
 
-const listEl = document.querySelector("#question-list");
-const emptyEl = document.querySelector("#empty");
-const addBtn = document.querySelector("#add-question");
-const addSectionBtn = document.querySelector("#add-section");
-const saveStatus = document.querySelector("#save-status");
+const root = document.querySelector("#survey-edit");
+const listEl = root?.querySelector("#edit-question-list");
+const emptyEl = root?.querySelector("#edit-empty");
+const addBtn = root?.querySelector("#add-question");
+const addSectionBtn = root?.querySelector("#add-section");
+const saveStatus = root?.querySelector("#edit-save-status");
 
 let questions = [];
 let sections = [];
@@ -564,7 +565,11 @@ function bind() {
   });
 }
 
-async function init() {
+export async function initSurveyEdit() {
+  if (!root || !listEl || !addBtn) {
+    console.warn("[survey-edit] missing edit panel elements");
+    return;
+  }
   bind();
   try {
     await reload();
@@ -572,5 +577,3 @@ async function init() {
     showSave("error", err.message || "Could not load survey questions.");
   }
 }
-
-init();

@@ -33,33 +33,91 @@
       </nav>
     </header>
 
-    <main>
+    <main id="survey-page">
       <section class="panel survey-intro">
         <div class="survey-intro-row">
           <div>
             <h1>House Survey</h1>
-            <p class="lede">
-              Build a shared checklist for visits. Group questions into sections, then fill answers
-              per house with notes from walkthroughs.
+            <p class="lede" id="survey-lede">
+              Pick a house to fill visit answers, or switch to Edit survey to change the checklist.
             </p>
           </div>
+          <div
+            class="survey-mode-toggle"
+            role="group"
+            aria-label="Survey mode"
+          >
+            <button type="button" class="survey-mode-btn is-active" data-mode="fill" aria-pressed="true">
+              Fill / View
+            </button>
+            <button type="button" class="survey-mode-btn" data-mode="edit" aria-pressed="false">
+              Edit survey
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="survey-fill" class="survey-mode-panel" data-mode-panel="fill">
+        <section class="panel survey-fill-toolbar">
+          <label class="field survey-house-picker">
+            Address
+            <input
+              id="survey-house-input"
+              class="survey-input"
+              type="search"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-controls="survey-house-list"
+              placeholder="Search addresses…"
+              autocomplete="off"
+              enterkeyhint="search"
+            />
+          </label>
+          <ul id="survey-house-list" class="survey-house-list" role="listbox" hidden></ul>
+          <div class="actions house-actions survey-fill-actions">
+            <a id="back-details" class="button-link" href="/">House Details</a>
+            <button type="button" id="save-answers" disabled>Save answers</button>
+          </div>
+          <p id="fill-save-status" class="banner" hidden></p>
+        </section>
+
+        <section id="fill-pick" class="panel empty">
+          <h2>Pick a house</h2>
+          <p>Search and select an address above to fill or review its survey.</p>
+        </section>
+
+        <section id="fill-empty" class="panel empty hidden">
+          <h2>No survey questions</h2>
+          <p>Switch to <strong>Edit survey</strong> to add the visit checklist first.</p>
+        </section>
+
+        <p id="fill-missing" class="banner sample hidden">
+          This address isn’t in the current active list, but answers can still be saved.
+        </p>
+
+        <ol id="fill-question-list" class="survey-section-list" aria-label="Survey answers" hidden></ol>
+      </section>
+
+      <section id="survey-edit" class="survey-mode-panel" data-mode-panel="edit" hidden>
+        <section class="panel survey-edit-toolbar">
           <div class="survey-intro-actions">
             <button type="button" id="add-section" class="button-link">Add section</button>
             <button type="button" id="add-question" class="survey-add" aria-label="Add question">+</button>
           </div>
-        </div>
-        <p id="save-status" class="banner" hidden></p>
-      </section>
+          <p id="edit-save-status" class="banner" hidden></p>
+        </section>
 
-      <section id="empty" class="panel empty">
-        <h2>No questions yet</h2>
-        <p>Tap + to add a question, or Add section to start organizing the checklist.</p>
-      </section>
+        <section id="edit-empty" class="panel empty">
+          <h2>No questions yet</h2>
+          <p>Tap + to add a question, or Add section to start organizing the checklist.</p>
+        </section>
 
-      <ol id="question-list" class="survey-section-list" aria-label="Survey sections" hidden></ol>
+        <ol id="edit-question-list" class="survey-section-list" aria-label="Survey sections" hidden></ol>
+      </section>
     </main>
 
     <script type="module" src="/js/nav.js"></script>
-    <script type="module" src="/js/survey.js"></script>
+    <script type="module" src="/js/survey-page.js"></script>
   </body>
 </html>

@@ -12,8 +12,41 @@ export const TYPE_LABELS = {
 export const OTHER_SECTION_TITLE = "Other";
 export const TITLE_FALLBACK_MAX = 72;
 
+/** Fill/view URL on the unified Survey tab (default mode). */
 export function surveyFillUrl(slug) {
-  return `/survey/fill?house=${encodeURIComponent(slug)}`;
+  const params = new URLSearchParams();
+  if (slug) params.set("house", String(slug));
+  const query = params.toString();
+  return query ? `/survey?${query}` : "/survey";
+}
+
+export function surveyEditUrl(slug = "") {
+  const params = new URLSearchParams();
+  params.set("mode", "edit");
+  if (slug) params.set("house", String(slug));
+  return `/survey?${params.toString()}`;
+}
+
+export function surveyPageUrl({ mode = "fill", house = "" } = {}) {
+  const params = new URLSearchParams();
+  if (mode === "edit") params.set("mode", "edit");
+  if (house) params.set("house", String(house));
+  const query = params.toString();
+  return query ? `/survey?${query}` : "/survey";
+}
+
+export function parseSurveyUrl(href = "") {
+  let url;
+  try {
+    url = new URL(href, "http://local.invalid");
+  } catch {
+    return { mode: "fill", house: "" };
+  }
+  const params = url.searchParams;
+  const modeRaw = String(params.get("mode") || "").trim().toLowerCase();
+  const mode = modeRaw === "edit" || modeRaw === "setup" ? "edit" : "fill";
+  const house = String(params.get("house") || "").trim();
+  return { mode, house };
 }
 
 export function questionDisplayTitle(question, maxLen = TITLE_FALLBACK_MAX) {
