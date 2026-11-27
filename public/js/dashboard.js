@@ -30,6 +30,16 @@ import {
   sectionProgress,
   surveyFillUrl,
 } from "./survey-shared.js";
+import {
+  METRIC_CRITERION_IDS,
+  SCHOOL_LEVEL_CRITERION_IDS,
+  STATUS_ICONS,
+  STATUS_LABELS,
+  hasOwnField,
+  parseBooleanField,
+  scoreHouse as scoreHousePrereqs,
+  summaryText as prereqSummaryText,
+} from "./prerequisites-shared.js";
 
 const select = document.querySelector("#house-select");
 const includeToggle = document.querySelector("#include-not-interested");
@@ -42,6 +52,7 @@ const insideBadge = document.querySelector("#inside-badge");
 const interestBadge = document.querySelector("#interest-badge");
 const notInterestedBtn = document.querySelector("#not-interested-btn");
 const budgetBanner = document.querySelector("#budget-banner");
+const prereqSummaryEl = document.querySelector("#prereq-summary");
 const metricsEl = document.querySelector("#metrics");
 const photoEl = document.querySelector("#photo");
 const photoFallback = document.querySelector("#photo-fallback");
@@ -60,6 +71,7 @@ const surveyAnswersList = document.querySelector("#survey-answers-list");
 
 const STORAGE_KEY = "house-tracker:selected";
 let surveyCache = { slug: "", questions: [], sections: [], answers: [], status: null };
+let prereqConfig = null;
 
 let chart;
 let payload = {
@@ -70,11 +82,51 @@ let payload = {
   schools: [],
 };
 
-function metric(label, value, extra = "") {
-  return `<article class="metric ${extra}">
-    <span class="label">${escapeHtml(label)}</span>
+function metric(label, value, extra = "", prereqStatus = "") {
+  const status = prereqStatus && prereqStatus !== "off" ? prereqStatus : "";
+  const classes = ["metric", extra, status ? `prereq-${status}` : ""]
+    .filter(Boolean)
+    .join(" ");
+  const cue =
+    status && STATUS_ICONS[status]
+      ? `<span class="prereq-cue" title="${escapeHtml(STATUS_LABELS[status] || status)}" aria-label="${escapeHtml(
+          STATUS_LABELS[status] || status
+        )}">${STATUS_ICONS[status]}</span>`
+      : "";
+  return `<article class="${classes}"${status ? ` data-prereq-status="${status}"` : ""}>
+    <span class="label">${escapeHtml(label)}${cue}</span>
     <div class="value">${value}</div>
   </article>`;
+}
+
+function prereqStatusForMetric(label, scored) {
+  if (!scored?.byId) return "";
+  const id = METRIC_CRITERION_IDS[label];
+  if (!id) return "";
+  return scored.byId[id]?.status || "";
+}
+
+function renderPrereqSummary(scored) {
+  if (!prereqSummaryEl) return;
+  const text = prereqSummaryText(scored?.summary);
+  if (!text) {
+    prereqSummaryEl.hidden = true;
+    prereqSummaryEl.textContent = "";
+    return;
+  }
+  prereqSummaryEl.hidden = false;
+  prereqSummaryEl.textContent = text;
+}
+
+async function loadPrerequisites() {
+  try {
+    const res = await fetch("/api/prerequisites");
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || "Could not load prerequisites.");
+    prereqConfig = data;
+  } catch {
+    prereqConfig = null;
+  }
 }
 
 function trimHistory(history) {
@@ -362,23 +414,33 @@ function renderInterestUi(house) {
   show(notInterestedBtn, !notInterested && !isSoldStatus(house.status));
 }
 
-function schoolRowHtml(school) {
+function schoolRowHtml(school, scored) {
   const ratingText = schoolRatingLabel(school.rating);
   const ratingClass = schoolRatingClass(school.rating);
   const ratingInner = /^https?:\/\//i.test(String(school.ratingSource || ""))
     ? `<a href="${escapeHtml(school.ratingSource)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ratingText)}</a>`
     : escapeHtml(ratingText);
   const district = school.district ? escapeHtml(school.district) : "District unknown";
-  return `<li class="school-row">
+  const criterionId = SCHOOL_LEVEL_CRITERION_IDS[school.level];
+  const prereqStatus = criterionId && scored?.byId?.[criterionId]?.status;
+  const status = prereqStatus && prereqStatus !== "off" ? prereqStatus : "";
+  const classes = ["school-row", status ? `prereq-${status}` : ""].filter(Boolean).join(" ");
+  const cue =
+    status && STATUS_ICONS[status]
+      ? `<span class="prereq-cue" title="${escapeHtml(STATUS_LABELS[status] || status)}" aria-label="${escapeHtml(
+          STATUS_LABELS[status] || status
+        )}">${STATUS_ICONS[status]}</span>`
+      : "";
+  return `<li class="${classes}"${status ? ` data-prereq-status="${status}"` : ""}>
     <div>
-      <p class="school-row-name">${escapeHtml(school.name)}</p>
+      <p class="school-row-name">${escapeHtml(school.name)}${cue}</p>
       <p class="school-row-meta">${escapeHtml(schoolLevelLabel(school.level))} · ${district}</p>
     </div>
     <span class="pill school-rating ${ratingClass}">${ratingInner}</span>
   </li>`;
 }
 
-function renderSchools(house) {
+function renderSchools(house, scored) {
   const schools = schoolsForHouse(house, payload.schools);
   if (!schools.length) {
     schoolsSection.hidden = true;
@@ -386,7 +448,7 @@ function renderSchools(house) {
     return;
   }
   schoolsSection.hidden = false;
-  schoolsList.innerHTML = schools.map(schoolRowHtml).join("");
+  schoolsList.innerHTML = schools.map((school) => schoolRowHtml(school, scored)).join("");
 }
 
 function surveyAnswerRowHtml(answer, question) {
@@ -540,22 +602,79 @@ function renderHouse(house) {
     ? `<a href="${escapeHtml(listingHref)}" target="_blank" rel="noopener noreferrer">View on Zillow</a>`
     : "No listing link";
 
-  const priceClass = delta ? `price ${delta.kind}` : "price";
-  metricsEl.innerHTML = [
-    metric("List price", escapeHtml(formatMoney(house.listPrice)), priceClass),
-    metric("Status", escapeHtml(house.status || "—")),
-    metric("Beds", formatNumber(house.beds)),
-    metric("Baths", formatNumber(house.baths)),
-    metric("Square feet", formatNumber(house.sqft)),
-    metric("Price / sq ft", escapeHtml(pricePerSqft(house))),
-    metric("Year built", formatYear(house.yearBuilt)),
-    metric("Age", escapeHtml(houseAge(house.yearBuilt))),
-    metric("Lot acres", house.lotAcres == null ? "—" : escapeHtml(house.lotAcres)),
-    metric("Last updated", escapeHtml(formatDate(house.lastUpdated))),
-    metric("Zillow", zillowSafe),
-  ].join("");
+  const scored = prereqConfig
+    ? scoreHousePrereqs(house, prereqConfig, { schools: payload.schools })
+    : null;
+  renderPrereqSummary(scored);
 
-  renderSchools(house);
+  const priceClass = delta ? `price ${delta.kind}` : "price";
+  const rows = [
+    metric("List price", escapeHtml(formatMoney(house.listPrice)), priceClass, prereqStatusForMetric("List price", scored)),
+    metric("Status", escapeHtml(house.status || "—")),
+    metric("Beds", formatNumber(house.beds), "", prereqStatusForMetric("Beds", scored)),
+    metric("Baths", formatNumber(house.baths), "", prereqStatusForMetric("Baths", scored)),
+    metric("Square feet", formatNumber(house.sqft), "", prereqStatusForMetric("Square feet", scored)),
+    metric("Price / sq ft", escapeHtml(pricePerSqft(house))),
+    metric("Year built", formatYear(house.yearBuilt), "", prereqStatusForMetric("Year built", scored)),
+    metric("Age", escapeHtml(houseAge(house.yearBuilt)), "", prereqStatusForMetric("Age", scored)),
+    metric("Lot acres", house.lotAcres == null ? "—" : escapeHtml(house.lotAcres), "", prereqStatusForMetric("Lot acres", scored)),
+  ];
+
+  if (hasOwnField(house, "garageSpaces")) {
+    rows.push(
+      metric(
+        "Garage / parking",
+        formatNumber(house.garageSpaces),
+        "",
+        prereqStatusForMetric("Garage / parking", scored)
+      )
+    );
+  } else if (prereqConfig?.criteria?.some((c) => c.id === "garage" && c.enabled)) {
+    // Enabled garage prereq with no field → show neutral box so missing data is visible.
+    rows.push(
+      metric("Garage / parking", "—", "", prereqStatusForMetric("Garage / parking", scored) || "neutral")
+    );
+  }
+
+  if (hasOwnField(house, "hoaMonthly")) {
+    rows.push(
+      metric("HOA / mo", escapeHtml(formatMoney(house.hoaMonthly)), "", prereqStatusForMetric("HOA / mo", scored))
+    );
+  }
+
+  if (hasOwnField(house, "stories")) {
+    rows.push(metric("Stories", formatNumber(house.stories), "", prereqStatusForMetric("Stories", scored)));
+  }
+
+  if (hasOwnField(house, "hasPool")) {
+    const pool = parseBooleanField(house.hasPool);
+    const poolText = pool == null ? "—" : pool ? "Yes" : "No";
+    rows.push(metric("Pool", poolText, "", prereqStatusForMetric("Pool", scored)));
+  }
+
+  if (hasOwnField(house, "propertyTaxAnnual")) {
+    rows.push(
+      metric(
+        "Property tax / yr",
+        escapeHtml(formatMoney(house.propertyTaxAnnual)),
+        "",
+        prereqStatusForMetric("Property tax / yr", scored)
+      )
+    );
+  }
+
+  if (hasOwnField(house, "daysOnMarket")) {
+    rows.push(metric("Days on market", formatNumber(house.daysOnMarket)));
+  }
+
+  rows.push(
+    metric("Last updated", escapeHtml(formatDate(house.lastUpdated))),
+    metric("Zillow", zillowSafe)
+  );
+
+  metricsEl.innerHTML = rows.join("");
+
+  renderSchools(house, scored);
   setMedia(house);
   renderChart(house, budget);
   if (surveyCache.slug === house.slug) renderSurveySection(house);
@@ -680,7 +799,7 @@ notInterestedBtn.addEventListener("click", async () => {
 
 async function load() {
   try {
-    const next = await fetchHouses();
+    const [next] = await Promise.all([fetchHouses(), loadPrerequisites()]);
     const keepSlug = select.value || slugFromLocation();
     payload = next;
     renderAll();
