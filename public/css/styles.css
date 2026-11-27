@@ -954,8 +954,8 @@ button.secondary,
 .rank-card,
 .rank-placeholder {
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
-  gap: 0.75rem 0.85rem;
+  grid-template-columns: auto auto auto minmax(0, 1fr);
+  gap: 0.75rem 0.65rem;
   align-items: center;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -996,8 +996,10 @@ button.secondary,
 .rank-handle {
   display: grid;
   place-items: center;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   border-radius: 12px;
   background: #f3efe7;
@@ -1017,6 +1019,44 @@ button.secondary,
   background: #e4eee8;
 }
 
+.rank-nudge {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.rank-nudge-btn {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 44px;
+  min-height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: #f3efe7;
+  color: var(--forest);
+  box-shadow: none;
+  line-height: 1;
+}
+
+.rank-nudge-btn svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  fill: currentColor;
+}
+
+.rank-nudge-btn:hover,
+.rank-nudge-btn:focus-visible {
+  background: #e4eee8;
+}
+
+.rank-nudge-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 .rank-card.is-dragging {
   position: fixed;
   z-index: 20;
@@ -1024,10 +1064,22 @@ button.secondary,
   pointer-events: none;
   box-shadow: 0 12px 32px rgba(31, 27, 22, 0.18);
   cursor: grabbing;
+  opacity: 0.96;
+  transform: scale(1.02);
 }
 
 .rank-card.is-dragging .rank-handle {
   cursor: grabbing;
+}
+
+body.is-ranking-drag {
+  cursor: grabbing;
+  user-select: none;
+  touch-action: none;
+}
+
+body.is-ranking-drag * {
+  cursor: grabbing !important;
 }
 
 .rank-number {
@@ -1125,8 +1177,8 @@ button.secondary,
 
   .rank-card,
   .rank-placeholder {
-    grid-template-columns: auto auto minmax(0, 1fr);
-    gap: 0.55rem 0.6rem;
+    grid-template-columns: auto auto auto minmax(0, 1fr);
+    gap: 0.5rem 0.45rem;
     padding: 0.75rem;
   }
 
@@ -1680,9 +1732,13 @@ body.map-page main.map-main {
 button,
 .button-link,
 .zillow-cta,
-.nav a,
-.rank-handle {
+.nav a {
   touch-action: manipulation;
+}
+
+/* Keep the grip on pointer-only so touch drag works on phones. */
+.rank-handle {
+  touch-action: none;
 }
 
 .map-tip-card,
@@ -1876,21 +1932,35 @@ button,
 
   .rank-card,
   .rank-placeholder {
-    grid-template-columns: 2.75rem 2.75rem minmax(0, 1fr);
-    gap: 0.55rem 0.65rem;
-    padding: 0.75rem;
+    grid-template-columns: 2.75rem 2.75rem 2.75rem minmax(0, 1fr);
+    gap: 0.45rem 0.4rem;
+    padding: 0.7rem;
   }
 
   .rank-link {
-    grid-template-columns: 56px minmax(0, 1fr);
+    grid-template-columns: 48px minmax(0, 1fr);
     min-width: 0;
     min-height: 44px;
   }
 
+  .rank-thumb {
+    width: 48px;
+    height: 48px;
+  }
+
   .rank-handle,
+  .rank-nudge-btn,
   .rank-input {
     width: 2.75rem;
     height: 2.75rem;
+  }
+
+  .rank-nudge {
+    gap: 0.2rem;
+  }
+
+  .rank-address {
+    font-size: 0.95rem;
   }
 
   .grave-card .actions button {
