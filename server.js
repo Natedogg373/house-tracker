@@ -48,6 +48,17 @@ const {
   savePrerequisites,
   scoreHouse,
 } = require("./lib/prerequisites");
+const {
+  maybeImportHousesFromDisk,
+  upsertHouse,
+  appendPricePoint,
+  patchHouseStatus,
+  softDeleteHouse,
+  getHouseRow,
+  exportAllData,
+  exportCsv,
+  getHousesDbPath,
+} = require("./lib/houses-db");
 
 const app = express();
 
@@ -576,6 +587,102 @@ app.get("/api/prerequisites/score/:slug", (req, res) => {
   }
 });
 
+function requireHouseDataToken(req, res) {
+  const token = process.env.HOUSE_DATA_API_TOKEN;
+  if (!token || !String(token).trim()) {
+    res.status(503).json({
+      error: "House data write API is disabled (HOUSE_DATA_API_TOKEN is unset).",
+      code: "TOKEN_UNSET",
+    });
+    return false;
+  }
+  const auth = String(req.headers.authorization || "");
+  const expected = `Bearer ${String(token).trim()}`;
+  if (auth !== expected) {
+    res.status(401).json({ error: "Unauthorized.", code: "UNAUTHORIZED" });
+    return false;
+  }
+  return true;
+}
+
+function houseDataError(res, err, fallback) {
+  const status = err.statusCode || 500;
+  if (status >= 500) console.error("[api] house data error:", err);
+  return res.status(status).json({
+    error: err.message || fallback,
+    code: err.code,
+  });
+}
+
+app.get("/api/data/export", (req, res) => {
+  try {
+    const format = String(req.query.format || "json").trim().toLowerCase();
+    if (format === "csv") {
+      res.setHeader("Content-Type", "text/csv; charset=utf-8");
+      res.setHeader("Content-Disposition", 'attachment; filename="houses-export.csv"');
+      return res.send(exportCsv());
+    }
+    return res.json(exportAllData());
+  } catch (err) {
+    return houseDataError(res, err, "Failed to export house data.");
+  }
+});
+
+app.put("/api/data/houses/:slug", (req, res) => {
+  if (!requireHouseDataToken(req, res)) return;
+  try {
+    const slug = String(req.params.slug || "").trim();
+    const house = upsertHouse(slug, req.body || {}, { actor: "api" });
+    return res.json({ ok: true, house });
+  } catch (err) {
+    return houseDataError(res, err, "Failed to upsert house.");
+  }
+});
+
+app.post("/api/data/houses/:slug/price", (req, res) => {
+  if (!requireHouseDataToken(req, res)) return;
+  try {
+    const slug = String(req.params.slug || "").trim();
+    const house = appendPricePoint(slug, req.body || {}, { actor: "api" });
+    return res.json({ ok: true, house });
+  } catch (err) {
+    return houseDataError(res, err, "Failed to append price.");
+  }
+});
+
+app.patch("/api/data/houses/:slug/status", (req, res) => {
+  if (!requireHouseDataToken(req, res)) return;
+  try {
+    const slug = String(req.params.slug || "").trim();
+    const house = patchHouseStatus(slug, req.body || {}, { actor: "api" });
+    return res.json({ ok: true, house });
+  } catch (err) {
+    return houseDataError(res, err, "Failed to update status.");
+  }
+});
+
+app.delete("/api/data/houses/:slug", (req, res) => {
+  if (!requireHouseDataToken(req, res)) return;
+  try {
+    const slug = String(req.params.slug || "").trim();
+    const house = softDeleteHouse(slug, { actor: "api" });
+    return res.json({ ok: true, house });
+  } catch (err) {
+    return houseDataError(res, err, "Failed to delete house.");
+  }
+});
+
+app.get("/api/data/houses/:slug", (req, res) => {
+  try {
+    const slug = String(req.params.slug || "").trim();
+    const house = getHouseRow(slug, { includeDeleted: false });
+    if (!house) return res.status(404).json({ error: "House not found." });
+    return res.json({ house });
+  } catch (err) {
+    return houseDataError(res, err, "Failed to load house.");
+  }
+});
+
 function start() {
   try {
     const seed = maybeSeedSurveyFromFile();
@@ -588,6 +695,19 @@ function start() {
     }
   } catch (err) {
     console.error("[survey] Seed failed:", err.message || err);
+  }
+
+  try {
+    const imported = maybeImportHousesFromDisk();
+    if (imported.imported) {
+      console.log(
+        `[houses-db] Imported ${imported.houseCount} houses (${imported.pricePoints} price points) into ${getHousesDbPath()}`
+      );
+    } else if (imported.reason === "already_has_houses") {
+      console.log(`[houses-db] Using existing DB at ${getHousesDbPath()} (${imported.houseCount} houses)`);
+    }
+  } catch (err) {
+    console.error("[houses-db] Import failed:", err.message || err);
   }
 
   const port = Number(process.env.PORT) || 3000;

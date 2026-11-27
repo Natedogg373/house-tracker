@@ -1,8 +1,8 @@
 # House Tracker
 
-A small local web app for Nate and partner to browse houses they’re considering. House data is written into this repo as JSON by a separate House Tracker bot; this app reads those files, shows House Details, a map, rankings, and a graveyard, and can ask the bot to look up a new listing.
+A small local web app for Nate and partner to browse houses they’re considering. **SQLite is the single source of truth** for listings, price history, interest, and rankings (same DB file pattern as the House Survey). A separate House Tracker bot writes through an authenticated HTTP API; the site reflects changes immediately — no redeploy. Committed `data/houses/*.json` files remain as the seed / backup import source.
 
-House listing JSON stays file-based. The House Survey feature uses a local SQLite file (Node’s built-in `node:sqlite`, so no native addon build). After install, one command starts it.
+The House Survey and Prerequisites features share the same SQLite file (Node’s built-in `node:sqlite`, so no native addon build). After install, one command starts it.
 
 ## Setup
 
@@ -35,23 +35,23 @@ Copy `.env.example` to `.env`. `.env` is gitignored; never commit secrets.
 | `GEOFENCES_PATH` | Optional override of saved map areas (default `data/geofences.json`). |
 | `SCHOOLS_PATH` | Optional override of school pins (default `data/schools.json`). Sample mode uses `data/sample/schools.json`. |
 | `SURVEY_DB_PATH` | SQLite path for House Survey questions/answers and Prerequisites settings (default `data/survey.db`). On Coolify, set this to a persistent volume path such as `/persist/survey.db`. |
+| `HOUSES_DB_PATH` | SQLite path for listings, price history, interest, and rankings. Defaults to `SURVEY_DB_PATH` (same file) when unset. |
+| `HOUSE_DATA_API_TOKEN` | Bearer token for bot write endpoints under `/api/data/houses/…`. **Writes are rejected (503) when unset.** Export/reads stay public. |
 | `NOMINATIM_USER_AGENT` | Override the Nominatim User-Agent (a default identifying this app is already set). |
 | `GEOCODE_CACHE_PATH` | Override the geocode cache file (default `data/geocode-cache.json`). |
 | `GEOCODE_PREFETCH` | Set `false` to skip background geocoding of every loaded address. |
 
-House Details works without webhook env vars. Adding a house or moving one back from No longer interested needs both webhook variables.
+House Details works without webhook env vars. Adding a house or moving one back from No longer interested needs both webhook variables. Bot **updates** to listing fields need `HOUSE_DATA_API_TOKEN`.
 
-### Git pull (so new houses appear without a restart)
+### Git pull (legacy JSON sync)
 
-The bot commits JSON to GitHub. While the server is running it periodically runs `git pull` in the repo root, then House Details re-reads `data/houses/` on the next page load (it also refreshes every 30 seconds).
+The app can still `git pull` on an interval (for schools JSON, geofences, seed files, etc.). Listing data itself now lives in SQLite and is updated via the House data API — a pull is **not** required for new/updated houses to appear.
 
 If pull fails, the server **logs the error and keeps running**.
 
-The clone needs credentials that can pull (SSH key or HTTPS token). Use a branch that tracks the remote the bot pushes to (usually `main`). Uncommitted local edits to tracked files can make `git pull` fail.
-
 ## Data format
 
-The bot owns `data/houses/`. Do not put demo data there. This app never writes house JSON files.
+**Authoritative store:** SQLite (`HOUSES_DB_PATH` / `SURVEY_DB_PATH`). On first startup with an empty `houses` table, the app imports `data/houses/*.json`, `data/interest.json`, and `data/rankings.json` once (idempotent). Re-run with `npm run houses:import` (add `-- --force` to replace). Keep the JSON seed files in git; do not treat them as live after the DB has been seeded.
 
 One JSON file per house: `data/houses/<address-slug>.json`.
 
@@ -95,23 +95,13 @@ When `photoUrl` is missing or the image fails to load, House Details embeds an O
 
 ### Rankings
 
-`data/rankings.json` is a committed JSON array of address slugs, in preference order:
-
-```json
-["9223-seagrove-dr-75243", "7130-abrams-rd-75231"]
-```
-
-The Rankings page POSTs that list to `/api/rankings`, and the local server writes the file. House JSON files are not modified — the House Tracker bot owns those.
-
-If the file is missing, houses default to **alphabetical by address**. New houses not yet in the file are appended in that same order; slugs for houses that no longer exist are ignored.
+Preference order lives in the SQLite `house_rankings` table (seeded from `data/rankings.json` on first import). The Rankings page POSTs `/api/rankings`; the server writes the DB. Missing rankings default to **alphabetical by address**. New houses not yet ranked are appended; unknown slugs are ignored.
 
 Sold houses and No longer interested houses are hidden on the Rankings page. Clicking a house (the photo/address, not the drag handle or rank number) opens it on House Details at `/?house=<slug>`.
 
-The order is shared through git. After you rearrange houses, **commit `data/rankings.json`** (or let a later bot sync commit it) so `git pull` on other machines picks it up. Local reorders that are not committed are overwritten on the next pull.
+### Interest
 
-### Interest (`data/interest.json`)
-
-The app owns this file. It never edits house JSON. Shape:
+Not-interested / pending reactivation live in the SQLite `house_interest` table (seeded from `data/interest.json`). Shape of the export / seed file:
 
 ```json
 {
@@ -120,15 +110,15 @@ The app owns this file. It never edits house JSON. Shape:
 }
 ```
 
-House Details has a **Not interested** action (with a confirm). That POSTs `/api/interest/not-interested` and the server appends the slug to `notInterested`. Those houses drop off Rankings, the Map (active pins), and House Details’ default dropdown — turn on **Include not interested** (or open `/?house=<slug>`) to view one.
+House Details has a **Not interested** action (with a confirm). That POSTs `/api/interest/not-interested`. Those houses drop off Rankings, the Map (active pins), and House Details’ default dropdown — turn on **Include not interested** (or open `/?house=<slug>`) to view one.
 
-Graveyard’s **No longer interested** section lists them (photo, address, last list price, since date, link to House Details). **Move back to interested** does **not** immediately restore the house. It:
+Graveyard’s **No longer interested** section lists them. **Move back to interested** does **not** immediately restore the house. It:
 
 1. Moves the slug from `notInterested` to `pendingReactivation`
 2. Shows “Checking if still active…”
 3. POSTs the House Tracker webhook (see below)
 
-The bot re-checks Zillow and commits the result: if the listing is still active it **removes the slug from both lists** in `data/interest.json`; if not, it **keeps the house out** of the interested list. Commit `data/interest.json` (or let a bot sync commit it) so other machines pick it up.
+The bot re-checks Zillow and then updates interest via `PATCH /api/data/houses/:slug/status` with `{ "interest": "active" }` (or leaves it not-interested).
 
 ### Schools (`data/schools.json`)
 
@@ -191,7 +181,7 @@ JSON API: `GET/POST /api/survey/questions`, `PUT /api/survey/questions/:id`, `DE
 
 - **House Details** (`/`, deep link `/?house=<slug>`) — pick an address, see details, photo, and price history vs. the $700K budget line. The dropdown updates the URL; opening a deep link selects that house. **Not interested** moves it to the Graveyard list above. **Fill survey** and the survey answers section sit on this page.
 - **Map** (`/map`) — Leaflet + OSM. Active house pins (not sold, not not-interested), school pins for the selected level, a school legend, and drawable geofences. Hover a house pin for photo, price, address, and that level’s school; click the pin or tooltip to open House Details.
-- **Rankings** (`/rankings`) — drag houses into an order, or type a rank number (that house moves there and the rest shift). Saved to `data/rankings.json`. Sold and not-interested houses are excluded. Click a house (not the handle or rank input) to open House Details. Each row links to fill that house’s survey.
+- **Rankings** (`/rankings`) — drag the grip (pointer-friendly), use up/down arrows, or type a rank number and press Enter. Saved to SQLite. Sold and not-interested houses are excluded. Click a house (not the handle, arrows, or rank input) to open House Details. Each row links to fill that house’s survey.
 - **Survey** (`/survey`) — fill/view per house by default; toggle Edit survey for the shared questionnaire. Deep link: `/survey?house=<slug>` (legacy `/survey/fill` redirects).
 - **Prerequisites** (`/prerequisites`) — enable Zillow-style thresholds (price, sqft, beds, baths, garage, lot, year built) and a global tolerance %; colors matching House Details metric boxes.
 - **Graveyard** (`/graveyard`) — **Sold** (word match, so `Sold (10/1/2026)` counts) plus **No longer interested**. Sold cards show original list price, lowest list price, sale price (or Unknown), and days on market. Newest `soldDate` first; otherwise by address.
@@ -220,7 +210,85 @@ Same URL and `Authorization` header for both actions (`HOUSE_TRACKER_WEBHOOK_URL
 }
 ```
 
-`input` is the house’s `zillowUrl` when it looks like `http(s)://…`, otherwise the address. The bot should re-scrape Zillow and then update `data/interest.json`: remove the slug from both `notInterested` and `pendingReactivation` if the listing is still active; otherwise leave it out of the interested set.
+`input` is the house’s `zillowUrl` when it looks like `http(s)://…`, otherwise the address. The bot should re-scrape Zillow and then update interest via the House data API (`PATCH …/status` with `"interest": "active"` when the listing is still active).
+
+## House data API
+
+Authenticated write API for the House Tracker bot. Set `HOUSE_DATA_API_TOKEN` in Coolify / `.env`. All write routes require:
+
+```http
+Authorization: Bearer <HOUSE_DATA_API_TOKEN>
+```
+
+If the token env var is **unset**, every write returns **503**. Wrong/missing `Authorization` → **401**.
+
+Base URL in production: `https://projectserver.tail6f8e33.ts.net`.
+
+### Endpoints
+
+| Method | Path | Auth | Purpose |
+| --- | --- | --- | --- |
+| `PUT` | `/api/data/houses/:slug` | Bearer | Upsert house (partial merge of fields + optional `priceHistory`) |
+| `POST` | `/api/data/houses/:slug/price` | Bearer | Append / upsert one price point `{ "week", "price" }` |
+| `PATCH` | `/api/data/houses/:slug/status` | Bearer | Update `status` / `soldDate` / `salePrice` / `listPrice` and/or `interest` |
+| `DELETE` | `/api/data/houses/:slug` | Bearer | Soft-delete (hidden from site reads; still in export) |
+| `GET` | `/api/data/houses/:slug` | public | Single house record |
+| `GET` | `/api/data/export` | public | Full JSON dump (`houses`, `interest`, `rankings`) |
+| `GET` | `/api/data/export?format=csv` | public | Flat sheet-shaped CSV rows for rebuilding Google Sheets |
+
+Core filterable fields are typed columns; unknown / long-tail Zillow fields (fireplace, roof, appliances, …) land in a JSON `extras` column automatically — no migration needed for new keys.
+
+### curl examples
+
+```bash
+TOKEN=…   # HOUSE_DATA_API_TOKEN
+HOST=https://projectserver.tail6f8e33.ts.net
+
+# Upsert / partial update (merge)
+curl -fsS -X PUT "$HOST/api/data/houses/9223-seagrove-dr-75243" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "address": "9223 Seagrove Dr, Dallas, TX 75243",
+    "status": "For sale",
+    "listPrice": 739000,
+    "beds": 4,
+    "baths": 2.5,
+    "sqft": 2381,
+    "zestimate": 745000,
+    "schoolIds": ["example-elem"],
+    "priceHistory": [
+      { "week": "2026-09-07", "price": 739000 },
+      { "week": "2026-09-14", "price": null }
+    ]
+  }'
+
+# Append one weekly price point
+curl -fsS -X POST "$HOST/api/data/houses/9223-seagrove-dr-75243/price" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{ "week": "2026-09-21", "price": 729000 }'
+
+# Mark sold + clear not-interested, or set interest
+curl -fsS -X PATCH "$HOST/api/data/houses/9223-seagrove-dr-75243/status" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{ "status": "Sold (10/1/2026)", "soldDate": "2026-10-01", "salePrice": 720000, "interest": "active" }'
+
+# Soft-delete
+curl -fsS -X DELETE "$HOST/api/data/houses/9223-seagrove-dr-75243" \
+  -H "Authorization: Bearer $TOKEN"
+
+# Rebuild Google Sheet from the DB
+curl -fsS "$HOST/api/data/export" -o houses.json
+curl -fsS "$HOST/api/data/export?format=csv" -o houses.csv
+```
+
+`interest` on the status patch accepts `active`, `notInterested`, or `pendingReactivation` (optional `since` / `requested` ISO dates).
+
+### Nightly backup
+
+`.github/workflows/backup-houses.yml` fetches `/api/data/export` over Tailscale and commits snapshots under `data/backup/`. Those commits use `[skip ci]` and `data/backup/**` is in the deploy workflow’s `paths-ignore`, so they do **not** trigger a Coolify redeploy.
 
 ## Local webhook testing
 
@@ -245,7 +313,7 @@ npm test
 
 ## Auto-deploy
 
-Pushes to `main` (and manual **Run workflow**) join Tailscale, then hit a Coolify deploy webhook. Every push deploys — including House Tracker bot commits under `data/houses/`. The workflow is `.github/workflows/deploy.yml`. Concurrent runs queue (`concurrency` group `deploy`) so two deploys cannot overlap. `curl -fsS` fails the job if Coolify is unreachable or returns an HTTP error.
+Pushes to `main` (and manual **Run workflow**) join Tailscale, then hit a Coolify deploy webhook. The workflow is `.github/workflows/deploy.yml`. Commits that only touch `data/backup/**` or include `[skip ci]` do **not** deploy. Concurrent runs queue (`concurrency` group `deploy`) so two deploys cannot overlap. `curl -fsS` fails the job if Coolify is unreachable or returns an HTTP error.
 
 The GitHub Action uses `tailscale/github-action@v4`. That action mints an **ephemeral** tagged node for the job and logs it out when the run finishes.
 
@@ -295,27 +363,30 @@ Create an API token (**Keys & Tokens → API Tokens**) with the **deploy** permi
 
 ### Persistent volume (do not wipe user-written files)
 
-The process **writes** these files under `data/` (JSON via temp file then `rename`; survey via SQLite):
+The process **writes**:
 
-- `data/rankings.json` — Rankings page `POST /api/rankings` (`lib/rankings.js`). Override with `RANKINGS_PATH`.
-- `data/interest.json` — not-interested / pending reactivation (`lib/interest.js`). Override with `INTEREST_PATH`.
+- SQLite (`SURVEY_DB_PATH` / `HOUSES_DB_PATH`) — listings, price history, interest, rankings, survey, prerequisites (gitignored `data/survey.db` locally).
 - `data/geofences.json` — Map areas (`lib/geofences.js`). Override with `GEOFENCES_PATH`.
 - `data/geocode-cache.json` — Nominatim cache (`lib/geocode.js`, gitignored). Override with `GEOCODE_CACHE_PATH`.
-- `data/survey.db` — House Survey sections, questions, per-house answers, and Prerequisites config (`lib/survey.js`, `lib/prerequisites.js`, gitignored). Override with `SURVEY_DB_PATH`.
-- `data/survey-seed.json` — bundled walkthrough checklist imported once when the survey DB has no questions.
 
-Do **not** bind-mount the whole `data/` directory over the checkout. That would hide `data/houses/` from bot-driven deploys. Because JSON saves `rename` a sibling `.tmp` file, persist a **directory**, not a single-file bind (rename across filesystems fails).
+Seed / backup only (not live after first import):
 
-**Persistent storage (survey + prerequisites):** visit notes and prerequisite thresholds are irreplaceable. Point `SURVEY_DB_PATH` at a Coolify persistent volume (for example `/persist/survey.db`) so the SQLite file survives redeploys. Railpack does not need a native SQLite addon — the app uses Node’s built-in `node:sqlite` (Node **≥ 22.5**).
+- `data/houses/*.json` — one-time import source for the houses table.
+- `data/interest.json` / `data/rankings.json` — imported once with houses.
+- `data/backup/` — nightly export snapshots from GitHub Actions.
+- `data/survey-seed.json` — survey checklist imported once when the survey DB has no questions.
+
+Do **not** bind-mount the whole `data/` directory over the checkout. That would hide seed JSON and schools. Because geofence JSON saves `rename` a sibling `.tmp` file, persist a **directory**, not a single-file bind (rename across filesystems fails).
+
+**Persistent storage:** Point `SURVEY_DB_PATH` at a Coolify persistent volume (for example `/persist/survey.db`) so listings, visit notes, and prerequisite thresholds survive redeploys. Leave `HOUSES_DB_PATH` unset so houses share that same file. Railpack does not need a native SQLite addon — the app uses Node’s built-in `node:sqlite` (Node **≥ 22.5**).
 
 In Coolify, mount a persistent volume at a writable directory (for example `/persist`) and set:
 
 ```
-RANKINGS_PATH=/persist/rankings.json
-INTEREST_PATH=/persist/interest.json
 GEOFENCES_PATH=/persist/geofences.json
 GEOCODE_CACHE_PATH=/persist/geocode-cache.json
 SURVEY_DB_PATH=/persist/survey.db
+HOUSE_DATA_API_TOKEN=<long random secret>
 ```
 
-Leave `data/houses/` in the image so each deploy picks up new listing JSON. Seed `/persist/rankings.json`, `/persist/interest.json`, and `/persist/geofences.json` once from the committed files if you want the current state on first boot; otherwise rankings start alphabetical and interest/geofences start empty until someone saves them in the app. Survey starts empty until questions are added in the app.
+On first boot with an empty houses table, the app imports committed `data/houses/*.json` (+ interest/rankings). After that the DB is authoritative; the bot should write via the House data API and rebuild the Google Sheet from `/api/data/export`.
