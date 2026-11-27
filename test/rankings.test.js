@@ -7,6 +7,7 @@ const { loadHousesFromDir, HOUSES_DIR } = require("../lib/houses");
 const {
   applyRankings,
   loadRankings,
+  moveBySteps,
   moveToRank,
   normalizeSlugs,
   saveRankings,
@@ -52,13 +53,62 @@ describe("moveToRank", () => {
     assert.deepEqual(moveToRank(["a", "b", "c"], 0, 3), ["b", "c", "a"]);
   });
 
+  it("moves #2 to #7 in a list of 9 and shifts 3..7 up one", () => {
+    const list = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    assert.deepEqual(moveToRank(list, 1, 7), [
+      "1",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "2",
+      "8",
+      "9",
+    ]);
+  });
+
+  it("moves a lower item up and shifts the intervening items down", () => {
+    const list = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    assert.deepEqual(moveToRank(list, 6, 2), [
+      "1",
+      "7",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "8",
+      "9",
+    ]);
+  });
+
   it("clamps out-of-range ranks to 1..N", () => {
     assert.deepEqual(moveToRank(["a", "b", "c"], 2, 0), ["c", "a", "b"]);
     assert.deepEqual(moveToRank(["a", "b", "c"], 0, 99), ["b", "c", "a"]);
+    assert.deepEqual(moveToRank(["a", "b", "c"], 1, -3), ["b", "a", "c"]);
   });
 
-  it("leaves the list unchanged when the rank is not a number", () => {
+  it("leaves the list unchanged for empty, whitespace, or non-numeric input", () => {
     assert.deepEqual(moveToRank(["a", "b", "c"], 1, "nope"), ["a", "b", "c"]);
+    assert.deepEqual(moveToRank(["a", "b", "c"], 1, ""), ["a", "b", "c"]);
+    assert.deepEqual(moveToRank(["a", "b", "c"], 1, "   "), ["a", "b", "c"]);
+    assert.deepEqual(moveToRank(["a", "b", "c"], 1, null), ["a", "b", "c"]);
+  });
+});
+
+describe("moveBySteps", () => {
+  it("moves an item up or down by one and clamps at the ends", () => {
+    assert.deepEqual(moveBySteps(["a", "b", "c"], 1, -1), ["b", "a", "c"]);
+    assert.deepEqual(moveBySteps(["a", "b", "c"], 1, 1), ["a", "c", "b"]);
+    assert.deepEqual(moveBySteps(["a", "b", "c"], 0, -1), ["a", "b", "c"]);
+    assert.deepEqual(moveBySteps(["a", "b", "c"], 2, 1), ["a", "b", "c"]);
+  });
+
+  it("supports multi-step moves and ignores a zero/invalid step", () => {
+    assert.deepEqual(moveBySteps(["a", "b", "c", "d"], 0, 2), ["b", "c", "a", "d"]);
+    assert.deepEqual(moveBySteps(["a", "b", "c"], 1, 0), ["a", "b", "c"]);
+    assert.deepEqual(moveBySteps(["a", "b", "c"], 1, "nope"), ["a", "b", "c"]);
   });
 });
 
