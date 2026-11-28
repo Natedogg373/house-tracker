@@ -1,0 +1,3851 @@
+{
+  "exportedAt": "2026-11-28T16:55:29.708Z",
+  "houses": [
+    {
+      "address": "11901 Woodbridge Dr, Dallas, TX 75243",
+      "appliancesIncluded": "Dryer, Dishwasher, Gas Cooktop, Disposal, Microwave, Refrigerator",
+      "baths": 3,
+      "beds": 4,
+      "constructionMaterials": "Brick veneer",
+      "cooling": "Central",
+      "createdAt": "2026-11-27T19:18:53.379Z",
+      "daysOnMarket": null,
+      "fencing": "Back yard; 8-foot privacy fence",
+      "fireplaceCount": 1,
+      "flooring": null,
+      "foundationType": null,
+      "garageSpaces": 2,
+      "hasPool": true,
+      "heating": "Central, Gas",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.910379,
+      "laundryLocation": "Utility room",
+      "listPrice": 549000,
+      "lng": -96.714756,
+      "lotAcres": 0.25,
+      "lotSizeSqft": 10890,
+      "parkingFeatures": "Circular Driveway, Garage, Garage Door Opener, Attached",
+      "patioPorch": "Covered, Deck",
+      "photoUrl": "https://photos.zillowstatic.com/fp/9343800107cb5e909e0072cbbf325c1b-cc_ft_1536.jpg",
+      "poolType": "private",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": 585000,
+          "week": "2026-08-10"
+        },
+        {
+          "price": 585000,
+          "week": "2026-08-17"
+        },
+        {
+          "price": 585000,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 579000,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 579000,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 579000,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 565000,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 565000,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 549000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 549000,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 549000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 549000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": 549000,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 549000,
+          "week": "2026-11-09"
+        },
+        {
+          "price": null,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 200,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 11018,
+      "rentZestimate": 4666,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "audelia-creek-elementary",
+        "liberty-junior-high",
+        "berkner-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "11901-woodbridge-dr-75243",
+      "soldDate": null,
+      "sqft": 2742,
+      "status": "Sold (found 11/22/2026; price/date not shown; last listed $549,000)",
+      "stories": 2,
+      "taxAssessedValue": null,
+      "updatedAt": "2026-11-27T19:18:53.379Z",
+      "water": "Public",
+      "yearBuilt": 1980,
+      "yearRenovated": null,
+      "zestimate": 535200,
+      "zillowUrl": "https://www.zillow.com/homedetails/11901-Woodbridge-Dr-Dallas-TX-75243/26890250_zpid/"
+    },
+    {
+      "address": "7130 Abrams Rd, Dallas, TX 75231",
+      "appliancesIncluded": "Dishwasher, Electric Cooktop, Electric Oven, Disposal, Gas Water Heater, Microwave, Trash Compactor, Vented Exhaust Fan",
+      "baths": 3,
+      "beds": 3,
+      "constructionMaterials": "Brick",
+      "cooling": "Central",
+      "createdAt": "2026-11-27T19:18:53.382Z",
+      "daysOnMarket": null,
+      "fencing": "Privacy, Wood",
+      "fireplaceCount": 1,
+      "flooring": "Carpet, Ceramic Tile, Hardwood",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": false,
+      "heating": "Central",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.873571,
+      "laundryLocation": null,
+      "listPrice": 699000,
+      "lng": -96.741115,
+      "lotAcres": 0.19,
+      "lotSizeSqft": 8319.96,
+      "parkingFeatures": "Alley Access, Driveway, Garage, Attached",
+      "patioPorch": "Covered",
+      "photoUrl": "https://photos.zillowstatic.com/fp/f7a135f2744fa6cf298cc786ae8f562a-cc_ft_1536.jpg",
+      "poolType": "none",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": null,
+          "week": "2026-08-10"
+        },
+        {
+          "price": null,
+          "week": "2026-08-17"
+        },
+        {
+          "price": null,
+          "week": "2026-08-24"
+        },
+        {
+          "price": null,
+          "week": "2026-08-31"
+        },
+        {
+          "price": null,
+          "week": "2026-09-07"
+        },
+        {
+          "price": null,
+          "week": "2026-09-14"
+        },
+        {
+          "price": null,
+          "week": "2026-09-21"
+        },
+        {
+          "price": null,
+          "week": "2026-09-28"
+        },
+        {
+          "price": null,
+          "week": "2026-10-05"
+        },
+        {
+          "price": null,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 699000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 699000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": 699000,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 699000,
+          "week": "2026-11-09"
+        },
+        {
+          "price": null,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 253,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 15711,
+      "rentZestimate": 4223,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "merriman-park-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "7130-abrams-rd-75231",
+      "soldDate": null,
+      "sqft": 2764,
+      "status": "Sold (found 11/22/2026; price/date not shown; last listed $699,000)",
+      "stories": 2,
+      "taxAssessedValue": 671960,
+      "updatedAt": "2026-11-27T19:18:53.382Z",
+      "water": "Public",
+      "yearBuilt": 1986,
+      "yearRenovated": null,
+      "zestimate": 699100,
+      "zillowUrl": "https://www.zillow.com/homedetails/7130-Abrams-Rd-Dallas-TX-75231/26912796_zpid/"
+    },
+    {
+      "address": "7221 Pleasant View Dr, Dallas, TX 75231",
+      "appliancesIncluded": "Convection Oven, Dryer, Dishwasher, Electric Cooktop, Electric Oven, Electric Water Heater, Disposal, Microwave, Refrigerator, Trash Compactor, Washer",
+      "baths": 2.5,
+      "beds": 3,
+      "constructionMaterials": "Brick",
+      "cooling": "Central",
+      "createdAt": "2026-11-27T19:18:53.383Z",
+      "daysOnMarket": 78,
+      "fencing": "Wood",
+      "fireplaceCount": 1,
+      "flooring": null,
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": true,
+      "heating": "Central",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.880929,
+      "laundryLocation": "First floor laundry",
+      "listPrice": 775000,
+      "lng": -96.736378,
+      "lotAcres": 0.21,
+      "lotSizeSqft": 9191.16,
+      "parkingFeatures": "Additional Parking, Alley Access, Concrete, Driveway, Epoxy Flooring, Garage, Garage Door Opener, Lighted, Private, Garage Faces Rear, Storage, Attached",
+      "patioPorch": "Covered",
+      "photoUrl": "https://photos.zillowstatic.com/fp/0e609318d4db334163a6fa9a6b50fb9d-cc_ft_1536.jpg",
+      "poolType": "private",
+      "priceHistory": [
+        {
+          "price": 849000,
+          "week": "2026-01-05"
+        },
+        {
+          "price": 849000,
+          "week": "2026-01-12"
+        },
+        {
+          "price": 849000,
+          "week": "2026-01-19"
+        },
+        {
+          "price": 849000,
+          "week": "2026-01-26"
+        },
+        {
+          "price": 849000,
+          "week": "2026-02-02"
+        },
+        {
+          "price": 849000,
+          "week": "2026-02-09"
+        },
+        {
+          "price": 825000,
+          "week": "2026-02-16"
+        },
+        {
+          "price": 825000,
+          "week": "2026-02-23"
+        },
+        {
+          "price": 825000,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": null,
+          "week": "2026-08-10"
+        },
+        {
+          "price": null,
+          "week": "2026-08-17"
+        },
+        {
+          "price": null,
+          "week": "2026-08-24"
+        },
+        {
+          "price": null,
+          "week": "2026-08-31"
+        },
+        {
+          "price": null,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 800000,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 800000,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 800000,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 800000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 800000,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 800000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 800000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": 800000,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 775000,
+          "week": "2026-11-09"
+        },
+        {
+          "price": 775000,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 278,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 19901,
+      "rentZestimate": null,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "merriman-park-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "7221-pleasant-view-dr-75231",
+      "soldDate": null,
+      "sqft": 2785,
+      "status": "For sale (price cut 11/13/2026)",
+      "stories": 1,
+      "taxAssessedValue": 849380,
+      "updatedAt": "2026-11-27T19:18:53.383Z",
+      "water": "Public",
+      "yearBuilt": 1979,
+      "yearRenovated": 2021,
+      "zestimate": null,
+      "zillowUrl": "https://www.zillow.com/homedetails/7221-Pleasant-View-Dr-Dallas-TX-75231/26867873_zpid/"
+    },
+    {
+      "address": "7738 Lemmonwood Dr, Dallas, TX 75231",
+      "appliancesIncluded": "Dishwasher, Disposal, Electric Range, Ice Maker, Microwave",
+      "baths": 2.5,
+      "beds": 3,
+      "constructionMaterials": "Brick, Fiber Cement",
+      "cooling": "Central Air",
+      "createdAt": "2026-11-27T19:18:53.383Z",
+      "daysOnMarket": 36,
+      "fencing": "Electric, Wood",
+      "fireplaceCount": 1,
+      "flooring": "Tile, Wood",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": false,
+      "heating": "Central, Natural Gas",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.888332,
+      "laundryLocation": null,
+      "listPrice": 649000,
+      "lng": -96.732736,
+      "lotAcres": 0.23,
+      "lotSizeSqft": 9931.68,
+      "parkingFeatures": "Additional Parking, Alley Access, Converted Garage, Covered, Electric Gate, Enclosed, Garage, Garage Faces Rear, Gated, Attached, Carport (2)",
+      "patioPorch": "Covered",
+      "photoUrl": "https://photos.zillowstatic.com/fp/54031c2019fbb80e93badeeeaf7e2331-cc_ft_1536.jpg",
+      "poolType": "none",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": 679000,
+          "week": "2026-06-22"
+        },
+        {
+          "price": 679000,
+          "week": "2026-06-29"
+        },
+        {
+          "price": 679000,
+          "week": "2026-07-06"
+        },
+        {
+          "price": 679000,
+          "week": "2026-07-13"
+        },
+        {
+          "price": 679000,
+          "week": "2026-07-20"
+        },
+        {
+          "price": 679000,
+          "week": "2026-07-27"
+        },
+        {
+          "price": 679000,
+          "week": "2026-08-03"
+        },
+        {
+          "price": 679000,
+          "week": "2026-08-10"
+        },
+        {
+          "price": 679000,
+          "week": "2026-08-17"
+        },
+        {
+          "price": 679000,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 668900,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 668900,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 668900,
+          "week": "2026-09-14"
+        },
+        {
+          "price": null,
+          "week": "2026-09-21"
+        },
+        {
+          "price": null,
+          "week": "2026-09-28"
+        },
+        {
+          "price": null,
+          "week": "2026-10-05"
+        },
+        {
+          "price": null,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 649000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 649000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": 649000,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 649000,
+          "week": "2026-11-09"
+        },
+        {
+          "price": 649000,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 299,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 14595,
+      "rentZestimate": null,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "merriman-park-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "7738-lemmonwood-dr-75231",
+      "soldDate": null,
+      "sqft": 2168,
+      "status": "For sale (listed 10/21/2026)",
+      "stories": 1,
+      "taxAssessedValue": 640710,
+      "updatedAt": "2026-11-27T19:18:53.383Z",
+      "water": null,
+      "yearBuilt": 1977,
+      "yearRenovated": 1985,
+      "zestimate": 628200,
+      "zillowUrl": "https://www.zillow.com/homedetails/7738-Lemmonwood-Dr-Dallas-TX-75231/26868187_zpid/"
+    },
+    {
+      "address": "8026 Westover Dr, Dallas, TX 75231",
+      "appliancesIncluded": "Double Oven, Dishwasher, Electric Cooktop, Electric Oven, Electric Water Heater, Disposal, Microwave",
+      "baths": 2,
+      "beds": 4,
+      "constructionMaterials": "Brick",
+      "cooling": "Central Air, Electric",
+      "createdAt": "2026-11-27T19:18:53.384Z",
+      "daysOnMarket": 204,
+      "fencing": "Fenced, Full, Wood",
+      "fireplaceCount": 1,
+      "flooring": "Carpet, Tile, Wood",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": true,
+      "heating": "Central, Electric",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.886045,
+      "laundryLocation": "Laundry in utility room",
+      "listPrice": 600000,
+      "lng": -96.744244,
+      "lotAcres": 0.18,
+      "lotSizeSqft": 7884.36,
+      "parkingFeatures": "Door-Single, Driveway, Garage, Garage Door Opener, Garage Faces Rear, Attached",
+      "patioPorch": "Covered",
+      "photoUrl": "https://photos.zillowstatic.com/fp/fa4ad69e312e9b16695d6c38dcb05738-cc_ft_1536.jpg",
+      "poolType": "private",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": 799900,
+          "week": "2026-05-11"
+        },
+        {
+          "price": 799900,
+          "week": "2026-05-18"
+        },
+        {
+          "price": 799900,
+          "week": "2026-05-25"
+        },
+        {
+          "price": 750000,
+          "week": "2026-06-01"
+        },
+        {
+          "price": 750000,
+          "week": "2026-06-08"
+        },
+        {
+          "price": 750000,
+          "week": "2026-06-15"
+        },
+        {
+          "price": 750000,
+          "week": "2026-06-22"
+        },
+        {
+          "price": 750000,
+          "week": "2026-06-29"
+        },
+        {
+          "price": 730000,
+          "week": "2026-07-06"
+        },
+        {
+          "price": 730000,
+          "week": "2026-07-13"
+        },
+        {
+          "price": 730000,
+          "week": "2026-07-20"
+        },
+        {
+          "price": 715000,
+          "week": "2026-07-27"
+        },
+        {
+          "price": 715000,
+          "week": "2026-08-03"
+        },
+        {
+          "price": 715000,
+          "week": "2026-08-10"
+        },
+        {
+          "price": 700000,
+          "week": "2026-08-17"
+        },
+        {
+          "price": 700000,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 700000,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 700000,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 685000,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 685000,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 675000,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 675000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 650000,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 650000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 650000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": 625000,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 625000,
+          "week": "2026-11-09"
+        },
+        {
+          "price": 600000,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 289,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 15637,
+      "rentZestimate": null,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "moss-haven-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "8026-westover-dr-75231",
+      "soldDate": null,
+      "sqft": 2079,
+      "status": "For sale (price cut 11/19/2026)",
+      "stories": 1,
+      "taxAssessedValue": 618790,
+      "updatedAt": "2026-11-27T19:18:53.384Z",
+      "water": "Public",
+      "yearBuilt": 1978,
+      "yearRenovated": null,
+      "zestimate": 595500,
+      "zillowUrl": "https://www.zillow.com/homedetails/8026-Westover-Dr-Dallas-TX-75231/26868573_zpid/"
+    },
+    {
+      "address": "8031 Moss Meadows Dr, Dallas, TX 75231",
+      "appliancesIncluded": "Dishwasher, Electric Range, Disposal, Microwave",
+      "baths": 3,
+      "beds": 4,
+      "constructionMaterials": "Brick",
+      "cooling": null,
+      "createdAt": "2026-11-27T19:18:53.385Z",
+      "daysOnMarket": null,
+      "fencing": "Wood",
+      "fireplaceCount": 1,
+      "flooring": "Laminate, Tile",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": false,
+      "heating": null,
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.887339,
+      "laundryLocation": "In hall",
+      "listPrice": 738000,
+      "lng": -96.743878,
+      "lotAcres": 0.19,
+      "lotSizeSqft": 8145.72,
+      "parkingFeatures": "Door-Single, Garage, Garage Faces Rear, Attached",
+      "patioPorch": "Covered, Patio",
+      "photoUrl": "https://photos.zillowstatic.com/fp/060ebffb55e99cc9634b9c750e1e4872-cc_ft_1536.jpg",
+      "poolType": "none",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": null,
+          "week": "2026-08-10"
+        },
+        {
+          "price": 749000,
+          "week": "2026-08-17"
+        },
+        {
+          "price": 749000,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 749000,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 749000,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 749000,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 738000,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 738000,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 738000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 738000,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 738000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 738000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": null,
+          "week": "2026-11-02"
+        },
+        {
+          "price": null,
+          "week": "2026-11-09"
+        },
+        {
+          "price": null,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 378,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 13070,
+      "rentZestimate": 4820,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "moss-haven-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "8031-moss-meadows-dr-75231",
+      "soldDate": "2026-10-30",
+      "sqft": 1953,
+      "status": "Sold (10/30/2026; price not shown; last listed $738,000)",
+      "stories": 1,
+      "taxAssessedValue": null,
+      "updatedAt": "2026-11-27T19:18:53.385Z",
+      "water": "Public",
+      "yearBuilt": 1978,
+      "yearRenovated": null,
+      "zestimate": 709000,
+      "zillowUrl": "https://www.zillow.com/homedetails/8031-Moss-Meadows-Dr-Dallas-TX-75231/26868624_zpid/"
+    },
+    {
+      "address": "8721 Flint Falls Dr, Dallas, TX 75243",
+      "appliancesIncluded": "Dishwasher, Electric Oven, Disposal, Gas Water Heater",
+      "baths": 3,
+      "beds": 4,
+      "constructionMaterials": "Brick",
+      "cooling": "Central",
+      "createdAt": "2026-11-27T19:18:53.385Z",
+      "daysOnMarket": 14,
+      "fencing": "Wood",
+      "fireplaceCount": 1,
+      "flooring": "Carpet, Ceramic Tile, Wood",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": false,
+      "heating": "Central",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.89709,
+      "laundryLocation": "Utility room",
+      "listPrice": 549900,
+      "lng": -96.738471,
+      "lotAcres": 0.21,
+      "lotSizeSqft": 9060.48,
+      "parkingFeatures": "Door-Single, Garage, Garage Door Opener, Garage Faces Rear, Attached",
+      "patioPorch": "Covered",
+      "photoUrl": "https://photos.zillowstatic.com/fp/453834f99af160e00f176f71fe02cd72-cc_ft_1536.jpg",
+      "poolType": "none",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": null,
+          "week": "2026-08-10"
+        },
+        {
+          "price": null,
+          "week": "2026-08-17"
+        },
+        {
+          "price": 609990,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 609990,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 609990,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 609990,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 609990,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 589900,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 589900,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 589900,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 559900,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 559900,
+          "week": "2026-10-26"
+        },
+        {
+          "price": 549900,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 549900,
+          "week": "2026-11-09"
+        },
+        {
+          "price": 549900,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 251,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 15386,
+      "rentZestimate": null,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "skyview-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "8721-flint-falls-dr-75243",
+      "soldDate": null,
+      "sqft": 2189,
+      "status": "For sale (back on market 11/2/2026; price cut 11/3/2026)",
+      "stories": 1,
+      "taxAssessedValue": 658060,
+      "updatedAt": "2026-11-27T19:18:53.385Z",
+      "water": "Public",
+      "yearBuilt": 1976,
+      "yearRenovated": null,
+      "zestimate": 533300,
+      "zillowUrl": "https://www.zillow.com/homedetails/8721-Flint-Falls-Dr-Dallas-TX-75243/26886903_zpid/"
+    },
+    {
+      "address": "8915 White Pine Ln, Dallas, TX 75238",
+      "appliancesIncluded": "Dishwasher, Electric Range, Disposal, Microwave, Tankless Water Heater",
+      "baths": 2.5,
+      "beds": 3,
+      "constructionMaterials": "Brick",
+      "cooling": "Central",
+      "createdAt": "2026-11-27T19:18:53.386Z",
+      "daysOnMarket": null,
+      "fencing": "Wood",
+      "fireplaceCount": 1,
+      "flooring": "Ceramic Tile, Wood",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": false,
+      "heating": "Central",
+      "hoaMonthly": 100,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.869252,
+      "laundryLocation": "Laundry in utility room",
+      "listPrice": 685000,
+      "lng": -96.72891,
+      "lotAcres": 0.09,
+      "lotSizeSqft": 3746.16,
+      "parkingFeatures": "Driveway, Garage Faces Front, Garage, Garage Door Opener, Attached",
+      "patioPorch": "Rear Porch, Deck, Covered",
+      "photoUrl": "https://photos.zillowstatic.com/fp/546957cf9bdfe9fe4ab01f3311d896a2-cc_ft_1536.jpg",
+      "poolType": "none",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": null,
+          "week": "2026-08-10"
+        },
+        {
+          "price": null,
+          "week": "2026-08-17"
+        },
+        {
+          "price": null,
+          "week": "2026-08-24"
+        },
+        {
+          "price": null,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 685000,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 685000,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 685000,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 685000,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 685000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": null,
+          "week": "2026-10-12"
+        },
+        {
+          "price": null,
+          "week": "2026-10-19"
+        },
+        {
+          "price": null,
+          "week": "2026-10-26"
+        },
+        {
+          "price": null,
+          "week": "2026-11-02"
+        },
+        {
+          "price": null,
+          "week": "2026-11-09"
+        },
+        {
+          "price": null,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 299,
+      "primaryOnMain": false,
+      "propertyTaxAnnual": 14028,
+      "rentZestimate": 3735,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "white-rock-elementary",
+        "lake-highlands-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "8915-white-pine-ln-75238",
+      "soldDate": "2026-10-08",
+      "sqft": 2292,
+      "status": "Sold (10/8/2026; price not shown; last listed $685,000)",
+      "stories": 2,
+      "taxAssessedValue": 600000,
+      "updatedAt": "2026-11-27T19:18:53.386Z",
+      "water": "Public",
+      "yearBuilt": 1999,
+      "yearRenovated": null,
+      "zestimate": 623200,
+      "zillowUrl": "https://www.zillow.com/homedetails/8915-White-Pine-Ln-Dallas-TX-75238/26912745_zpid/"
+    },
+    {
+      "address": "9006 Church Rd, Dallas, TX 75231",
+      "appliancesIncluded": "Dishwasher, Electric Cooktop, Electric Oven, Electric Range, Disposal, Gas Water Heater, Ice Maker, Microwave",
+      "baths": 2.5,
+      "beds": 3,
+      "constructionMaterials": "Brick veneer",
+      "cooling": "Attic Fan, Central Air, Electric",
+      "createdAt": "2026-11-27T19:18:53.386Z",
+      "daysOnMarket": 55,
+      "fencing": "Wood",
+      "fireplaceCount": 1,
+      "flooring": "Carpet, Ceramic Tile, Parquet, Slate, Wood",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": true,
+      "heating": "Central, Natural Gas",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.886003,
+      "laundryLocation": "Utility room",
+      "listPrice": 699000,
+      "lng": -96.741204,
+      "lotAcres": 0.24,
+      "lotSizeSqft": 10585.08,
+      "parkingFeatures": "Garage, Garage Door Opener, Garage Faces Rear, Attached",
+      "patioPorch": "Covered",
+      "photoUrl": "https://photos.zillowstatic.com/fp/77cebed1b915ee4df4f709f846e609f5-cc_ft_1536.jpg",
+      "poolType": "private",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": null,
+          "week": "2026-08-10"
+        },
+        {
+          "price": null,
+          "week": "2026-08-17"
+        },
+        {
+          "price": null,
+          "week": "2026-08-24"
+        },
+        {
+          "price": null,
+          "week": "2026-08-31"
+        },
+        {
+          "price": null,
+          "week": "2026-09-07"
+        },
+        {
+          "price": null,
+          "week": "2026-09-14"
+        },
+        {
+          "price": null,
+          "week": "2026-09-21"
+        },
+        {
+          "price": null,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 749000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 749000,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 749000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 749000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": 699000,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 699000,
+          "week": "2026-11-09"
+        },
+        {
+          "price": 699000,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 317,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 14507,
+      "rentZestimate": null,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "merriman-park-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "9006-church-rd-75231",
+      "soldDate": null,
+      "sqft": 2204,
+      "status": "For sale (price cut 11/3/2026)",
+      "stories": 1,
+      "taxAssessedValue": 663000,
+      "updatedAt": "2026-11-27T19:18:53.386Z",
+      "water": "Public",
+      "yearBuilt": 1979,
+      "yearRenovated": null,
+      "zestimate": 680900,
+      "zillowUrl": "https://www.zillow.com/homedetails/9006-Church-Rd-Dallas-TX-75231/26893384_zpid/"
+    },
+    {
+      "address": "9028 Clearhurst Dr, Dallas, TX 75238",
+      "appliancesIncluded": "Dishwasher, Electric Cooktop, Disposal, Gas Water Heater, Microwave",
+      "baths": 2,
+      "beds": 3,
+      "constructionMaterials": "Brick",
+      "cooling": "Central",
+      "createdAt": "2026-11-27T19:18:53.387Z",
+      "daysOnMarket": null,
+      "fencing": "Wood",
+      "fireplaceCount": 1,
+      "flooring": "Carpet, Tile, Wood",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": false,
+      "heating": "Central",
+      "hoaMonthly": 87.5,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.869509,
+      "laundryLocation": null,
+      "listPrice": 615000,
+      "lng": -96.730294,
+      "lotAcres": 0.09,
+      "lotSizeSqft": 4007.52,
+      "parkingFeatures": "Covered, Garage Faces Front, Garage, Garage Door Opener, Attached",
+      "patioPorch": "Patio",
+      "photoUrl": "https://photos.zillowstatic.com/fp/accbf7bc8b30fe3396dbd15db688f631-cc_ft_1536.jpg",
+      "poolType": "none",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": null,
+          "week": "2026-08-10"
+        },
+        {
+          "price": 615000,
+          "week": "2026-08-17"
+        },
+        {
+          "price": 615000,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 615000,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 615000,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 615000,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 615000,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 615000,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 615000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": null,
+          "week": "2026-10-12"
+        },
+        {
+          "price": null,
+          "week": "2026-10-19"
+        },
+        {
+          "price": null,
+          "week": "2026-10-26"
+        },
+        {
+          "price": null,
+          "week": "2026-11-02"
+        },
+        {
+          "price": null,
+          "week": "2026-11-09"
+        },
+        {
+          "price": null,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 331,
+      "primaryOnMain": false,
+      "propertyTaxAnnual": 13551,
+      "rentZestimate": 3308,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "white-rock-elementary",
+        "lake-highlands-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "9028-clearhurst-dr-75238",
+      "soldDate": null,
+      "sqft": 1859,
+      "status": "Sold (found 10/18/2026; price/date not shown; last listed $615,000)",
+      "stories": 2,
+      "taxAssessedValue": 579600,
+      "updatedAt": "2026-11-27T19:18:53.387Z",
+      "water": "Public",
+      "yearBuilt": 1999,
+      "yearRenovated": null,
+      "zestimate": 607900,
+      "zillowUrl": "https://www.zillow.com/homedetails/9028-Clearhurst-Dr-Dallas-TX-75238/26912736_zpid/"
+    },
+    {
+      "address": "9178 Glen Springs Dr, Dallas, TX 75243",
+      "appliancesIncluded": "Dishwasher, Microwave, Refrigerator, Disposal, Gas Cooktop, Double Oven",
+      "baths": 3.5,
+      "beds": 4,
+      "constructionMaterials": "Brick",
+      "cooling": "Ceiling Fan(s), Central Air, Electric",
+      "createdAt": "2026-11-27T19:18:53.388Z",
+      "daysOnMarket": 111,
+      "fencing": null,
+      "fireplaceCount": null,
+      "flooring": "Carpet, Ceramic Tile, Wood",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": true,
+      "heating": "Natural Gas, Central",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.901035,
+      "laundryLocation": null,
+      "listPrice": 699000,
+      "lng": -96.729241,
+      "lotAcres": 0.23,
+      "lotSizeSqft": 10149.48,
+      "parkingFeatures": "Attached, Garage, Garage Faces Rear, Alley Access",
+      "patioPorch": "Covered, Deck, Balcony",
+      "photoUrl": "https://photos.zillowstatic.com/fp/b63c07c3f761e972c75a210849e80595-cc_ft_1536.jpg",
+      "poolType": "private",
+      "priceHistory": [
+        {
+          "price": 799900,
+          "week": "2026-01-05"
+        },
+        {
+          "price": 799900,
+          "week": "2026-01-12"
+        },
+        {
+          "price": 775000,
+          "week": "2026-01-19"
+        },
+        {
+          "price": 775000,
+          "week": "2026-01-26"
+        },
+        {
+          "price": 775000,
+          "week": "2026-02-02"
+        },
+        {
+          "price": 775000,
+          "week": "2026-02-09"
+        },
+        {
+          "price": 775000,
+          "week": "2026-02-16"
+        },
+        {
+          "price": 775000,
+          "week": "2026-02-23"
+        },
+        {
+          "price": 775000,
+          "week": "2026-03-02"
+        },
+        {
+          "price": 775000,
+          "week": "2026-03-09"
+        },
+        {
+          "price": 765000,
+          "week": "2026-03-16"
+        },
+        {
+          "price": 765000,
+          "week": "2026-03-23"
+        },
+        {
+          "price": 765000,
+          "week": "2026-03-30"
+        },
+        {
+          "price": 765000,
+          "week": "2026-04-06"
+        },
+        {
+          "price": 765000,
+          "week": "2026-04-13"
+        },
+        {
+          "price": 750000,
+          "week": "2026-04-20"
+        },
+        {
+          "price": 750000,
+          "week": "2026-04-27"
+        },
+        {
+          "price": 750000,
+          "week": "2026-05-04"
+        },
+        {
+          "price": 750000,
+          "week": "2026-05-11"
+        },
+        {
+          "price": 750000,
+          "week": "2026-05-18"
+        },
+        {
+          "price": 740000,
+          "week": "2026-05-25"
+        },
+        {
+          "price": 740000,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": 735000,
+          "week": "2026-08-10"
+        },
+        {
+          "price": 719900,
+          "week": "2026-08-17"
+        },
+        {
+          "price": 719900,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 719900,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 719900,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 709900,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 709900,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 709900,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 709900,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 699000,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 699000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 699000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": null,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 699000,
+          "week": "2026-11-09"
+        },
+        {
+          "price": 699000,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 179,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 19155,
+      "rentZestimate": null,
+      "roofType": null,
+      "salePrice": null,
+      "schoolIds": [
+        "skyview-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": null,
+      "slug": "9178-glen-springs-dr-75243",
+      "soldDate": null,
+      "sqft": 3910,
+      "status": "For sale (back on market, found 11/15/2026)",
+      "stories": 2,
+      "taxAssessedValue": null,
+      "updatedAt": "2026-11-27T19:18:53.388Z",
+      "water": "Public",
+      "yearBuilt": 1973,
+      "yearRenovated": null,
+      "zestimate": 685000,
+      "zillowUrl": "https://www.zillow.com/homedetails/9178-Glen-Springs-Dr-Dallas-TX-75243/26869083_zpid/"
+    },
+    {
+      "address": "9205 Moss Farm Ln, Dallas, TX 75243",
+      "appliancesIncluded": "Gas Cooktop, Microwave, Refrigerator",
+      "baths": 2.5,
+      "beds": 4,
+      "constructionMaterials": "Brick veneer",
+      "cooling": "Ceiling Fan(s), Central Air",
+      "createdAt": "2026-11-27T19:18:53.388Z",
+      "daysOnMarket": 187,
+      "fencing": "Wood",
+      "fireplaceCount": 2,
+      "flooring": null,
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": true,
+      "heating": "Central",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.896178,
+      "laundryLocation": null,
+      "listPrice": 660000,
+      "lng": -96.743906,
+      "lotAcres": 0.16,
+      "lotSizeSqft": 7056.72,
+      "parkingFeatures": "Common, Direct Access, Driveway, Attached Garage (2), Carport (2)",
+      "patioPorch": null,
+      "photoUrl": "https://photos.zillowstatic.com/fp/9f4a7c495ee855a85667d4d5c65ef802-cc_ft_1536.jpg",
+      "poolType": "private",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": 789900,
+          "week": "2026-05-25"
+        },
+        {
+          "price": 789900,
+          "week": "2026-06-01"
+        },
+        {
+          "price": 789900,
+          "week": "2026-06-08"
+        },
+        {
+          "price": 769900,
+          "week": "2026-06-15"
+        },
+        {
+          "price": 759900,
+          "week": "2026-06-22"
+        },
+        {
+          "price": 739900,
+          "week": "2026-06-29"
+        },
+        {
+          "price": 739900,
+          "week": "2026-07-06"
+        },
+        {
+          "price": 739900,
+          "week": "2026-07-13"
+        },
+        {
+          "price": 739900,
+          "week": "2026-07-20"
+        },
+        {
+          "price": 734900,
+          "week": "2026-07-27"
+        },
+        {
+          "price": 719900,
+          "week": "2026-08-03"
+        },
+        {
+          "price": 719900,
+          "week": "2026-08-10"
+        },
+        {
+          "price": 699000,
+          "week": "2026-08-17"
+        },
+        {
+          "price": 699000,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 699000,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 699000,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 699000,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 684900,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 670000,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 670000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 670000,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 670000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 660000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": 660000,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 660000,
+          "week": "2026-11-09"
+        },
+        {
+          "price": 660000,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 263,
+      "primaryOnMain": null,
+      "propertyTaxAnnual": 11620,
+      "rentZestimate": null,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "moss-haven-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": null,
+      "slug": "9205-moss-farm-ln-75243",
+      "soldDate": null,
+      "sqft": 2509,
+      "status": "For sale (price cut 10/29/2026)",
+      "stories": 1.5,
+      "taxAssessedValue": 497000,
+      "updatedAt": "2026-11-27T19:18:53.388Z",
+      "water": null,
+      "yearBuilt": 1976,
+      "yearRenovated": null,
+      "zestimate": 652400,
+      "zillowUrl": "https://www.zillow.com/homedetails/9205-Moss-Farm-Ln-Dallas-TX-75243/26868426_zpid/"
+    },
+    {
+      "address": "9223 Seagrove Dr, Dallas, TX 75243",
+      "appliancesIncluded": "Dishwasher, Electric Range, Disposal, Microwave, Refrigerator",
+      "baths": 2.5,
+      "beds": 4,
+      "constructionMaterials": "Brick",
+      "cooling": null,
+      "createdAt": "2026-11-27T19:18:53.389Z",
+      "daysOnMarket": null,
+      "fencing": "Wood",
+      "fireplaceCount": 1,
+      "flooring": "Tile, Wood",
+      "foundationType": "Pillar/Post/Pier",
+      "garageSpaces": 2,
+      "hasPool": false,
+      "heating": null,
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-26",
+      "lat": 32.898748,
+      "laundryLocation": null,
+      "listPrice": 719000,
+      "lng": -96.743449,
+      "lotAcres": 0.2,
+      "lotSizeSqft": 8712,
+      "parkingFeatures": "Driveway, Garage, Garage Faces Rear, Attached",
+      "patioPorch": "Covered",
+      "photoUrl": "https://photos.zillowstatic.com/fp/bfcb0134b9dce2ef2d1cc991dc2965c5-cc_ft_1536.jpg",
+      "poolType": "none",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": null,
+          "week": "2026-08-10"
+        },
+        {
+          "price": null,
+          "week": "2026-08-17"
+        },
+        {
+          "price": null,
+          "week": "2026-08-24"
+        },
+        {
+          "price": null,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 739000,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 739000,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 739000,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 739000,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 739000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 739000,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 739000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 719000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": 719000,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 719000,
+          "week": "2026-11-09"
+        },
+        {
+          "price": 719000,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 302,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 10855,
+      "rentZestimate": 3202,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "moss-haven-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "9223-seagrove-dr-75243",
+      "soldDate": "2026-11-25",
+      "sqft": 2381,
+      "status": "Sold (11/25/2026; price not shown; last listed $719,000)",
+      "stories": 1,
+      "taxAssessedValue": 626080,
+      "updatedAt": "2026-11-27T19:18:53.389Z",
+      "water": "Public",
+      "yearBuilt": 1972,
+      "yearRenovated": null,
+      "zestimate": 691500,
+      "zillowUrl": "https://www.zillow.com/homedetails/9223-Seagrove-Dr-Dallas-TX-75243/26869989_zpid/"
+    },
+    {
+      "address": "9517 Fallbrook Dr, Dallas, TX 75243",
+      "appliancesIncluded": "Double Oven, Dishwasher, Disposal, Gas Oven, Microwave",
+      "baths": 2.5,
+      "beds": 3,
+      "constructionMaterials": "Brick",
+      "cooling": "Central Air, Ceiling Fan(s), Electric, Zoned",
+      "createdAt": "2026-11-27T19:18:53.389Z",
+      "daysOnMarket": null,
+      "fencing": "Wood",
+      "fireplaceCount": 1,
+      "flooring": "Carpet, Ceramic Tile, Wood",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": false,
+      "heating": "Central, Natural Gas, Zoned",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.901777,
+      "laundryLocation": "Laundry in utility room",
+      "listPrice": 600000,
+      "lng": -96.731715,
+      "lotAcres": 0.19,
+      "lotSizeSqft": 8276.4,
+      "parkingFeatures": "Garage, Garage Door Opener, Garage Faces Rear, Attached",
+      "patioPorch": "Covered, Patio",
+      "photoUrl": "https://photos.zillowstatic.com/fp/d0fcb1ce9deaff6780213af55ae1a252-cc_ft_1536.jpg",
+      "poolType": "none",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": 675000,
+          "week": "2026-06-08"
+        },
+        {
+          "price": 675000,
+          "week": "2026-06-15"
+        },
+        {
+          "price": 675000,
+          "week": "2026-06-22"
+        },
+        {
+          "price": 675000,
+          "week": "2026-06-29"
+        },
+        {
+          "price": 675000,
+          "week": "2026-07-06"
+        },
+        {
+          "price": 665000,
+          "week": "2026-07-13"
+        },
+        {
+          "price": 665000,
+          "week": "2026-07-20"
+        },
+        {
+          "price": 665000,
+          "week": "2026-07-27"
+        },
+        {
+          "price": 650000,
+          "week": "2026-08-03"
+        },
+        {
+          "price": 650000,
+          "week": "2026-08-10"
+        },
+        {
+          "price": 650000,
+          "week": "2026-08-17"
+        },
+        {
+          "price": 650000,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 640000,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 630000,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 620000,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 610000,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 610000,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 600000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 600000,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 600000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 600000,
+          "week": "2026-10-26"
+        },
+        {
+          "price": null,
+          "week": "2026-11-02"
+        },
+        {
+          "price": null,
+          "week": "2026-11-09"
+        },
+        {
+          "price": null,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 235,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 14225,
+      "rentZestimate": 3689,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "skyview-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "9517-fallbrook-dr-75243",
+      "soldDate": null,
+      "sqft": 2556,
+      "status": "Sold (found 11/8/2026; price/date not shown; last listed $600,000)",
+      "stories": 2,
+      "taxAssessedValue": 666720,
+      "updatedAt": "2026-11-27T19:18:53.389Z",
+      "water": "Public",
+      "yearBuilt": 1973,
+      "yearRenovated": null,
+      "zestimate": 617200,
+      "zillowUrl": "https://www.zillow.com/homedetails/9517-Fallbrook-Dr-Dallas-TX-75243/26869003_zpid/"
+    },
+    {
+      "address": "9902 Galway Dr, Dallas, TX 75218",
+      "appliancesIncluded": "Dishwasher, Disposal, Wine Cooler",
+      "baths": 4,
+      "beds": 4,
+      "constructionMaterials": "Brick",
+      "cooling": "Central Air",
+      "createdAt": "2026-11-27T19:18:53.390Z",
+      "daysOnMarket": 55,
+      "fencing": "Gate, Masonry, Wood",
+      "fireplaceCount": 1,
+      "flooring": null,
+      "foundationType": "Pillar/Post/Pier",
+      "garageSpaces": 0,
+      "hasPool": false,
+      "heating": "Central",
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.837296,
+      "laundryLocation": "Utility room",
+      "listPrice": 685000,
+      "lng": -96.698794,
+      "lotAcres": 0.46,
+      "lotSizeSqft": 20124.72,
+      "parkingFeatures": "Carport (2), Driveway, Electric Gate",
+      "patioPorch": "Covered, Deck",
+      "photoUrl": "https://photos.zillowstatic.com/fp/65c9fb9035b06318e12fdac84a810af4-cc_ft_1536.jpg",
+      "poolType": "none",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": 949000,
+          "week": "2026-03-23"
+        },
+        {
+          "price": 949000,
+          "week": "2026-03-30"
+        },
+        {
+          "price": 899999,
+          "week": "2026-04-06"
+        },
+        {
+          "price": 899999,
+          "week": "2026-04-13"
+        },
+        {
+          "price": 899999,
+          "week": "2026-04-20"
+        },
+        {
+          "price": 849999,
+          "week": "2026-04-27"
+        },
+        {
+          "price": 849999,
+          "week": "2026-05-04"
+        },
+        {
+          "price": 849999,
+          "week": "2026-05-11"
+        },
+        {
+          "price": 849999,
+          "week": "2026-05-18"
+        },
+        {
+          "price": 849999,
+          "week": "2026-05-25"
+        },
+        {
+          "price": 849999,
+          "week": "2026-06-01"
+        },
+        {
+          "price": 849999,
+          "week": "2026-06-08"
+        },
+        {
+          "price": 849999,
+          "week": "2026-06-15"
+        },
+        {
+          "price": 799999,
+          "week": "2026-06-22"
+        },
+        {
+          "price": 799999,
+          "week": "2026-06-29"
+        },
+        {
+          "price": 799999,
+          "week": "2026-07-06"
+        },
+        {
+          "price": 799999,
+          "week": "2026-07-13"
+        },
+        {
+          "price": 799999,
+          "week": "2026-07-20"
+        },
+        {
+          "price": 775000,
+          "week": "2026-07-27"
+        },
+        {
+          "price": 775000,
+          "week": "2026-08-03"
+        },
+        {
+          "price": 775000,
+          "week": "2026-08-10"
+        },
+        {
+          "price": 775000,
+          "week": "2026-08-17"
+        },
+        {
+          "price": 749900,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 749900,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 749900,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 749900,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 749900,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 749900,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 699999,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 699999,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 699999,
+          "week": "2026-10-19"
+        },
+        {
+          "price": 699999,
+          "week": "2026-10-26"
+        },
+        {
+          "price": 685000,
+          "week": "2026-11-02"
+        },
+        {
+          "price": 685000,
+          "week": "2026-11-09"
+        },
+        {
+          "price": 685000,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 258,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 15222,
+      "rentZestimate": null,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "hexter-elementary",
+        "robert-t-hill-middle",
+        "bryan-adams-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "9902-galway-dr-75218",
+      "soldDate": null,
+      "sqft": 2653,
+      "status": "For sale (price cut 11/5/2026)",
+      "stories": 1,
+      "taxAssessedValue": 759420,
+      "updatedAt": "2026-11-27T19:18:53.390Z",
+      "water": null,
+      "yearBuilt": 1971,
+      "yearRenovated": null,
+      "zestimate": 656100,
+      "zillowUrl": "https://www.zillow.com/homedetails/9902-Galway-Dr-Dallas-TX-75218/26744176_zpid/"
+    },
+    {
+      "address": "9918 Chimney Hill Ln, Dallas, TX 75243",
+      "appliancesIncluded": "Some Gas Appliances, Built-In Refrigerator, Dishwasher, Gas Cooktop, Disposal, Gas Water Heater, Microwave, Plumbed For Gas, Refrigerator, Vented Exhaust Fan",
+      "baths": 3,
+      "beds": 4,
+      "constructionMaterials": "Brick",
+      "cooling": null,
+      "createdAt": "2026-11-27T19:18:53.390Z",
+      "daysOnMarket": null,
+      "fencing": "Metal, Wrought Iron",
+      "fireplaceCount": 1,
+      "flooring": "Carpet, Engineered Hardwood, Laminate, Marble, Tile",
+      "foundationType": "Slab",
+      "garageSpaces": 2,
+      "hasPool": false,
+      "heating": null,
+      "hoaMonthly": 0,
+      "lastUpdated": "2026-11-22",
+      "lat": 32.915897,
+      "laundryLocation": "Laundry in utility room",
+      "listPrice": 525000,
+      "lng": -96.728141,
+      "lotAcres": 0.2,
+      "lotSizeSqft": 8799.12,
+      "parkingFeatures": "Alley Access, Door-Single, Electric Gate, Garage, Garage Door Opener, Gated, Garage Faces Rear, Storage, Attached",
+      "patioPorch": "Awning(s), Covered",
+      "photoUrl": "https://photos.zillowstatic.com/fp/56d29f4fe59f802f6daee11d7015a9ff-cc_ft_1536.jpg",
+      "poolType": "none",
+      "priceHistory": [
+        {
+          "price": null,
+          "week": "2026-01-05"
+        },
+        {
+          "price": null,
+          "week": "2026-01-12"
+        },
+        {
+          "price": null,
+          "week": "2026-01-19"
+        },
+        {
+          "price": null,
+          "week": "2026-01-26"
+        },
+        {
+          "price": null,
+          "week": "2026-02-02"
+        },
+        {
+          "price": null,
+          "week": "2026-02-09"
+        },
+        {
+          "price": null,
+          "week": "2026-02-16"
+        },
+        {
+          "price": null,
+          "week": "2026-02-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-02"
+        },
+        {
+          "price": null,
+          "week": "2026-03-09"
+        },
+        {
+          "price": null,
+          "week": "2026-03-16"
+        },
+        {
+          "price": null,
+          "week": "2026-03-23"
+        },
+        {
+          "price": null,
+          "week": "2026-03-30"
+        },
+        {
+          "price": null,
+          "week": "2026-04-06"
+        },
+        {
+          "price": null,
+          "week": "2026-04-13"
+        },
+        {
+          "price": null,
+          "week": "2026-04-20"
+        },
+        {
+          "price": null,
+          "week": "2026-04-27"
+        },
+        {
+          "price": null,
+          "week": "2026-05-04"
+        },
+        {
+          "price": null,
+          "week": "2026-05-11"
+        },
+        {
+          "price": null,
+          "week": "2026-05-18"
+        },
+        {
+          "price": null,
+          "week": "2026-05-25"
+        },
+        {
+          "price": null,
+          "week": "2026-06-01"
+        },
+        {
+          "price": null,
+          "week": "2026-06-08"
+        },
+        {
+          "price": null,
+          "week": "2026-06-15"
+        },
+        {
+          "price": null,
+          "week": "2026-06-22"
+        },
+        {
+          "price": null,
+          "week": "2026-06-29"
+        },
+        {
+          "price": null,
+          "week": "2026-07-06"
+        },
+        {
+          "price": null,
+          "week": "2026-07-13"
+        },
+        {
+          "price": null,
+          "week": "2026-07-20"
+        },
+        {
+          "price": null,
+          "week": "2026-07-27"
+        },
+        {
+          "price": null,
+          "week": "2026-08-03"
+        },
+        {
+          "price": null,
+          "week": "2026-08-10"
+        },
+        {
+          "price": null,
+          "week": "2026-08-17"
+        },
+        {
+          "price": null,
+          "week": "2026-08-24"
+        },
+        {
+          "price": 525000,
+          "week": "2026-08-31"
+        },
+        {
+          "price": 525000,
+          "week": "2026-09-07"
+        },
+        {
+          "price": 525000,
+          "week": "2026-09-14"
+        },
+        {
+          "price": 525000,
+          "week": "2026-09-21"
+        },
+        {
+          "price": 525000,
+          "week": "2026-09-28"
+        },
+        {
+          "price": 525000,
+          "week": "2026-10-05"
+        },
+        {
+          "price": 525000,
+          "week": "2026-10-12"
+        },
+        {
+          "price": 525000,
+          "week": "2026-10-19"
+        },
+        {
+          "price": null,
+          "week": "2026-10-26"
+        },
+        {
+          "price": null,
+          "week": "2026-11-02"
+        },
+        {
+          "price": null,
+          "week": "2026-11-09"
+        },
+        {
+          "price": null,
+          "week": "2026-11-16"
+        }
+      ],
+      "pricePerSqft": 195,
+      "primaryOnMain": true,
+      "propertyTaxAnnual": 10595,
+      "rentZestimate": 2683,
+      "roofType": "Composition",
+      "salePrice": null,
+      "schoolIds": [
+        "aikin-elementary",
+        "forest-meadow-middle",
+        "lake-highlands-high"
+      ],
+      "sewer": "Public Sewer",
+      "slug": "9918-chimney-hill-ln-75243",
+      "soldDate": "2026-10-30",
+      "sqft": 2696,
+      "status": "Sold (10/30/2026; price not shown; last listed $525,000)",
+      "stories": 1,
+      "taxAssessedValue": null,
+      "updatedAt": "2026-11-27T19:18:53.390Z",
+      "water": "Public",
+      "yearBuilt": 1979,
+      "yearRenovated": null,
+      "zestimate": 513200,
+      "zillowUrl": "https://www.zillow.com/homedetails/9918-Chimney-Hill-Ln-Dallas-TX-75243/26888525_zpid/"
+    }
+  ],
+  "interest": {
+    "notInterested": [],
+    "pendingReactivation": []
+  },
+  "rankings": [
+    "11901-woodbridge-dr-75243",
+    "7130-abrams-rd-75231",
+    "7221-pleasant-view-dr-75231",
+    "7738-lemmonwood-dr-75231",
+    "8026-westover-dr-75231",
+    "8031-moss-meadows-dr-75231",
+    "8721-flint-falls-dr-75243",
+    "8915-white-pine-ln-75238",
+    "9006-church-rd-75231",
+    "9028-clearhurst-dr-75238",
+    "9178-glen-springs-dr-75243",
+    "9205-moss-farm-ln-75243",
+    "9223-seagrove-dr-75243",
+    "9517-fallbrook-dr-75243",
+    "9902-galway-dr-75218",
+    "9918-chimney-hill-ln-75243"
+  ]
+}
